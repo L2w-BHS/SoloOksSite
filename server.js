@@ -12,7 +12,12 @@ const GOOGLE_SHEETS_SECRET = process.env.GOOGLE_SHEETS_SECRET;
 
 // Подключаем существующую базу данных.
 // Если файла ещё нет, SQLite создаст его.
-const db = new Database(path.join(__dirname, "orders.db"));
+// Путь к базе данных.
+// Локально используем orders.db в папке проекта.
+// На Railway путь зададим через переменную DB_PATH.
+const dbPath = process.env.DB_PATH || path.join(__dirname, "orders.db");
+
+const db = new Database(dbPath);    
 
 db.pragma("journal_mode = WAL");
 
@@ -119,14 +124,7 @@ async function sendOrderToGoogleSheets(order) {
 }
 
 app.post("/api/create-order", (req, res) => {
-    console.log("Данные формы:", req.body);
 
-    const {
-        fullName,
-        phone,
-        deliveryMethod,
-        social
-    } = req.body;
 
     const GOOGLE_SHEETS_URL = process.env.GOOGLE_SHEETS_URL;
     const GOOGLE_SHEETS_SECRET = process.env.GOOGLE_SHEETS_SECRET;
