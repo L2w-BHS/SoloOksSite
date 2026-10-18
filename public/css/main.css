@@ -1,0 +1,1635 @@
+@import url('https://fonts.googleapis.com/css2?family=Sansation:wght@300;400;700&display=swap');
+/* =================================
+   ОБЩИЕ НАСТРОЙКИ
+================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 20px;
+}
+body {
+    font-family: "Sansation", sans-serif;
+    font-weight: 400;
+    background: #f7f4ef;
+    color: #222;
+    line-height: 1.6;
+}
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+img {
+    display: block;
+    max-width: 100%;
+}
+/* =================================
+   ГЛАВНЫЙ ЭКРАН
+================================= */
+.hero {
+    padding: 80px 0;
+}
+.hero h1 {
+    text-align: center;
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+.hero-subtitle {
+    text-align: center;
+    font-size: 20px;
+    color: #666;
+    margin-bottom: 60px;
+}
+.hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 60px;
+}
+.hero-image {
+    width: 50%;
+    min-width: 0;
+}
+.hero-image img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+.hero-info {
+    width: 50%;
+    min-width: 0;
+}
+.hero-info h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+.hero-info p {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 25px;
+}
+.price {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+/* =================================
+   КНОПКИ
+================================= */
+.button {
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    background: #222;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 18px;
+    transition: background 0.2s, transform 0.2s;
+}
+.button:hover {
+    background: #444;
+    transform: translateY(-2px);
+}
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+.button-light {
+    background: transparent;
+    color: #222;
+    border: 1px solid #999;
+}
+.button-light:hover {
+    background: #e9e4dc;
+    color: #222;
+}
+/* =================================
+   О КНИГЕ
+================================= */
+.about {
+    background: white;
+    padding: 80px 0;
+}
+.about h2,
+.gallery h2,
+.buy h2,
+footer h2 {
+    font-size: 36px;
+    margin-bottom: 25px;
+}
+.about p {
+    max-width: 800px;
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #555;
+}
+.book-details {
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 20px;
+}
+.book-details-list {
+    margin-top: 30px;
+}
+.book-details-list h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+.book-details-list ul {
+    padding-left: 24px;
+    color: #555;
+}
+.book-details-list li {
+    margin-bottom: 10px;
+}
+.price-note {
+    font-size: 15px;
+    opacity: 0.85;
+    margin-bottom: 20px;
+}
+/* =================================
+   ОБЩАЯ ГАЛЕРЕЯ
+================================= */
+.gallery {
+    padding: 80px 0;
+}
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px;
+}
+.gallery-grid img {
+    width: 100%;
+    border-radius: 10px;
+}
+/* =================================
+   АВТОР И ЕЁ ФОТОГРАФИИ
+================================= */
+.author {
+    background: #eee9e1;
+    padding: 80px 0;
+}
+.author h2 {
+    font-size: 36px;
+    margin-bottom: 25px;
+}
+.author-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+}
+.author-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    width: min(100%, 420px);
+    max-width: 420px;
+    flex: 0 1 420px;
+    align-self: flex-start;
+}
+.author-gallery img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);
+    transition: transform 0.25s ease;
+}
+.author-gallery img:hover {
+    transform: scale(1.03);
+}
+.author-info {
+    flex: 1;
+    min-width: 0;
+}
+.author-info h3 {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+.author-info p {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 18px;
+}
+/* =================================
+   ВАРИАНТЫ ЦЕНЫ
+================================= */
+.price-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin: 35px 0;
+    text-align: left;
+}
+.price-option {
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+}
+/* Первые две рамочки:
+   текст по центру горизонтально и вертикально */
+.price-option:nth-child(-n+2) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.price-option h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+.price-option .price {
+    font-size: 30px;
+    margin-bottom: 0;
+}
+.price-option p:not(.price) {
+    font-size: 16px;
+}
+/* =================================
+   КНОПКИ В БЛОКЕ ПРЕДЗАКАЗА
+================================= */
+.buy .hero-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.buy .hero-buttons .button {
+    text-align: center;
+}
+/* =================================
+   ОТЗЫВ
+================================= */
+.review {
+    background: #fff;
+    padding: 80px 0;
+    text-align: center;
+}
+.review h2 {
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+.review blockquote {
+    max-width: 850px;
+    margin: 0 auto 20px;
+    font-size: 21px;
+    line-height: 1.8;
+    color: #444;
+    font-style: italic;
+}
+.review-author {
+    font-weight: 700;
+}
+/* =================================
+   ПОКУПКА
+================================= */
+.buy {
+    background: #222;
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+}
+.buy p {
+    margin-bottom: 25px;
+    font-size: 18px;
+}
+/* =================================
+   МОДАЛЬНОЕ ОКНО
+================================= */
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 1000;
+}
+.modal.active {
+    display: flex;
+}
+.modal-content {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    padding: 40px;
+    border-radius: 12px;
+    position: relative;
+}
+.close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    border: none;
+    background: none;
+    font-size: 30px;
+    cursor: pointer;
+}
+/* =================================
+   ФОРМА
+================================= */
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.modal-content label {
+    font-weight: 700;
+    margin-top: 10px;
+}
+.modal-content input {
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 16px;
+}
+.modal-content input:focus {
+    outline: none;
+    border-color: #222;
+}
+/* =================================
+   ПОДВАЛ САЙТА
+================================= */
+footer {
+    background: #111;
+    color: white;
+    padding: 60px 0;
+    text-align: center;
+}
+.socials {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.socials a {
+    padding: 10px 20px;
+    border: 1px solid #555;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+}
+.socials a:hover {
+    background: white;
+    color: #111;
+}
+.copyright {
+    color: #888;
+}
+/* =================================
+   АДАПТАЦИЯ ПОД ТЕЛЕФОН
+================================= */
+@media (max-width: 700px) {
+    .hero {
+        padding: 50px 0;
+    }
+    .hero h1 {
+        font-size: 34px;
+    }
+    .hero-subtitle {
+        font-size: 18px;
+        margin-bottom: 35px;
+    }
+    .hero-content {
+        flex-direction: column;
+        gap: 30px;
+    }
+    .hero-image,
+    .hero-info {
+        width: 100%;
+    }
+    .hero-info h2 {
+        font-size: 28px;
+    }
+    .about,
+    .gallery,
+    .author,
+    .review,
+    .buy {
+        padding: 50px 0;
+    }
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+    .about h2,
+    .gallery h2,
+    .buy h2,
+    footer h2 {
+        font-size: 28px;
+    }
+    .hero-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .hero-buttons .button {
+        text-align: center;
+    }
+    /* В блоке предзаказа кнопки остаются в ряд */
+    .buy .hero-buttons {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .buy .hero-buttons .button {
+        text-align: center;
+    }
+    .author-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 25px;
+    }
+    .author-gallery {
+        width: 100%;
+        max-width: 360px;
+        flex: 0 1 auto;
+        gap: 8px;
+        margin: 0 auto;
+    }
+    .author-gallery img {
+        border-radius: 8px;
+    }
+    .author h2 {
+        font-size: 28px;
+    }
+    .author-info h3 {
+        font-size: 24px;
+    }
+    .price-options {
+        grid-template-columns: 1fr;
+    }
+    .price-option {
+        padding: 20px;
+    }
+    .review h2 {
+        font-size: 28px;
+    }
+    .review blockquote {
+        font-size: 18px;
+    }
+    .modal-content {
+        padding: 30px 20px;
+    }
+    .socials {
+        gap: 10px;
+    }
+    .socials a {
+        padding: 8px 12px;
+    }
+}
+/* =================================
+   УВАЖАЕМ НАСТРОЙКИ АНИМАЦИИ
+================================= */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}
+/* ===== ИСПРАВЛЕНИЕ КАРУСЕЛИ ОТЗЫВОВ ===== */
+#reviews .reviews-carousel {
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+    text-align: left;
+}
+#reviews .reviews-track {
+    position: relative;
+    display: block;
+    padding: 30px;
+    background: #f7f4ef;
+    border: 1px solid #e6dfd4;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+#reviews .review-slide {
+    display: none;
+    width: 100%;
+    animation: reviewFade 0.25s ease;
+}
+#reviews .review-slide.is-active {
+    display: block;
+}
+#reviews .review-slide h3 {
+    margin: 0 0 18px;
+    color: #222;
+    font-size: 24px;
+}
+#reviews .reviews-carousel .review-slide blockquote {
+    max-width: none;
+    margin: 0;
+    color: #444;
+    font-size: 17px;
+    font-style: normal;
+    line-height: 1.8;
+    white-space: pre-line;
+    text-align: left;
+}
+#reviews .review-number {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #8a7965;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+#reviews .reviews-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 25px;
+}
+#reviews .reviews-arrow {
+    padding: 11px 18px;
+    border: 1px solid #d7cec1;
+    border-radius: 8px;
+    background: #fff;
+    color: #222;
+    font: inherit;
+    cursor: pointer;
+}
+#reviews .reviews-arrow:hover {
+    background: #e9e4dc;
+}
+#reviews .reviews-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 260px;
+}
+#reviews .reviews-dot {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #d4ccc0;
+    cursor: pointer;
+}
+#reviews .reviews-dot.is-active {
+    background: #292929;
+    transform: scale(1.25);
+}
+#reviews .reviews-arrow:focus-visible,
+#reviews .reviews-dot:focus-visible {
+    outline: 2px solid #8a7965;
+    outline-offset: 3px;
+}
+#reviews .reviews-counter {
+    margin-top: 12px;
+    color: #888;
+    font-size: 14px;
+    text-align: center;
+}
+@keyframes reviewFade {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@media (max-width: 700px) {
+    #reviews .reviews-track {
+        padding: 22px 18px;
+    }
+    #reviews .reviews-carousel .review-slide blockquote {
+        font-size: 16px;
+        line-height: 1.7;
+    }
+    #reviews .review-slide h3 {
+        font-size: 21px;
+    }
+    #reviews .reviews-controls {
+        gap: 10px;
+    }
+    #reviews .reviews-arrow {
+        padding: 10px 13px;
+        font-size: 14px;
+    }
+    #reviews .reviews-dots {
+        order: 3;
+        width: 100%;
+        max-width: none;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    #reviews .review-slide {
+        animation: none;
+    }
+}
+/* ================================= */
+/* ФОРМА ПРЕДЗАКАЗА КНИГИ */
+/* ================================= */
+
+#order-modal {
+    overflow-y: auto;
+    align-items: flex-start;
+    padding: 24px 16px;
+}
+
+#order-modal .order-modal-content {
+    margin: auto;
+    max-height: none;
+    overflow: visible;
+    width: 100%;
+    max-width: 540px;
+    padding: 36px;
+    color: #222;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+#order-modal h2 {
+    margin: 0 35px 10px 0;
+    font-size: 28px;
+    line-height: 1.3;
+}
+
+#order-modal .order-description {
+    margin-bottom: 20px;
+    color: #666;
+    font-size: 15px;
+}
+
+#order-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#order-form label {
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+#order-form input,
+#order-form textarea {
+    display: block;
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid #d5d0c8;
+    border-radius: 8px;
+    background: #fff;
+    color: #222;
+    font: inherit;
+    font-size: 16px;
+}
+
+#order-form textarea {
+    resize: vertical;
+    min-height: 70px;
+}
+
+#order-form input:focus,
+#order-form textarea:focus {
+    outline: 2px solid #a99a84;
+    outline-offset: 1px;
+    border-color: #8a7965;
+}
+
+#order-form .order-required-note {
+    margin: 12px 0 4px;
+    color: #777;
+    font-size: 13px;
+}
+
+#order-form .order-submit {
+    width: 100%;
+    margin-top: 8px;
+}
+
+#order-form .order-demo-note {
+    margin: 8px 0 0;
+    color: #777;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+#order-modal .order-success {
+    padding-top: 12px;
+}
+
+#order-modal .order-success h3 {
+    margin-bottom: 10px;
+}
+
+#order-modal .order-success p {
+    margin-bottom: 20px;
+    color: #555;
+    font-size: 15px;
+}
+
+#order-modal .close {
+    color: #555;
+    line-height: 1;
+}
+
+@media (max-width: 500px) {
+    #order-modal {
+        padding: 12px;
+    }
+
+    #order-modal .order-modal-content {
+        padding: 28px 20px;
+        border-radius: 12px;
+    }
+
+    #order-modal h2 {
+        font-size: 24px;
+    }
+}
+
+/* Выделенная кнопка заказа книги */
+.buy .hero-buttons #open-order-form {
+    background: #e5c99a;
+    color: #222;
+    border: 2px solid #e5c99a;
+    border-radius: 10px;
+    padding: 17px 42px;
+    font-family: inherit;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    box-shadow: 0 6px 18px rgba(229, 201, 154, 0.25);
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* Эффект при наведении */
+.buy .hero-buttons #open-order-form:hover {
+    background: #f0d9b3;
+    border-color: #f0d9b3;
+    color: #222;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(229, 201, 154, 0.35);
+}
+
+/* Эффект при нажатии */
+.buy .hero-buttons #open-order-form:active {
+    transform: translateY(0);
+}
+
+/* Обводка при переходе с клавиатуры */
+.buy .hero-buttons #open-order-form:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 4px;
+}
+
+/* Исправляем скрытие формы и сообщения после отправки */
+#order-form[hidden],
+#order-success[hidden] {
+    display: none !important;
+}
+
+
+/* Неподвижный фон с горами */
+html {
+    min-height: 100%;
+}
+
+body {
+    position: relative;
+    isolation: isolate;
+    background-color: #111;
+}
+
+/* Слой с горами, который остаётся на экране при прокрутке */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background-image: url("../images/news-bg.png");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+
+    z-index: -1;
+    pointer-events: none;
+}
+
+
+
+/* ===== БЕЖЕВЫЕ КНОПКИ ===== */
+
+:root {
+    --accent: #c5a77b;
+    --accent-bright: #d8bd96;
+    --accent-light: #f0dfc2;
+}
+
+/* Кнопки в шапке и первом блоке */
+header button,
+header .btn,
+header .button,
+header a.button,
+.hero button,
+.hero .btn,
+.hero .button,
+.hero a.button,
+button,
+.btn,
+.button {
+    background: linear-gradient(135deg, #d4b58a, #b8996c);
+    color: #211a12;
+    border: 1px solid #e6cda7;
+    border-radius: 12px;
+    box-shadow:
+        0 4px 18px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    font-weight: 700;
+    transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+/* При наведении — чуть светлее */
+header button:hover,
+header .btn:hover,
+header .button:hover,
+header a.button:hover,
+.hero button:hover,
+.hero .btn:hover,
+.hero .button:hover,
+.hero a.button:hover,
+button:hover,
+.btn:hover,
+.button:hover {
+    background: linear-gradient(135deg, #e2c69e, #c5a77b);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Бежевые акценты в первом блоке */
+.hero h1 span,
+.hero .accent {
+    color: #e0bd8a;
+}
+
+/* Текст оставляем светлым для контраста */
+.hero h1,
+.hero h2 {
+    color: #fffaf2;
+    text-shadow: 0 3px 12px rgba(0, 0, 0, 0.65);
+}
+
+.hero p {
+    color: #f0e7da;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+}
+
+/* =====================================
+   ИНФОРМАЦИОННЫЕ ВСПЛЫВАЮЩИЕ ОКНА
+   ===================================== */
+
+.info-modal {
+    z-index: 1100;
+}
+
+.info-modal-content {
+    width: min(760px, calc(100% - 32px));
+    max-width: 760px;
+    max-height: 85vh;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    background: #29251f;
+    color: #f4eee4;
+    border: 1px solid rgba(211, 184, 145, 0.45);
+    border-radius: 18px;
+    padding: 0;
+}
+
+.info-modal-content .close {
+    position: sticky;
+    top: 12px;
+    float: right;
+    z-index: 2;
+    margin: 12px 12px -48px 0;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(231, 210, 180, 0.35);
+    border-radius: 50%;
+    background: #453b30;
+    color: #f4e5cf;
+    font-size: 30px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.info-modal-content .close:hover {
+    background: #d2b48c;
+    color: #241d16;
+}
+
+.info-modal-body {
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 38px clamp(22px, 5vw, 48px);
+    box-sizing: border-box;
+    scrollbar-color: #b99a70 #29251f;
+    scrollbar-width: thin;
+}
+
+.info-modal-body h2 {
+    color: #e0c39b;
+    font-size: clamp(28px, 4vw, 38px);
+    line-height: 1.2;
+    margin: 0 45px 24px 0;
+}
+
+.info-modal-body h3 {
+    color: #e0c39b;
+    font-size: clamp(20px, 3vw, 25px);
+    line-height: 1.35;
+    margin: 28px 0 14px;
+}
+
+.info-modal-body p,
+.info-modal-body li {
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+.info-modal-body p {
+    margin: 0 0 16px;
+}
+
+.info-modal-body strong {
+    color: #f0d7b2;
+}
+
+.info-eyebrow {
+    color: #c6a477;
+    font-size: 12px !important;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    margin-bottom: 10px !important;
+}
+
+.info-modal-body ul {
+    padding-left: 22px;
+    margin: 12px 0 22px;
+}
+
+.info-modal-body li {
+    padding-left: 4px;
+    margin-bottom: 10px;
+}
+
+.info-divider {
+    height: 1px;
+    background: rgba(211, 184, 145, 0.3);
+    margin: 28px 0;
+}
+
+.author-highlight {
+    margin-top: 28px;
+    padding: 22px;
+    background: rgba(190, 155, 111, 0.13);
+    border-left: 3px solid #c7a477;
+    border-radius: 0 12px 12px 0;
+}
+
+.author-highlight p {
+    margin-bottom: 10px;
+}
+
+.author-highlight-ending {
+    color: #e0c39b;
+    font-weight: 700;
+    margin-bottom: 0 !important;
+}
+
+@media (max-width: 600px) {
+    .info-modal-content {
+        width: calc(100% - 20px);
+        max-height: 90vh;
+        border-radius: 14px;
+    }
+
+    .info-modal-body {
+        max-height: 90vh;
+        padding: 30px 20px;
+    }
+
+    .info-modal-body p,
+    .info-modal-body li {
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    .author-highlight {
+        padding: 16px;
+    }
+}
+
+
+/* ================================= */
+/* КАРУСЕЛЬ ФОТОГРАФИЙ АВТОРА */
+/* ================================= */
+
+.author-photos {
+    padding: 70px 0;
+    color: #f5ead8;
+    text-align: center;
+}
+
+.author-photos-subtitle {
+    margin-bottom: 30px;
+    opacity: 0.85;
+}
+
+.photo-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.photo-carousel-window {
+    width: 100%;
+    max-width: 850px;
+    overflow: hidden;
+    border-radius: 18px;
+}
+
+.photo-carousel-track {
+    display: flex;
+    transition: transform 0.4s ease;
+}
+
+.photo-carousel-slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    margin: 0;
+}
+
+.photo-carousel-slide img {
+    display: block;
+    width: 100%;
+    height: 480px;
+    object-fit: contain;
+    border-radius: 18px;
+}
+
+.photo-arrow {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: #c9a77b;
+    color: #211a14;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.photo-arrow:hover {
+    background: #e4c59a;
+    transform: scale(1.08);
+}
+
+.photo-dots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 22px;
+}
+
+.photo-dot {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #96836d;
+    cursor: pointer;
+}
+
+.photo-dot.is-active {
+    background: #e4c59a;
+    transform: scale(1.3);
+}
+
+.photo-counter {
+    margin-top: 14px;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+    .author-photos {
+        padding: 45px 0;
+    }
+
+    .photo-carousel {
+        gap: 7px;
+    }
+
+    .photo-arrow {
+        flex-basis: 34px;
+        width: 34px;
+        height: 34px;
+        font-size: 19px;
+    }
+
+    .photo-carousel-slide img {
+        height: 300px;
+    }
+
+    .photo-carousel-window {
+        border-radius: 12px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .photo-carousel-track {
+        transition: none;
+    }
+}
+
+
+/* Карусель фотографий внутри окна «Подробнее обо мне» */
+.photo-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    margin-top: 22px;
+}
+
+.photo-carousel-window {
+    flex: 1;
+    min-width: 0;
+    max-width: 680px;
+    overflow: hidden;
+    border-radius: 14px;
+}
+
+.photo-carousel-track {
+    display: flex;
+    align-items: stretch;
+    transition: transform 0.35s ease;
+}
+
+.photo-carousel-slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    margin: 0;
+}
+
+.photo-carousel-slide img {
+    display: block;
+    width: 100%;
+    height: 380px;
+    object-fit: contain;
+    border-radius: 14px;
+}
+
+.photo-missing img {
+    opacity: 0.25;
+}
+
+.photo-arrow {
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #c9a77b;
+    color: #211a14;
+    font-size: 23px;
+    cursor: pointer;
+}
+
+.photo-arrow:hover {
+    background: #e4c59a;
+}
+
+.photo-dots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.photo-dot {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #96836d;
+    cursor: pointer;
+}
+
+.photo-dot.is-active {
+    background: #c9a77b;
+    transform: scale(1.25);
+}
+
+.photo-counter {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+    .photo-carousel {
+        gap: 6px;
+    }
+
+    .photo-arrow {
+        flex-basis: 32px;
+        width: 32px;
+        height: 32px;
+        font-size: 19px;
+    }
+
+    .photo-carousel-slide img {
+        height: 260px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .photo-carousel-track {
+        transition: none;
+    }
+}
+
+
+/* ==============================
+   ОКНО «СМИ ОБО МНЕ»
+   ============================== */
+
+/* Основное окно */
+.smi-modal {
+    padding: 14px;
+    overflow-y: auto;
+    align-items: flex-start;
+}
+
+/* Белая область с содержимым */
+.smi-modal-content {
+    width: min(100%, 980px);
+    max-width: 980px;
+    max-height: calc(100vh - 28px);
+    overflow-y: auto;
+    padding: 34px clamp(16px, 4vw, 42px);
+    margin: auto;
+    box-sizing: border-box;
+}
+
+/* Заголовок окна */
+.smi-modal-content h2 {
+    margin: 0 48px 24px 0;
+}
+
+/* Кнопка закрытия × */
+.smi-close {
+    position: sticky;
+    float: right;
+    top: 0;
+    margin: -10px -12px 0 12px;
+    border: 0;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    font-size: 30px;
+    line-height: 1;
+    cursor: pointer;
+    background: #f1eee8;
+    color: #222;
+    z-index: 2;
+}
+
+/* Содержимое документа */
+.smi-document {
+    overflow-wrap: anywhere;
+    line-height: 1.65;
+}
+
+.smi-document p {
+    margin: 0 0 13px;
+}
+
+.smi-document h3 {
+    margin: 26px 0 12px;
+    line-height: 1.35;
+}
+
+/* Ссылки на публикации */
+.smi-document a {
+    color: #8a4d35;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* Фотографии и изображения из документа */
+.smi-document img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    max-height: 560px;
+    object-fit: contain;
+    margin: 18px auto;
+    border-radius: 8px;
+}
+
+/* Заголовки статей — кликабельные */
+.smi-document .smi-headline-link {
+    color: #8a4d35;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+}
+
+.smi-document .smi-headline-link:hover {
+    color: #b36b4b;
+}
+
+/* Адаптация для телефонов */
+@media (max-width: 600px) {
+    .smi-modal {
+        padding: 6px;
+    }
+
+    .smi-modal-content {
+        max-height: calc(100vh - 12px);
+        padding: 22px 15px;
+    }
+
+    .smi-document img {
+        max-height: 420px;
+    }
+}
+
+
+/* Одинаковый размер кнопок в блоке «Обо мне» */
+.about-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 12px;
+}
+
+.about-buttons .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 230px;
+    min-height: 54px;
+    padding: 12px 16px;
+    font-size: 18px;
+    line-height: 1.3;
+    text-align: center;
+    text-decoration: none;
+}
+
+/* Делаем цену 1500 ₽ в верхней части сайта светлее */
+.price {
+    color: #f5e6c8;
+}
+
+
+/* =========================================
+   РЕКВИЗИТЫ И ПУБЛИЧНАЯ ОФЕРТА
+========================================= */
+
+.legal-section {
+    padding: 80px 20px 36px;
+    background: #eee9e1;
+    color: #292722;
+}
+
+.legal-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.legal-eyebrow {
+    margin: 0 0 10px;
+    color: #8a6a4b;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.legal-container h2 {
+    margin: 0 0 14px;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.15;
+}
+
+.legal-intro {
+    max-width: 650px;
+    margin: 0 0 30px;
+    color: #625d55;
+    line-height: 1.7;
+}
+
+.legal-card,
+.legal-details {
+    margin: 0 0 14px;
+    border: 1px solid #ddd4c8;
+    border-radius: 14px;
+    background: #faf8f4;
+}
+
+.legal-card {
+    padding: 24px;
+}
+
+.legal-card h3 {
+    margin: 0 0 18px;
+    font-size: 21px;
+}
+
+.legal-card p,
+.legal-details-content p {
+    line-height: 1.75;
+    overflow-wrap: anywhere;
+}
+
+.legal-card p {
+    margin: 9px 0;
+}
+
+.legal-details {
+    overflow: hidden;
+}
+
+.legal-details summary {
+    position: relative;
+    padding: 20px 52px 20px 22px;
+    cursor: pointer;
+    font-weight: 700;
+    line-height: 1.5;
+    list-style: none;
+}
+
+.legal-details summary::-webkit-details-marker {
+    display: none;
+}
+
+.legal-details summary::after {
+    content: "+";
+    position: absolute;
+    top: 50%;
+    right: 22px;
+    transform: translateY(-50%);
+    color: #8a6a4b;
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.legal-details[open] summary::after {
+    content: "−";
+}
+
+.legal-details[open] summary {
+    border-bottom: 1px solid #e6dfd5;
+}
+
+.legal-details-content {
+    padding: 8px 22px 22px;
+}
+
+.legal-details-content p {
+    margin: 13px 0;
+}
+
+.legal-details-content strong {
+    color: #302c26;
+}
+
+.legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.legal-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: #302c26;
+    color: #fff;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.legal-links a:hover {
+    background: #8a6a4b;
+}
+
+.legal-details-content a {
+    color: #795633;
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+}
+
+.legal-note {
+    padding: 14px;
+    border-left: 3px solid #b08b62;
+    background: #f0e9df;
+    font-size: 14px;
+}
+
+.legal-footer {
+    margin: 30px 0 0;
+    color: #777066;
+    font-size: 13px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .legal-section {
+        padding: 54px 15px 26px;
+    }
+
+    .legal-card {
+        padding: 18px;
+    }
+
+    .legal-details summary {
+        padding: 17px 44px 17px 17px;
+    }
+
+    .legal-details summary::after {
+        right: 16px;
+    }
+
+    .legal-details-content {
+        padding: 5px 17px 18px;
+    }
+
+    .legal-links {
+        flex-direction: column;
+    }
+
+    .legal-links a {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}

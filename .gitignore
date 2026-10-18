@@ -1,0 +1,18 @@
+
+# Секреты и настройки
+.env
+.env.*
+
+# Зависимости Node.js
+node_modules/
+
+# Базы данных и файлы заказов
+*.db
+*.sqlite
+*.sqlite3
+*.sqbpro
+orders.csv
+orders.cvs
+
+# Локальные служебные файлы
+.DS_Store
