@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 
 const express = require("express");
@@ -7,23 +8,20 @@ const Database = require("better-sqlite3");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 const GOOGLE_SHEETS_URL = process.env.GOOGLE_SHEETS_URL;
 const GOOGLE_SHEETS_SECRET = process.env.GOOGLE_SHEETS_SECRET;
 
-// Подключаем существующую базу данных.
-// Если файла ещё нет, SQLite создаст его.
-// Путь к базе данных.
-// Локально используем orders.db в папке проекта.
-// На Railway путь зададим через переменную DB_PATH.
-const dbPath = process.env.DB_PATH || path.join(__dirname, "orders.db");
+// Подключаем существующую базу заказов.
+const dbPath =
+    process.env.DB_PATH || path.join(__dirname, "orders.db");
 
-const db = new Database(dbPath);    
+const db = new Database(dbPath);
 
 db.pragma("journal_mode = WAL");
 
-// Создаём таблицу, если её ещё нет.
-// Старые поля postcode и address оставляем,
-// чтобы не ломать существующую базу.
+// Создаём таблицу, только если её ещё нет.
+// Старые поля сохраняем для совместимости с базой.
 db.exec(`
     CREATE TABLE IF NOT EXISTS orders (
         order_id TEXT PRIMARY KEY,
@@ -38,8 +36,7 @@ db.exec(`
     )
 `);
 
-// Добавляем поле доставки в существующую таблицу,
-// только если такого столбца ещё нет.
+// Добавляем поле способа доставки, если его ещё нет.
 const columns = db.prepare("PRAGMA table_info(orders)").all();
 
 if (!columns.some(column => column.name === "delivery_method")) {
@@ -80,10 +77,10 @@ const saveOrder = db.prepare(`
 app.use(express.json({ limit: "20kb" }));
 app.use(express.urlencoded({ extended: false }));
 
-// Отдаём посетителям файлы сайта из папки public.
+// Показываем посетителям файлы из папки public.
 app.use(express.static(path.join(__dirname, "public")));
 
-// Проверяем работу сервера и базы данных.
+// Проверка сервера.
 app.get("/api/status", (req, res) => {
     res.json({
         message: "Сервер работает!",
@@ -92,12 +89,11 @@ app.get("/api/status", (req, res) => {
     });
 });
 
-// Создаём новый заказ.
-
+// Отправка заказа в Google Sheets.
+// Если Google недоступен, заказ останется в SQLite.
 async function sendOrderToGoogleSheets(order) {
     if (!GOOGLE_SHEETS_URL || !GOOGLE_SHEETS_SECRET) {
-        console.error("Google Таблицы не настроены.");
-        return;
+        throw new Error("Google Таблицы не настроены.");
     }
 
     const response = await fetch(GOOGLE_SHEETS_URL, {
@@ -123,18 +119,17 @@ async function sendOrderToGoogleSheets(order) {
     console.log("Ответ Google Таблиц:", result);
 }
 
+// Создание заказа из HTML-формы.
 app.post("/api/create-order", (req, res) => {
+    // Получаем значения, отправленные формой.
+    const {
+        fullName,
+        phone,
+        deliveryMethod,
+        social
+    } = req.body || {};
 
-
-    const GOOGLE_SHEETS_URL = process.env.GOOGLE_SHEETS_URL;
-    const GOOGLE_SHEETS_SECRET = process.env.GOOGLE_SHEETS_SECRET;
-    
-
-    // В твоей HTML-форме поле доставки называется mail.
-
-    // Проверяем данные, пришедшие из HTML-формы.
-
-    // Проверяем данные, пришедшие из HTML-формы.
+    // Проверяем обязательные поля.
     if (
         typeof fullName !== "string" ||
         !fullName.trim() ||
@@ -145,13 +140,12 @@ app.post("/api/create-order", (req, res) => {
         (social !== undefined && typeof social !== "string")
     ) {
         return res.status(400).json({
-            error: "Заполни ФИО, телефон и способ доставки."
+            error: "Заполни ФИО, телефон и способ доставки.",
+            message: "Заполни ФИО, телефон и способ доставки."
         });
     }
 
-
-
-    // Ограничиваем длину введённых данных.
+    // Ограничиваем длину данных.
     if (
         fullName.trim().length > 200 ||
         phone.trim().length > 50 ||
@@ -159,63 +153,60 @@ app.post("/api/create-order", (req, res) => {
         (typeof social === "string" && social.length > 500)
     ) {
         return res.status(400).json({
-            error: "Некоторые поля слишком длинные."
+            error: "Некоторые поля слишком длинные.",
+            message: "Некоторые поля слишком длинные."
         });
     }
 
+    // Создаём данные заказа.
     const order = {
         orderId: crypto.randomUUID(),
         fullName: fullName.trim(),
         phone: phone.trim(),
         deliveryMethod: deliveryMethod.trim(),
-        social: typeof social === "string"
-            ? social.trim()
-            : "",
+        social: typeof social === "string" ? social.trim() : "",
         amount: 1500,
         status: "pending",
         createdAt: new Date().toISOString()
     };
 
     try {
-        // Сохраняем заказ в SQLite.
+        // Сначала надёжно сохраняем заказ в SQLite.
         saveOrder.run(order);
-
-        sendOrderToGoogleSheets(order).catch(error => {
-            console.error(
-                "Не удалось отправить заказ в Google Таблицы:",
-                error.message
-            );
-        });
-
-        console.log(`Создан заказ: ${order.orderId}`);
-
-        return res.status(201).json({
-            orderId: order.orderId,
-            amount: order.amount,
-            status: order.status,
-            message: "Заказ сохранён. Оплата пока не подключена."
-        });
     } catch (error) {
         console.error("Ошибка сохранения заказа:", error.message);
 
         return res.status(500).json({
-            error: "Не удалось сохранить заказ. Попробуй позже."
+            error: "Не удалось сохранить заказ. Попробуй позже.",
+            message: "Не удалось сохранить заказ. Попробуй позже."
         });
     }
+
+    // Отправляем заказ в Google Sheets отдельно.
+    // Ошибка Google не отменяет сохранённый заказ.
+    sendOrderToGoogleSheets(order).catch(error => {
+        console.error(
+            "Не удалось отправить заказ в Google Таблицы:",
+            error.message
+        );
+    });
+
+    console.log(`Создан заказ: ${order.orderId}`);
+
+    return res.status(201).json({
+        orderId: order.orderId,
+        amount: order.amount,
+        status: order.status,
+        message: "Заказ сохранён. Оплата пока не подключена."
+    });
 });
 
-
-/* Запускаем сервер.
-   PORT автоматически задаётся хостингом.
-   Локально используем порт 3000, если другой не задан. */
-
-// Запускаем сервер.
-app.listen(PORT, '0.0.0.0', () => {
+// На сервере с Nginx приложение слушает только localhost.
+app.listen(PORT, "127.0.0.1", () => {
     console.log(`Сайт запущен на порту ${PORT}`);
 });
 
-
-// Закрываем соединение с базой при остановке сервера.
+// Корректно закрываем базу при остановке.
 function shutdown() {
     db.close();
     process.exit(0);
