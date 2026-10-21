@@ -1633,3 +1633,9 @@ button:hover,
         box-sizing: border-box;
     }
 }
+.koshkul {
+    color: hsl(62, 100%, 31%);
+}
+.export {
+    color: hsl(62, 100%, 31%);
+}
