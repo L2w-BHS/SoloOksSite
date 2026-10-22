@@ -1636,6 +1636,146 @@ button:hover,
 .koshkul {
     color: hsl(62, 100%, 31%);
 }
-.export {
-    color: hsl(62, 100%, 31%);
+
+
+/* Заголовок и карусель рабочего макета книги */
+.book-carousel {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto 30px;
+    text-align: center;
 }
+
+.book-carousel-title {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.carousel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.carousel-window {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.35s ease;
+}
+
+.carousel-track img {
+    display: block;
+    flex: 0 0 100%;
+    width: 100%;
+    height: 400px;
+    object-fit: contain;
+}
+
+.carousel-btn {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: #e8e0d5;
+    color: #333;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.carousel-btn:hover {
+    background: #d8c9b7;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.carousel-dot {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #c9c2b9;
+    cursor: pointer;
+}
+
+.carousel-dot.active {
+    background: #57483d;
+}
+
+@media (max-width: 480px) {
+    .book-carousel-title {
+        font-size: 21px;
+    }
+
+    .carousel-track img {
+        height: 300px;
+    }
+
+    .carousel {
+        gap: 4px;
+    }
+
+    .carousel-btn {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+
+/* Карусель макета книги */
+.book-carousel {
+    width: 100%;
+    max-width: 650px; /* Увеличивай число, если нужно ещё больше */
+    margin: 30px auto;
+    text-align: center;
+}
+
+.book-carousel h2 {
+    margin-bottom: 20px;
+}
+
+.carousel {
+    width: 100%;
+    position: relative;
+}
+
+.carousel-window {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.4s ease;
+}
+
+.carousel-track img {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+/* Чтобы на телефоне фото не выходило за экран */
+@media (max-width: 700px) {
+    .book-carousel {
+        max-width: 100%;
+    }
+}
+

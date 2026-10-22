@@ -31,12 +31,43 @@
             </p>
 
             <div class="hero-content">
-                <div class="hero-image">
-                    <img
-                        src="./images/book.jpg"
-                        alt="Обложка книги «Урал БЕЗ каблуков. Афера века»"
-                    >
+                
+<!-- Карусель рабочего макета книги -->
+<section class="book-carousel">
+    <h2 class="book-carousel-title">Рабочий макет книги</h2>
+
+    <div class="carousel">
+        <button class="carousel-btn prev" type="button"
+                aria-label="Предыдущее фото">&#10094;</button>
+
+        <div class="carousel-window">
+            <div class="carousel-track">
+                <img src="./images/book.jpg"
+                     alt="Рабочий макет книги — обложка">
+
+                <img src="./images/book2.jpg"
+                     alt="Рабочий макет книги — фото 2">
+
+                <img src="./images/book3.jpg"
+                     alt="Рабочий макет книги — фото 3">
+
+                <img src="./images/book4.jpg"
+                     alt="Рабочий макет книги — фото 4">
+            </div>
+        </div>
+
+        <button class="carousel-btn next" type="button"
+                aria-label="Следующее фото">&#10095;</button>
+    </div>
+
+                <div class="carousel-dots">
+                    <button class="carousel-dot active" aria-label="Фото 1"></button>
+                    <button class="carousel-dot" aria-label="Фото 2"></button>
+                    <button class="carousel-dot" aria-label="Фото 3"></button>
+                    <button class="carousel-dot" aria-label="Фото 4"></button>
                 </div>
+            </section>
+
 
                 <div class="hero-info">
                     <h2>Урал БЕЗ каблуков. Афера века.</h2>
@@ -1163,7 +1194,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     id="customer-social"
                     name="social"
                     rows="2"
-                    placeholder="VK, MAX или другой удобный способ связи"
+                    placeholder="ВК, MAX или другой удобный способ связи"
                 ></textarea>
 
                 <p class="order-required-note">
@@ -1699,7 +1730,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <a href="https://vk.ru/solooks"
                    target="_blank"
                    rel="noopener noreferrer">
-                    Написать во VK
+                    Написать во ВК
                 </a>
 
                 <a href="https://max.ru/u/f9LHodD0cOKoPlXvHjyeS63ThfyGuHkc5VVHCnR3w_8VFdgct9jYNwbEOpI"
@@ -1729,7 +1760,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <p><strong>Редактор</strong> К. Кузнецов </p>
                 <p><strong>Корректор</strong> К. Кузнецов </p>
                 <p><strong>Верстка</strong> С. Сауткин </p>
-                <p><strong>Издательство</strong> "Геотер" ПР №063431 от 26.05.1994г. </p>
+                <p><strong>Издательство</strong> "Геотер" ЛР №063431 от 26.05.1994г. </p>
                 <p><strong>Цена предзаказа:</strong> 1 500 ₽ за экземпляр.</p>
                 <p><strong>Планируемый выход:</strong> ноябрь 2026 года.</p>
                 <p>
@@ -1817,7 +1848,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </p>
                 <p>
                     Для обращения по заказу покупатель может связаться
-                    с продавцом через VK или MAX, указав номер заказа
+                    с продавцом через ВК или MAX, указав номер заказа
                     (если он присвоен) и суть обращения.
                 </p>
                 <p>
@@ -1897,18 +1928,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     к продавцу через
                     <a href="https://vk.ru/solooks"
                        target="_blank"
-                       rel="noopener noreferrer">VK</a>
+                       rel="noopener noreferrer">ВК</a>
                     или
                     <a href="https://max.ru/u/f9LHodD0cOKoPlXvHjyeS63ThfyGuHkc5VVHCnR3w_8VFdgct9jYNwbEOpI"
                        target="_blank"
                        rel="noopener noreferrer">MAX</a>.
-                </p>
-
-                <p class="legal-note">
-                    Важно: этот текст является проектом. До публикации
-                    необходимо проверить юридические условия, определить
-                    момент заключения договора, правила акцепта оферты,
-                    порядок изменения сроков и способ разрешения споров.
                 </p>
             </div>
         </details>
@@ -1919,5 +1943,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
     </div>
 </section>
+
+
+<script>
+document.querySelectorAll('.book-carousel').forEach(carousel => {
+    const track = carousel.querySelector('.carousel-track');
+    const images = track.querySelectorAll('img');
+    const prev = carousel.querySelector('.prev');
+    const next = carousel.querySelector('.next');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+
+    let current = 0;
+
+    function showSlide(index) {
+        current = (index + images.length) % images.length;
+
+        track.style.transform = `translateX(-${current * 100}%)`;
+
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === current);
+        });
+    }
+
+    prev.addEventListener('click', () => {
+        showSlide(current - 1);
+    });
+
+    next.addEventListener('click', () => {
+        showSlide(current + 1);
+    });
+
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+    });
+
+    showSlide(0);
+});
+</script>
 </body>
 </html>
