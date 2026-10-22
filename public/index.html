@@ -1167,14 +1167,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 <label for="customer-phone">Номер телефона *</label>
 
+
                 <input
                     type="tel"
-                    id="customer-phone"
+                    id="phone"
                     name="phone"
-                    placeholder="+7 900 000-00-00"
+                    placeholder="+7 (999) 123-45-67"
+                    maxlength="18"
+                    pattern="\+7 \([0-9]{3}\) [0-9]{3}-[0-9]{2}-[0-9]{2}"
+                    title="Введите номер в формате +7 (999) 123-45-67"
                     autocomplete="tel"
                     required
                 >
+
 
                 <label for="customer-delivery">Способ доставки *</label>
 
@@ -1214,6 +1219,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </p>
             </form>
 
+
             <div
                 class="order-success"
                 id="order-success"
@@ -1222,7 +1228,19 @@ document.addEventListener('DOMContentLoaded', function () {
             >
                 <h3>Заказ создан!</h3>
 
-                <p></p>
+                <p id="order-success-details"></p>
+
+                <p id="payment-countdown">
+                    Оплатите заказ в течение 15 минут.
+                </p>
+
+                <a
+                    class="button"
+                    id="pay-order-button"
+                    href="#"
+                >
+                    Перейти к оплате
+                </a>
 
                 <button
                     type="button"
@@ -1232,8 +1250,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     Понятно
                 </button>
             </div>
-        </div>
-    </div>
+
 
 
     <!-- ================================= -->
@@ -1341,135 +1358,183 @@ document.addEventListener('DOMContentLoaded', function () {
     </script>
 
 
-    <!-- ================================= -->
-    <!-- JAVASCRIPT: ФОРМА ЗАКАЗА -->
-    <!-- ================================= -->
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const modal = document.getElementById("order-modal");
-        const openButton = document.getElementById("open-order-form");
-        const closeButton = document.getElementById("close-order-form");
-        const form = document.getElementById("order-form");
-        const successMessage = document.getElementById("order-success");
-        const finishButton = document.getElementById("finish-order");
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("order-modal");
+    const openButton = document.getElementById("open-order-form");
+    const closeButton = document.getElementById("close-order-form");
+    const form = document.getElementById("order-form");
+    const successMessage = document.getElementById("order-success");
+    const finishButton = document.getElementById("finish-order");
+    const details = document.getElementById("order-success-details");
+    const countdown = document.getElementById("payment-countdown");
+    const payButton = document.getElementById("pay-order-button");
 
-        if (
-            !modal ||
-            !openButton ||
-            !closeButton ||
-            !form ||
-            !successMessage ||
-            !finishButton
-        ) {
-            return;
+    if (
+        !modal || !openButton || !closeButton || !form ||
+        !successMessage || !finishButton || !details ||
+        !countdown || !payButton
+    ) {
+        return;
+    }
+
+    let countdownInterval = null;
+
+    function openModal() {
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
         }
 
-        function openModal() {
-            modal.classList.add("active");
-            modal.setAttribute("aria-hidden", "false");
-            document.body.style.overflow = "hidden";
+        modal.classList.add("active");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
 
-            form.hidden = false;
-            successMessage.hidden = true;
+        form.hidden = false;
+        successMessage.hidden = true;
+        form.reset();
 
-            document.getElementById("customer-name").focus();
+        document.getElementById("customer-name").focus();
+    }
+
+    function closeModal() {
+        modal.classList.remove("active");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        openButton.focus();
+    }
+
+    function startCountdown(expiresAt) {
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
         }
 
-        function closeModal() {
-            modal.classList.remove("active");
-            modal.setAttribute("aria-hidden", "true");
-            document.body.style.overflow = "";
-            openButton.focus();
-        }
+        const deadline = new Date(expiresAt).getTime();
 
-        openButton.addEventListener("click", openModal);
-        closeButton.addEventListener("click", closeModal);
-        finishButton.addEventListener("click", closeModal);
-
-        modal.addEventListener("click", function (event) {
-            if (event.target === modal) {
-                closeModal();
-            }
-        });
-
-        document.addEventListener("keydown", function (event) {
-            if (
-                event.key === "Escape" &&
-                modal.classList.contains("active")
-            ) {
-                closeModal();
-            }
-        });
-
-        form.addEventListener("submit", async function (event) {
-            event.preventDefault();
-
-            if (!form.reportValidity()) return;
-
-            const submitButton = form.querySelector(
-                'button[type="submit"]'
+        function updateCountdown() {
+            const remaining = Math.max(
+                0,
+                Math.floor((deadline - Date.now()) / 1000)
             );
 
-            submitButton.disabled = true;
-            submitButton.textContent = "Создаём заказ...";
+            const minutes = Math.floor(remaining / 60);
+            const seconds = remaining % 60;
+
+            if (remaining > 0) {
+                countdown.textContent =
+                    `Оплатите заказ в течение ${minutes}:` +
+                    String(seconds).padStart(2, "0") +
+                    " минут:секунд.";
+            } else {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+
+                countdown.textContent =
+                    "Время оплаты истекло. Если вы не оплатили заказ, " +
+                    "оформите новый.";
+
+                payButton.removeAttribute("href");
+                payButton.setAttribute("aria-disabled", "true");
+                payButton.textContent = "Время оплаты истекло";
+            }
+        }
+
+        payButton.setAttribute("aria-disabled", "false");
+        updateCountdown();
+
+        if (deadline > Date.now()) {
+            countdownInterval = setInterval(updateCountdown, 1000);
+        }
+    }
+
+    openButton.addEventListener("click", openModal);
+    closeButton.addEventListener("click", closeModal);
+    finishButton.addEventListener("click", closeModal);
+
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) closeModal();
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (
+            event.key === "Escape" &&
+            modal.classList.contains("active")
+        ) {
+            closeModal();
+        }
+    });
+
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        if (!form.reportValidity()) return;
+
+        const submitButton = form.querySelector(
+            'button[type="submit"]'
+        );
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Создаём заказ...";
+
+        try {
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            const response = await fetch("/api/create-order", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            const responseText = await response.text();
+            let result;
 
             try {
-                const formData = new FormData(form);
-                const data = Object.fromEntries(formData.entries());
-
-                const response = await fetch("/api/create-order", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const responseText = await response.text();
-                let result;
-
-                try {
-                    result = JSON.parse(responseText);
-                } catch {
-                    console.error(
-                        "Сервер вернул не JSON:",
-                        responseText
-                    );
-
-                    throw new Error(
-                        "Ошибка сервера. Подробности смотри в консоли F12."
-                    );
-                }
-
-                if (!response.ok) {
-                    throw new Error(
-                        result.message || "Не удалось создать заказ."
-                    );
-                }
-
-                form.hidden = true;
-                successMessage.hidden = false;
-
-                successMessage.querySelector("p").textContent =
-                    `Заказ № ${result.orderId}. ` +
-                    `Сумма книги: ${result.amount} ₽. ` +
-                    "Оплата пока не подключена.";
-
-                finishButton.focus();
-
-            } catch (error) {
-                alert(
-                    error.message ||
-                    "Не удалось связаться с сервером."
+                result = JSON.parse(responseText);
+            } catch {
+                throw new Error(
+                    "Сервер вернул непонятный ответ. Попробуй позже."
                 );
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = "Купить — 1500 ₽";
             }
-        });
+
+            if (!response.ok) {
+                throw new Error(
+                    result.message || "Не удалось создать заказ."
+                );
+            }
+
+            if (!result.paymentUrl || !result.expiresAt) {
+                throw new Error("Сервер не вернул ссылку на оплату.");
+            }
+
+            details.textContent =
+                `Заказ № ${result.orderId}. Сумма: ${result.amount} ₽.`;
+
+            payButton.href = result.paymentUrl;
+            payButton.textContent = "Перейти к оплате";
+
+            countdown.textContent =
+                "Оплатите заказ в течение 15 минут.";
+
+            form.hidden = true;
+            successMessage.hidden = false;
+
+            startCountdown(result.expiresAt);
+            payButton.focus();
+
+        } catch (error) {
+            alert(error.message || "Не удалось связаться с сервером.");
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = "Купить — 1500 ₽";
+        }
     });
-    </script>
+});
+</script>
+
 
 
     <!-- ================================= -->
@@ -1980,5 +2045,44 @@ document.querySelectorAll('.book-carousel').forEach(carousel => {
     showSlide(0);
 });
 </script>
+
+
+<script>
+const phone = document.getElementById('phone');
+
+if (phone) {
+    phone.addEventListener('input', function () {
+        let digits = this.value.replace(/\D/g, '');
+
+        // Убираем начальную 7 или 8, если человек её ввёл
+        if (digits.startsWith('7') || digits.startsWith('8')) {
+            digits = digits.slice(1);
+        }
+
+        digits = digits.slice(0, 10);
+
+        let result = '+7';
+
+        if (digits.length > 0) {
+            result += ' (' + digits.slice(0, 3);
+        }
+
+        if (digits.length >= 4) {
+            result += ') ' + digits.slice(3, 6);
+        }
+
+        if (digits.length >= 7) {
+            result += '-' + digits.slice(6, 8);
+        }
+
+        if (digits.length >= 9) {
+            result += '-' + digits.slice(8, 10);
+        }
+
+        this.value = result;
+    });
+}
+</script>
+
 </body>
 </html>
