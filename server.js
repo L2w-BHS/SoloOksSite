@@ -133,41 +133,72 @@ const findOrder = db.prepare(`
 `);
 
 // Передаём в Google только подтверждённые оплаты.
+
 async function sendOrderToGoogleSheets(order) {
     if (!GOOGLE_SHEETS_URL || !GOOGLE_SHEETS_SECRET) {
         throw new Error("Google Таблицы не настроены.");
     }
 
-    const response = await fetch(GOOGLE_SHEETS_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            orderId: order.order_id,
-            fullName: order.full_name,
-            phone: order.phone,
-            deliveryMethod: order.delivery_method,
-            social: order.social || "",
-            amount: order.amount,
-            status: "paid",
-            createdAt: order.created_at,
-            secret: GOOGLE_SHEETS_SECRET
-        }),
-        signal: AbortSignal.timeout(10000)
-    });
+    let response;
+
+    try {
+        response = await fetch(GOOGLE_SHEETS_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                orderId: order.order_id,
+                fullName: order.full_name,
+                phone: order.phone,
+                deliveryMethod: order.delivery_method,
+                social: order.social || "",
+                amount: order.amount,
+                status: "paid",
+                createdAt: order.created_at,
+                secret: GOOGLE_SHEETS_SECRET
+            }),
+            signal: AbortSignal.timeout(20000)
+        });
+    } catch (error) {
+        console.error("Google POST: ошибка соединения");
+        console.error("Тип:", error.name);
+        console.error("Причина:", error.message);
+
+        if (error.cause) {
+            console.error("Код причины:", error.cause.code || "");
+            console.error("Детали:", error.cause.message || "");
+        }
+
+        throw error;
+    }
 
     const text = await response.text();
+
+    console.log("Google HTTP:", response.status);
+    console.log("Google ответ:", text.slice(0, 500));
+
     let result;
 
     try {
         result = JSON.parse(text);
     } catch {
-        throw new Error("Google Таблицы вернули непонятный ответ.");
+        throw new Error(
+            `Google вернули не JSON. HTTP ${response.status}`
+        );
     }
 
     if (!response.ok || result.ok !== true) {
-        throw new Error("Не удалось записать заказ в Google Таблицу.");
+        throw new Error(
+            `Google HTTP ${response.status}: ${
+                result.error || "неизвестная ошибка"
+            }`
+        );
     }
+
+    console.log("Google: заказ успешно принят:", order.order_id);
 }
+
 
 // Повторяем отправку, если Google временно не работал.
 async function sendPaidOrdersToSheets() {
