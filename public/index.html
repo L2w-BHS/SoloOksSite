@@ -1691,20 +1691,16 @@ document.addEventListener("DOMContentLoaded", function () {
     let countdownInterval = null;
 
     function openModal() {
-        if (countdownInterval) {
-            clearInterval(countdownInterval);
-            countdownInterval = null;
-        }
+        if (!modal || !form) return;
 
-        modal.classList.add("active");
-        modal.setAttribute("aria-hidden", "false");
-        document.body.style.overflow = "hidden";
-
-        form.hidden = false;
-        successMessage.hidden = true;
+        // Сбрасываем форму: галочки и поля не должны
+        // сохранять значения предыдущего заказа.
         form.reset();
 
-        document.getElementById("customer-name").focus();
+        modal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+
+        modal.querySelector('input[name="phone"]')?.focus();
     }
 
     function closeModal() {
