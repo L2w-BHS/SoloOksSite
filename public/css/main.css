@@ -1,4 +1,10 @@
+/* Sansation font import (from main.css).
+   If you prefer to avoid the third-party request, uncomment the comment
+   below and remove the @import line — the rest of the file uses
+   system fallbacks automatically. */
 @import url('https://fonts.googleapis.com/css2?family=Sansation:wght@300;400;700&display=swap');
+/* Google Fonts import disabled to avoid an unnecessary third-party request; system font fallbacks remain. */
+
 /* =================================
    ОБЩИЕ НАСТРОЙКИ
 ================================= */
@@ -10,13 +16,17 @@
 html {
     scroll-behavior: smooth;
     scroll-padding-top: 20px;
+    min-height: 100%;
 }
 body {
-    font-family: "Sansation", sans-serif;
+    font-family: "Sansation", Arial, Helvetica, sans-serif;
     font-weight: 400;
     background: #f7f4ef;
     color: #222;
     line-height: 1.6;
+    position: relative;
+    isolation: isolate;
+    background-color: #111;
 }
 .container {
     width: 90%;
@@ -31,6 +41,20 @@ img {
     display: block;
     max-width: 100%;
 }
+
+/* Неподвижный фон с горами */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("../images/news-bg.png");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    z-index: -1;
+    pointer-events: none;
+}
+
 /* =================================
    ГЛАВНЫЙ ЭКРАН
 ================================= */
@@ -80,7 +104,9 @@ img {
     font-size: 32px;
     font-weight: 700;
     margin-bottom: 25px;
+    color: #f5e6c8;
 }
+
 /* =================================
    КНОПКИ
 ================================= */
@@ -116,6 +142,7 @@ img {
     background: #e9e4dc;
     color: #222;
 }
+
 /* =================================
    О КНИГЕ
 ================================= */
@@ -160,6 +187,7 @@ footer h2 {
     opacity: 0.85;
     margin-bottom: 20px;
 }
+
 /* =================================
    ОБЩАЯ ГАЛЕРЕЯ
 ================================= */
@@ -175,6 +203,7 @@ footer h2 {
     width: 100%;
     border-radius: 10px;
 }
+
 /* =================================
    АВТОР И ЕЁ ФОТОГРАФИИ
 ================================= */
@@ -225,6 +254,7 @@ footer h2 {
     color: #555;
     margin-bottom: 18px;
 }
+
 /* =================================
    ВАРИАНТЫ ЦЕНЫ
 ================================= */
@@ -240,8 +270,6 @@ footer h2 {
     border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 12px;
 }
-/* Первые две рамочки:
-   текст по центру горизонтально и вертикально */
 .price-option:nth-child(-n+2) {
     display: flex;
     flex-direction: column;
@@ -260,6 +288,7 @@ footer h2 {
 .price-option p:not(.price) {
     font-size: 16px;
 }
+
 /* =================================
    КНОПКИ В БЛОКЕ ПРЕДЗАКАЗА
 ================================= */
@@ -274,6 +303,7 @@ footer h2 {
 .buy .hero-buttons .button {
     text-align: center;
 }
+
 /* =================================
    ОТЗЫВ
 ================================= */
@@ -297,6 +327,7 @@ footer h2 {
 .review-author {
     font-weight: 700;
 }
+
 /* =================================
    ПОКУПКА
 ================================= */
@@ -310,6 +341,7 @@ footer h2 {
     margin-bottom: 25px;
     font-size: 18px;
 }
+
 /* =================================
    МОДАЛЬНОЕ ОКНО
 ================================= */
@@ -346,6 +378,7 @@ footer h2 {
     font-size: 30px;
     cursor: pointer;
 }
+
 /* =================================
    ФОРМА
 ================================= */
@@ -369,6 +402,7 @@ footer h2 {
     outline: none;
     border-color: #222;
 }
+
 /* =================================
    ПОДВАЛ САЙТА
 ================================= */
@@ -398,69 +432,38 @@ footer {
 .copyright {
     color: #888;
 }
+
 /* =================================
    АДАПТАЦИЯ ПОД ТЕЛЕФОН
 ================================= */
 @media (max-width: 700px) {
-    .hero {
-        padding: 50px 0;
-    }
-    .hero h1 {
-        font-size: 34px;
-    }
-    .hero-subtitle {
-        font-size: 18px;
-        margin-bottom: 35px;
-    }
-    .hero-content {
-        flex-direction: column;
-        gap: 30px;
-    }
+    .hero { padding: 50px 0; }
+    .hero h1 { font-size: 34px; }
+    .hero-subtitle { font-size: 18px; margin-bottom: 35px; }
+    .hero-content { flex-direction: column; gap: 30px; }
     .hero-image,
-    .hero-info {
-        width: 100%;
-    }
-    .hero-info h2 {
-        font-size: 28px;
-    }
+    .hero-info { width: 100%; }
+    .hero-info h2 { font-size: 28px; }
     .about,
     .gallery,
     .author,
     .review,
-    .buy {
-        padding: 50px 0;
-    }
-    .gallery-grid {
-        grid-template-columns: 1fr;
-    }
+    .buy { padding: 50px 0; }
+    .gallery-grid { grid-template-columns: 1fr; }
     .about h2,
     .gallery h2,
     .buy h2,
-    footer h2 {
-        font-size: 28px;
-    }
-    .hero-buttons {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .hero-buttons .button {
-        text-align: center;
-    }
-    /* В блоке предзаказа кнопки остаются в ряд */
+    footer h2 { font-size: 28px; }
+    .hero-buttons { flex-direction: column; align-items: stretch; }
+    .hero-buttons .button { text-align: center; }
     .buy .hero-buttons {
         flex-direction: row;
         justify-content: center;
         align-items: center;
         flex-wrap: wrap;
     }
-    .buy .hero-buttons .button {
-        text-align: center;
-    }
-    .author-content {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 25px;
-    }
+    .buy .hero-buttons .button { text-align: center; }
+    .author-content { flex-direction: column; align-items: stretch; gap: 25px; }
     .author-gallery {
         width: 100%;
         max-width: 360px;
@@ -468,44 +471,23 @@ footer {
         gap: 8px;
         margin: 0 auto;
     }
-    .author-gallery img {
-        border-radius: 8px;
-    }
-    .author h2 {
-        font-size: 28px;
-    }
-    .author-info h3 {
-        font-size: 24px;
-    }
-    .price-options {
-        grid-template-columns: 1fr;
-    }
-    .price-option {
-        padding: 20px;
-    }
-    .review h2 {
-        font-size: 28px;
-    }
-    .review blockquote {
-        font-size: 18px;
-    }
-    .modal-content {
-        padding: 30px 20px;
-    }
-    .socials {
-        gap: 10px;
-    }
-    .socials a {
-        padding: 8px 12px;
-    }
+    .author-gallery img { border-radius: 8px; }
+    .author h2 { font-size: 28px; }
+    .author-info h3 { font-size: 24px; }
+    .price-options { grid-template-columns: 1fr; }
+    .price-option { padding: 20px; }
+    .review h2 { font-size: 28px; }
+    .review blockquote { font-size: 18px; }
+    .modal-content { padding: 30px 20px; }
+    .socials { gap: 10px; }
+    .socials a { padding: 8px 12px; }
 }
+
 /* =================================
    УВАЖАЕМ НАСТРОЙКИ АНИМАЦИИ
 ================================= */
 @media (prefers-reduced-motion: reduce) {
-    html {
-        scroll-behavior: auto;
-    }
+    html { scroll-behavior: auto; }
     *,
     *::before,
     *::after {
@@ -513,6 +495,7 @@ footer {
         animation-duration: 0.01ms !important;
     }
 }
+
 /* ===== ИСПРАВЛЕНИЕ КАРУСЕЛИ ОТЗЫВОВ ===== */
 #reviews .reviews-carousel {
     width: 100%;
@@ -613,54 +596,32 @@ footer {
     text-align: center;
 }
 @keyframes reviewFade {
-    from {
-        opacity: 0;
-        transform: translateY(5px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 @media (max-width: 700px) {
-    #reviews .reviews-track {
-        padding: 22px 18px;
-    }
+    #reviews .reviews-track { padding: 22px 18px; }
     #reviews .reviews-carousel .review-slide blockquote {
         font-size: 16px;
         line-height: 1.7;
     }
-    #reviews .review-slide h3 {
-        font-size: 21px;
-    }
-    #reviews .reviews-controls {
-        gap: 10px;
-    }
-    #reviews .reviews-arrow {
-        padding: 10px 13px;
-        font-size: 14px;
-    }
-    #reviews .reviews-dots {
-        order: 3;
-        width: 100%;
-        max-width: none;
-    }
+    #reviews .review-slide h3 { font-size: 21px; }
+    #reviews .reviews-controls { gap: 10px; }
+    #reviews .reviews-arrow { padding: 10px 13px; font-size: 14px; }
+    #reviews .reviews-dots { order: 3; width: 100%; max-width: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-    #reviews .review-slide {
-        animation: none;
-    }
+    #reviews .review-slide { animation: none; }
 }
+
 /* ================================= */
 /* ФОРМА ПРЕДЗАКАЗА КНИГИ */
 /* ================================= */
-
 #order-modal {
     overflow-y: auto;
     align-items: flex-start;
     padding: 24px 16px;
 }
-
 #order-modal .order-modal-content {
     margin: auto;
     max-height: none;
@@ -673,31 +634,26 @@ footer {
     border-radius: 16px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
 }
-
 #order-modal h2 {
     margin: 0 35px 10px 0;
     font-size: 28px;
     line-height: 1.3;
 }
-
 #order-modal .order-description {
     margin-bottom: 20px;
     color: #666;
     font-size: 15px;
 }
-
 #order-form {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
-
 #order-form label {
     margin-top: 10px;
     font-size: 15px;
     font-weight: 700;
 }
-
 #order-form input,
 #order-form textarea {
     display: block;
@@ -710,30 +666,25 @@ footer {
     font: inherit;
     font-size: 16px;
 }
-
 #order-form textarea {
     resize: vertical;
     min-height: 70px;
 }
-
 #order-form input:focus,
 #order-form textarea:focus {
     outline: 2px solid #a99a84;
     outline-offset: 1px;
     border-color: #8a7965;
 }
-
 #order-form .order-required-note {
     margin: 12px 0 4px;
     color: #777;
     font-size: 13px;
 }
-
 #order-form .order-submit {
     width: 100%;
     margin-top: 8px;
 }
-
 #order-form .order-demo-note {
     margin: 8px 0 0;
     color: #777;
@@ -741,39 +692,25 @@ footer {
     line-height: 1.5;
     text-align: center;
 }
-
 #order-modal .order-success {
     padding-top: 12px;
 }
-
 #order-modal .order-success h3 {
     margin-bottom: 10px;
 }
-
 #order-modal .order-success p {
     margin-bottom: 20px;
     color: #555;
     font-size: 15px;
 }
-
 #order-modal .close {
     color: #555;
     line-height: 1;
 }
-
 @media (max-width: 500px) {
-    #order-modal {
-        padding: 12px;
-    }
-
-    #order-modal .order-modal-content {
-        padding: 28px 20px;
-        border-radius: 12px;
-    }
-
-    #order-modal h2 {
-        font-size: 24px;
-    }
+    #order-modal { padding: 12px; }
+    #order-modal .order-modal-content { padding: 28px 20px; border-radius: 12px; }
+    #order-modal h2 { font-size: 24px; }
 }
 
 /* Выделенная кнопка заказа книги */
@@ -794,8 +731,6 @@ footer {
         transform 0.2s ease,
         box-shadow 0.2s ease;
 }
-
-/* Эффект при наведении */
 .buy .hero-buttons #open-order-form:hover {
     background: #f0d9b3;
     border-color: #f0d9b3;
@@ -803,13 +738,9 @@ footer {
     transform: translateY(-3px);
     box-shadow: 0 10px 24px rgba(229, 201, 154, 0.35);
 }
-
-/* Эффект при нажатии */
 .buy .hero-buttons #open-order-form:active {
     transform: translateY(0);
 }
-
-/* Обводка при переходе с клавиатуры */
 .buy .hero-buttons #open-order-form:focus-visible {
     outline: 3px solid #fff;
     outline-offset: 4px;
@@ -821,44 +752,12 @@ footer {
     display: none !important;
 }
 
-
-/* Неподвижный фон с горами */
-html {
-    min-height: 100%;
-}
-
-body {
-    position: relative;
-    isolation: isolate;
-    background-color: #111;
-}
-
-/* Слой с горами, который остаётся на экране при прокрутке */
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-
-    background-image: url("../images/news-bg.png");
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-
-    z-index: -1;
-    pointer-events: none;
-}
-
-
-
 /* ===== БЕЖЕВЫЕ КНОПКИ ===== */
-
 :root {
     --accent: #c5a77b;
     --accent-bright: #d8bd96;
     --accent-light: #f0dfc2;
 }
-
-/* Кнопки в шапке и первом блоке */
 header button,
 header .btn,
 header .button,
@@ -883,8 +782,6 @@ button,
         box-shadow 0.2s ease,
         transform 0.2s ease;
 }
-
-/* При наведении — чуть светлее */
 header button:hover,
 header .btn:hover,
 header .button:hover,
@@ -901,32 +798,27 @@ button:hover,
     transform: translateY(-2px);
 }
 
-/* Бежевые акценты в первом блоке */
-.hero h1 span,
-.hero .accent {
-    color: #e0bd8a;
-}
-
-/* Текст оставляем светлым для контраста */
+/* Текст в первом блоке — светлый для контраста с фоном */
 .hero h1,
 .hero h2 {
     color: #fffaf2;
     text-shadow: 0 3px 12px rgba(0, 0, 0, 0.65);
 }
-
 .hero p {
     color: #f0e7da;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+}
+.hero h1 span,
+.hero .accent {
+    color: #e0bd8a;
 }
 
 /* =====================================
    ИНФОРМАЦИОННЫЕ ВСПЛЫВАЮЩИЕ ОКНА
    ===================================== */
-
 .info-modal {
     z-index: 1100;
 }
-
 .info-modal-content {
     width: min(760px, calc(100% - 32px));
     max-width: 760px;
@@ -940,7 +832,6 @@ button:hover,
     border-radius: 18px;
     padding: 0;
 }
-
 .info-modal-content .close {
     position: sticky;
     top: 12px;
@@ -961,12 +852,10 @@ button:hover,
     cursor: pointer;
     transition: background 0.2s ease, color 0.2s ease;
 }
-
 .info-modal-content .close:hover {
     background: #d2b48c;
     color: #241d16;
 }
-
 .info-modal-body {
     max-height: 85vh;
     overflow-y: auto;
@@ -975,35 +864,29 @@ button:hover,
     scrollbar-color: #b99a70 #29251f;
     scrollbar-width: thin;
 }
-
 .info-modal-body h2 {
     color: #e0c39b;
     font-size: clamp(28px, 4vw, 38px);
     line-height: 1.2;
     margin: 0 45px 24px 0;
 }
-
 .info-modal-body h3 {
     color: #e0c39b;
     font-size: clamp(20px, 3vw, 25px);
     line-height: 1.35;
     margin: 28px 0 14px;
 }
-
 .info-modal-body p,
 .info-modal-body li {
     font-size: 16px;
     line-height: 1.8;
 }
-
 .info-modal-body p {
     margin: 0 0 16px;
 }
-
 .info-modal-body strong {
     color: #f0d7b2;
 }
-
 .info-eyebrow {
     color: #c6a477;
     font-size: 12px !important;
@@ -1011,23 +894,19 @@ button:hover,
     letter-spacing: 0.16em;
     margin-bottom: 10px !important;
 }
-
 .info-modal-body ul {
     padding-left: 22px;
     margin: 12px 0 22px;
 }
-
 .info-modal-body li {
     padding-left: 4px;
     margin-bottom: 10px;
 }
-
 .info-divider {
     height: 1px;
     background: rgba(211, 184, 145, 0.3);
     margin: 28px 0;
 }
-
 .author-highlight {
     margin-top: 28px;
     padding: 22px;
@@ -1035,169 +914,46 @@ button:hover,
     border-left: 3px solid #c7a477;
     border-radius: 0 12px 12px 0;
 }
-
 .author-highlight p {
     margin-bottom: 10px;
 }
-
 .author-highlight-ending {
     color: #e0c39b;
     font-weight: 700;
     margin-bottom: 0 !important;
 }
-
 @media (max-width: 600px) {
     .info-modal-content {
         width: calc(100% - 20px);
         max-height: 90vh;
         border-radius: 14px;
     }
-
     .info-modal-body {
         max-height: 90vh;
         padding: 30px 20px;
     }
-
     .info-modal-body p,
     .info-modal-body li {
         font-size: 15px;
         line-height: 1.7;
     }
-
     .author-highlight {
         padding: 16px;
     }
 }
 
-
 /* ================================= */
 /* КАРУСЕЛЬ ФОТОГРАФИЙ АВТОРА */
 /* ================================= */
-
 .author-photos {
     padding: 70px 0;
     color: #f5ead8;
     text-align: center;
 }
-
 .author-photos-subtitle {
     margin-bottom: 30px;
     opacity: 0.85;
 }
-
-.photo-carousel {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-}
-
-.photo-carousel-window {
-    width: 100%;
-    max-width: 850px;
-    overflow: hidden;
-    border-radius: 18px;
-}
-
-.photo-carousel-track {
-    display: flex;
-    transition: transform 0.4s ease;
-}
-
-.photo-carousel-slide {
-    flex: 0 0 100%;
-    min-width: 0;
-    margin: 0;
-}
-
-.photo-carousel-slide img {
-    display: block;
-    width: 100%;
-    height: 480px;
-    object-fit: contain;
-    border-radius: 18px;
-}
-
-.photo-arrow {
-    flex: 0 0 44px;
-    width: 44px;
-    height: 44px;
-    border: none;
-    border-radius: 50%;
-    background: #c9a77b;
-    color: #211a14;
-    font-size: 24px;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
-}
-
-.photo-arrow:hover {
-    background: #e4c59a;
-    transform: scale(1.08);
-}
-
-.photo-dots {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 9px;
-    margin-top: 22px;
-}
-
-.photo-dot {
-    width: 10px;
-    height: 10px;
-    padding: 0;
-    border: none;
-    border-radius: 50%;
-    background: #96836d;
-    cursor: pointer;
-}
-
-.photo-dot.is-active {
-    background: #e4c59a;
-    transform: scale(1.3);
-}
-
-.photo-counter {
-    margin-top: 14px;
-    font-size: 14px;
-    opacity: 0.8;
-}
-
-@media (max-width: 600px) {
-    .author-photos {
-        padding: 45px 0;
-    }
-
-    .photo-carousel {
-        gap: 7px;
-    }
-
-    .photo-arrow {
-        flex-basis: 34px;
-        width: 34px;
-        height: 34px;
-        font-size: 19px;
-    }
-
-    .photo-carousel-slide img {
-        height: 300px;
-    }
-
-    .photo-carousel-window {
-        border-radius: 12px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .photo-carousel-track {
-        transition: none;
-    }
-}
-
-
-/* Карусель фотографий внутри окна «Подробнее обо мне» */
 .photo-carousel {
     display: flex;
     align-items: center;
@@ -1206,7 +962,6 @@ button:hover,
     width: 100%;
     margin-top: 22px;
 }
-
 .photo-carousel-window {
     flex: 1;
     min-width: 0;
@@ -1214,19 +969,16 @@ button:hover,
     overflow: hidden;
     border-radius: 14px;
 }
-
 .photo-carousel-track {
     display: flex;
     align-items: stretch;
     transition: transform 0.35s ease;
 }
-
 .photo-carousel-slide {
     flex: 0 0 100%;
     min-width: 0;
     margin: 0;
 }
-
 .photo-carousel-slide img {
     display: block;
     width: 100%;
@@ -1234,11 +986,9 @@ button:hover,
     object-fit: contain;
     border-radius: 14px;
 }
-
 .photo-missing img {
     opacity: 0.25;
 }
-
 .photo-arrow {
     flex: 0 0 40px;
     width: 40px;
@@ -1251,11 +1001,9 @@ button:hover,
     font-size: 23px;
     cursor: pointer;
 }
-
 .photo-arrow:hover {
     background: #e4c59a;
 }
-
 .photo-dots {
     display: flex;
     justify-content: center;
@@ -1263,7 +1011,6 @@ button:hover,
     gap: 8px;
     margin-top: 18px;
 }
-
 .photo-dot {
     width: 10px;
     height: 10px;
@@ -1273,55 +1020,47 @@ button:hover,
     background: #96836d;
     cursor: pointer;
 }
-
 .photo-dot.is-active {
     background: #c9a77b;
     transform: scale(1.25);
 }
-
 .photo-counter {
     margin-top: 12px;
     text-align: center;
     font-size: 14px;
     opacity: 0.8;
 }
-
 @media (max-width: 600px) {
+    .author-photos {
+        padding: 45px 0;
+    }
     .photo-carousel {
         gap: 6px;
     }
-
     .photo-arrow {
         flex-basis: 32px;
         width: 32px;
         height: 32px;
         font-size: 19px;
     }
-
     .photo-carousel-slide img {
         height: 260px;
     }
 }
-
 @media (prefers-reduced-motion: reduce) {
     .photo-carousel-track {
         transition: none;
     }
 }
 
-
 /* ==============================
    ОКНО «СМИ ОБО МНЕ»
    ============================== */
-
-/* Основное окно */
 .smi-modal {
     padding: 14px;
     overflow-y: auto;
     align-items: flex-start;
 }
-
-/* Белая область с содержимым */
 .smi-modal-content {
     width: min(100%, 980px);
     max-width: 980px;
@@ -1331,13 +1070,9 @@ button:hover,
     margin: auto;
     box-sizing: border-box;
 }
-
-/* Заголовок окна */
 .smi-modal-content h2 {
     margin: 0 48px 24px 0;
 }
-
-/* Кнопка закрытия × */
 .smi-close {
     position: sticky;
     float: right;
@@ -1354,30 +1089,22 @@ button:hover,
     color: #222;
     z-index: 2;
 }
-
-/* Содержимое документа */
 .smi-document {
     overflow-wrap: anywhere;
     line-height: 1.65;
 }
-
 .smi-document p {
     margin: 0 0 13px;
 }
-
 .smi-document h3 {
     margin: 26px 0 12px;
     line-height: 1.35;
 }
-
-/* Ссылки на публикации */
 .smi-document a {
     color: #8a4d35;
     text-decoration: underline;
     text-underline-offset: 3px;
 }
-
-/* Фотографии и изображения из документа */
 .smi-document img {
     display: block;
     max-width: 100%;
@@ -1387,8 +1114,6 @@ button:hover,
     margin: 18px auto;
     border-radius: 8px;
 }
-
-/* Заголовки статей — кликабельные */
 .smi-document .smi-headline-link {
     color: #8a4d35;
     text-decoration: underline;
@@ -1396,27 +1121,17 @@ button:hover,
     text-underline-offset: 3px;
     transition: color 0.2s ease;
 }
-
 .smi-document .smi-headline-link:hover {
     color: #b36b4b;
 }
-
-/* Адаптация для телефонов */
 @media (max-width: 600px) {
-    .smi-modal {
-        padding: 6px;
-    }
-
+    .smi-modal { padding: 6px; }
     .smi-modal-content {
         max-height: calc(100vh - 12px);
         padding: 22px 15px;
     }
-
-    .smi-document img {
-        max-height: 420px;
-    }
+    .smi-document img { max-height: 420px; }
 }
-
 
 /* Одинаковый размер кнопок в блоке «Обо мне» */
 .about-buttons {
@@ -1425,7 +1140,6 @@ button:hover,
     align-items: stretch;
     gap: 12px;
 }
-
 .about-buttons .button {
     display: inline-flex;
     align-items: center;
@@ -1440,28 +1154,19 @@ button:hover,
     text-decoration: none;
 }
 
-/* Делаем цену 1500 ₽ в верхней части сайта светлее */
-.price {
-    color: #f5e6c8;
-}
-
-
 /* =========================================
    РЕКВИЗИТЫ И ПУБЛИЧНАЯ ОФЕРТА
 ========================================= */
-
 .legal-section {
     padding: 80px 20px 36px;
     background: #eee9e1;
     color: #292722;
 }
-
 .legal-container {
     width: 100%;
     max-width: 900px;
     margin: 0 auto;
 }
-
 .legal-eyebrow {
     margin: 0 0 10px;
     color: #8a6a4b;
@@ -1470,20 +1175,17 @@ button:hover,
     letter-spacing: 0.14em;
     text-transform: uppercase;
 }
-
 .legal-container h2 {
     margin: 0 0 14px;
     font-size: clamp(28px, 4vw, 42px);
     line-height: 1.15;
 }
-
 .legal-intro {
     max-width: 650px;
     margin: 0 0 30px;
     color: #625d55;
     line-height: 1.7;
 }
-
 .legal-card,
 .legal-details {
     margin: 0 0 14px;
@@ -1491,30 +1193,24 @@ button:hover,
     border-radius: 14px;
     background: #faf8f4;
 }
-
 .legal-card {
     padding: 24px;
 }
-
 .legal-card h3 {
     margin: 0 0 18px;
     font-size: 21px;
 }
-
 .legal-card p,
 .legal-details-content p {
     line-height: 1.75;
     overflow-wrap: anywhere;
 }
-
 .legal-card p {
     margin: 9px 0;
 }
-
 .legal-details {
     overflow: hidden;
 }
-
 .legal-details summary {
     position: relative;
     padding: 20px 52px 20px 22px;
@@ -1523,11 +1219,9 @@ button:hover,
     line-height: 1.5;
     list-style: none;
 }
-
 .legal-details summary::-webkit-details-marker {
     display: none;
 }
-
 .legal-details summary::after {
     content: "+";
     position: absolute;
@@ -1538,34 +1232,27 @@ button:hover,
     font-size: 24px;
     font-weight: 400;
 }
-
 .legal-details[open] summary::after {
     content: "−";
 }
-
 .legal-details[open] summary {
     border-bottom: 1px solid #e6dfd5;
 }
-
 .legal-details-content {
     padding: 8px 22px 22px;
 }
-
 .legal-details-content p {
     margin: 13px 0;
 }
-
 .legal-details-content strong {
     color: #302c26;
 }
-
 .legal-links {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 12px;
 }
-
 .legal-links a {
     display: inline-flex;
     align-items: center;
@@ -1578,107 +1265,80 @@ button:hover,
     text-decoration: none;
     transition: background 0.2s ease;
 }
-
 .legal-links a:hover {
     background: #8a6a4b;
 }
-
 .legal-details-content a {
     color: #795633;
     text-underline-offset: 3px;
     overflow-wrap: anywhere;
 }
-
 .legal-note {
     padding: 14px;
     border-left: 3px solid #b08b62;
     background: #f0e9df;
     font-size: 14px;
 }
-
 .legal-footer {
     margin: 30px 0 0;
     color: #777066;
     font-size: 13px;
     text-align: center;
 }
-
 @media (max-width: 600px) {
-    .legal-section {
-        padding: 54px 15px 26px;
-    }
-
-    .legal-card {
-        padding: 18px;
-    }
-
-    .legal-details summary {
-        padding: 17px 44px 17px 17px;
-    }
-
-    .legal-details summary::after {
-        right: 16px;
-    }
-
-    .legal-details-content {
-        padding: 5px 17px 18px;
-    }
-
-    .legal-links {
-        flex-direction: column;
-    }
-
-    .legal-links a {
-        width: 100%;
-        box-sizing: border-box;
-    }
+    .legal-section { padding: 54px 15px 26px; }
+    .legal-card { padding: 18px; }
+    .legal-details summary { padding: 17px 44px 17px 17px; }
+    .legal-details summary::after { right: 16px; }
+    .legal-details-content { padding: 5px 17px 18px; }
+    .legal-links { flex-direction: column; }
+    .legal-links a { width: 100%; box-sizing: border-box; }
 }
+
 .koshkul {
-    color: #ffcb82
+    color: #ffcb82;
 }
 
-
-/* Заголовок и карусель рабочего макета книги */
+/* =========================================
+   КАРУСЕЛЬ РАБОЧЕГО МАКЕТА КНИГИ
+========================================= */
 .book-carousel {
     width: 100%;
-    max-width: 520px;
-    margin: 0 auto 30px;
+    max-width: 650px;
+    margin: 30px auto;
     text-align: center;
 }
-
 .book-carousel-title {
     margin-bottom: 20px;
     font-size: 24px;
     font-weight: 700;
     line-height: 1.3;
 }
-
 .carousel {
+    width: 100%;
+    position: relative;
     display: flex;
     align-items: center;
     gap: 8px;
 }
-
 .carousel-window {
     flex: 1;
     min-width: 0;
     overflow: hidden;
     border-radius: 12px;
 }
-
 .carousel-track {
     display: flex;
-    transition: transform 0.35s ease;
+    transition: transform 0.4s ease;
 }
-
 .carousel-track img {
-    display: block;
-    flex: 0 0 100%;
     width: 100%;
-    height: 400px;
+    min-width: 100%;
+    flex: 0 0 100%;
+    height: auto;
     object-fit: contain;
+    display: block;
 }
-
 .carousel-btn {
     flex-shrink: 0;
     width: 36px;
@@ -1690,18 +1350,15 @@ button:hover,
     font-size: 18px;
     cursor: pointer;
 }
-
 .carousel-btn:hover {
     background: #d8c9b7;
 }
-
 .carousel-dots {
     display: flex;
     justify-content: center;
     gap: 10px;
     margin-top: 16px;
 }
-
 .carousel-dot {
     width: 9px;
     height: 9px;
@@ -1711,87 +1368,29 @@ button:hover,
     background: #c9c2b9;
     cursor: pointer;
 }
-
 .carousel-dot.active {
     background: #57483d;
 }
-
-@media (max-width: 480px) {
-    .book-carousel-title {
-        font-size: 21px;
-    }
-
-    .carousel-track img {
-        height: 300px;
-    }
-
-    .carousel {
-        gap: 4px;
-    }
-
-    .carousel-btn {
-        width: 30px;
-        height: 30px;
-    }
-}
-
-
-/* Карусель макета книги */
-.book-carousel {
-    width: 100%;
-    max-width: 650px; /* Увеличивай число, если нужно ещё больше */
-    margin: 30px auto;
-    text-align: center;
-}
-
-.book-carousel h2 {
-    margin-bottom: 20px;
-}
-
-.carousel {
-    width: 100%;
-    position: relative;
-}
-
-.carousel-window {
-    width: 100%;
-    overflow: hidden;
-    border-radius: 10px;
-}
-
-.carousel-track {
-    display: flex;
-    transition: transform 0.4s ease;
-}
-
-.carousel-track img {
-    width: 100%;
-    min-width: 100%;
-    height: auto;
-    object-fit: contain;
-    display: block;
-}
-
-/* Чтобы на телефоне фото не выходило за экран */
 @media (max-width: 700px) {
-    .book-carousel {
-        max-width: 100%;
-    }
+    .book-carousel { max-width: 100%; }
+    .carousel { gap: 4px; }
+    .carousel-btn { width: 30px; height: 30px; }
+}
+@media (max-width: 480px) {
+    .book-carousel-title { font-size: 21px; }
+    .carousel-track img { height: 300px; }
 }
 
 /* =========================================
-   СУВЕНИРНАЯ ПРОДУКЦИЯ И ОТКРЫТКИ
+   СУВЕНИРНАЯ ПРОДУКЦИЯ И ОТКРЫТКИ (новая структура)
 ========================================= */
-
 .postcards-section {
     padding: 70px 0;
     color: #f5ead8;
 }
-
 .postcards-section .container {
     max-width: 1100px;
 }
-
 .postcards-title {
     margin-bottom: 35px;
     color: #e0c39b;
@@ -1799,7 +1398,6 @@ button:hover,
     line-height: 1.25;
     text-align: center;
 }
-
 .postcards2-title {
     margin-bottom: 35px;
     color: #cebba2;
@@ -1807,37 +1405,31 @@ button:hover,
     line-height: 1.25;
     text-align: center;
 }
-
 .postcards-content {
     display: grid;
     grid-template-columns: minmax(0, 1.5fr) minmax(260px, 1fr);
     align-items: center;
     gap: 40px;
 }
-
 .postcards-gallery {
     min-width: 0;
     text-align: center;
 }
-
 .postcards-carousel {
     display: flex;
     align-items: center;
     gap: 12px;
 }
-
 .postcards-carousel-window {
     flex: 1;
     min-width: 0;
     overflow: hidden;
     border-radius: 14px;
 }
-
 .postcards-carousel-track {
     display: flex;
     transition: transform 0.35s ease;
 }
-
 .postcards-carousel-track img {
     display: block;
     flex: 0 0 100%;
@@ -1846,7 +1438,6 @@ button:hover,
     object-fit: contain;
     border-radius: 14px;
 }
-
 .postcards-arrow {
     flex: 0 0 40px;
     width: 40px;
@@ -1859,55 +1450,56 @@ button:hover,
     font-size: 24px;
     cursor: pointer;
 }
-
 .postcards-arrow:hover {
     background: linear-gradient(135deg, #e2c69e, #c5a77b);
 }
-
 .postcards-dots {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 9px;
-    margin-top: 18px;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
 }
-
-.postcards-dot {
-    width: 10px;
-    height: 10px;
+.postcards-dots .postcards-dot {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
     padding: 0;
-    border: none;
+    border: 2px solid #777;
     border-radius: 50%;
-    background: #96836d;
+    background: transparent;
     cursor: pointer;
+    opacity: 1;
+    transition: background-color 0.2s, border-color 0.2s;
 }
-
-.postcards-dot.is-active {
-    background: #e4c59a;
-    transform: scale(1.25);
+.postcards-dots .postcards-dot.active,
+.postcards-dots .postcards-dot[aria-current="true"] {
+    background: #e5c99a;
+    border-color: #e5c99a;
 }
-
+.postcards-dots .postcards-dot:not(.active):hover {
+    background: #bbb;
+    border-color: #555;
+}
 .postcards-info {
     padding: 30px;
     border: 1px solid rgba(211, 184, 145, 0.35);
     border-radius: 16px;
     background: rgba(41, 37, 31, 0.9);
 }
-
 .postcards-info p {
     margin-bottom: 18px;
     color: #f0e7da;
     font-size: 16px;
     line-height: 1.8;
 }
-
 .postcards-price {
     margin: 25px 0;
     color: #e0c39b;
     font-size: 36px;
     font-weight: 700;
 }
-
 .postcards-order-button {
     display: inline-block;
     width: 100%;
@@ -1923,20 +1515,17 @@ button:hover,
     cursor: pointer;
     transition: transform 0.2s ease, background 0.2s ease;
 }
-
 .postcards-order-button:hover {
     background: linear-gradient(135deg, #e2c69e, #c5a77b);
     transform: translateY(-2px);
 }
 
-/* Форма заказа открыток */
-
+/* Форма заказа открыток (новая структура) */
 #postcard-order-modal {
     overflow-y: auto;
     align-items: flex-start;
     padding: 20px;
 }
-
 #postcard-order-modal .modal-content {
     width: 100%;
     max-width: 500px;
@@ -1944,25 +1533,22 @@ button:hover,
     margin: auto;
     padding: 35px;
     border-radius: 14px;
+    position: relative;
 }
-
 #postcard-order-modal h2 {
     margin-bottom: 12px;
     color: #29251f;
     font-size: 26px;
 }
-
 #postcard-order-form {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-
 #postcard-order-form label {
     margin-top: 10px;
     font-weight: 700;
 }
-
 #postcard-order-form input {
     width: 100%;
     padding: 13px;
@@ -1973,181 +1559,34 @@ button:hover,
     font: inherit;
     font-size: 16px;
 }
-
 #postcard-order-form input:focus {
     outline: 2px solid #a99a84;
     outline-offset: 1px;
 }
-
 #postcard-order-form button {
     width: 100%;
     margin-top: 15px;
 }
-
-/* Адаптация для телефонов */
-
-@media (max-width: 750px) {
-    .postcards-section {
-        padding: 45px 0;
-    }
-
-    .postcards-content {
-        grid-template-columns: 1fr;
-        gap: 25px;
-    }
-
-    .postcards-carousel-track img {
-        height: 320px;
-    }
-
-    .postcards-info {
-        padding: 22px;
-    }
-
-    .postcards-price {
-        font-size: 30px;
-    }
-}
-
-@media (max-width: 400px) {
-    .postcards-carousel {
-        gap: 6px;
-    }
-
-    .postcards-arrow {
-        flex-basis: 32px;
-        width: 32px;
-        height: 32px;
-        font-size: 20px;
-    }
-
-    .postcards-carousel-track img {
-        height: 260px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .postcards-carousel-track {
-        transition: none;
-    }
-}
-
-
-/* Крестик закрытия формы заказа открытки */
 #postcard-order-modal .modal-close {
     position: absolute;
     top: 12px;
     right: 12px;
     left: auto;
-
     width: 44px;
     height: 44px;
     padding: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     font-size: 36px;
     line-height: 1;
     cursor: pointer;
     z-index: 10;
 }
 
-/* Контейнер формы — точка отсчёта для крестика */
-#postcard-order-modal .modal-content {
-    position: relative;
-}
-
-
-/* Точки карусели открыток */
-.postcards-dots {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 16px;
-}
-
-.postcards-dots .postcards-dot {
-    width: 12px;
-    height: 12px;
-    min-width: 12px;
-    min-height: 12px;
-    padding: 0;
-
-    border: 2px solid #777;
-    border-radius: 50%;
-    background: transparent;
-
-    cursor: pointer;
-    opacity: 1;
-    transition: background-color 0.2s, border-color 0.2s;
-}
-
-/* Активная фотография */
-.postcards-dots .postcards-dot.active,
-.postcards-dots .postcards-dot[aria-current="true"] {
-    background: #e5c99a;
-    border-color: #e5c99a;
-}
-
-/* Наведение на неактивную точку */
-.postcards-dots .postcards-dot:not(.active):hover {
-    background: #bbb;
-    border-color: #555;
-}
-
-
-/* =========================================
-   КАРУСЕЛЬ СУВЕНИРОВ И ОТКРЫТОК
-========================================= */
-
-/* Скрываем описание неактивного товара */
-.postcards-info[hidden] {
-    display: none !important;
-}
-
-/* Ссылки-кнопки оформляются так же, как кнопки */
-a.postcards-order-button {
-    box-sizing: border-box;
-    text-decoration: none;
-}
-
-/* Длинное описание браслета */
-.postcards-info[data-product="bracelet"] p {
-    margin-bottom: 14px;
-    line-height: 1.7;
-}
-
-/* Цена браслета */
-.postcards-info[data-product="bracelet"] .postcards-price {
-    margin-top: 20px;
-}
-
-/* Делаем карточку браслета удобной для длинного текста */
-@media (min-width: 751px) {
-    .postcards-info[data-product="bracelet"] {
-        align-self: stretch;
-    }
-}
-
-/* Мобильная версия */
-@media (max-width: 750px) {
-    .postcards-info[data-product="bracelet"] {
-        padding: 22px;
-    }
-
-    .postcards-info[data-product="bracelet"] p {
-        font-size: 15px;
-    }
-}
-
-
 /* =========================================
    КАРУСЕЛЬ ЦЕЛЫХ КАРТОЧЕК ТОВАРОВ
 ========================================= */
-
 .products-carousel {
     display: flex;
     align-items: center;
@@ -2155,29 +1594,24 @@ a.postcards-order-button {
     width: 100%;
     min-width: 0;
 }
-
 .products-carousel-window {
     flex: 1 1 auto;
     min-width: 0;
     overflow: hidden;
     border-radius: 16px;
 }
-
 .products-carousel-track {
     display: flex;
     align-items: stretch;
     width: 100%;
     transition: transform 0.45s ease;
 }
-
 .products-slide {
     flex: 0 0 100%;
     width: 100%;
     min-width: 0;
     box-sizing: border-box;
 }
-
-/* Внутреннее расположение фото и описания */
 .products-slide .postcards-content {
     display: grid;
     grid-template-columns: minmax(0, 1.5fr) minmax(260px, 1fr);
@@ -2185,22 +1619,16 @@ a.postcards-order-button {
     gap: 30px;
     height: 100%;
 }
-
-/* Галерея внутри карточки */
 .products-slide .postcards-gallery {
     width: 100%;
     min-width: 0;
 }
-
-/* Информация о товаре */
 .products-slide .postcards-info {
     box-sizing: border-box;
     width: 100%;
     min-width: 0;
     height: 100%;
 }
-
-/* Заголовок товара */
 .products-slide .postcards-info h3 {
     margin-top: 0;
     margin-bottom: 20px;
@@ -2208,8 +1636,6 @@ a.postcards-order-button {
     font-size: clamp(22px, 2.5vw, 30px);
     line-height: 1.3;
 }
-
-/* Стрелки переключения всей карточки */
 .products-arrow-prev,
 .products-arrow-next {
     position: relative;
@@ -2227,18 +1653,13 @@ a.postcards-order-button {
     color: #211a12;
     font-size: 24px;
     cursor: pointer;
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
-
 .products-arrow-prev:hover,
 .products-arrow-next:hover {
     background: linear-gradient(135deg, #e2c69e, #c5a77b);
     transform: scale(1.06);
 }
-
-/* Точки выбора товара */
 .products-carousel-dots {
     display: flex;
     justify-content: center;
@@ -2246,7 +1667,6 @@ a.postcards-order-button {
     gap: 10px;
     margin-top: 22px;
 }
-
 .products-carousel-dots .products-dot {
     width: 12px;
     height: 12px;
@@ -2262,24 +1682,49 @@ a.postcards-order-button {
         border-color 0.2s ease,
         transform 0.2s ease;
 }
-
 .products-carousel-dots .products-dot.active {
     background: #e5c99a;
     border-color: #e5c99a;
     transform: scale(1.15);
 }
 
+/* Дополнительные стили для карточки товара */
+.postcards-info[hidden] {
+    display: none !important;
+}
+a.postcards-order-button {
+    box-sizing: border-box;
+    text-decoration: none;
+}
+.postcards-info[data-product="bracelet"] p {
+    margin-bottom: 14px;
+    line-height: 1.7;
+}
+.postcards-info[data-product="bracelet"] .postcards-price {
+    margin-top: 20px;
+}
+@media (min-width: 751px) {
+    .postcards-info[data-product="bracelet"] {
+        align-self: stretch;
+    }
+}
+@media (max-width: 750px) {
+    .postcards-info[data-product="bracelet"] {
+        padding: 22px;
+    }
+    .postcards-info[data-product="bracelet"] p {
+        font-size: 15px;
+    }
+}
 
 /* =========================================
    ОДНА ФОТОГРАФИЯ БРАСЛЕТА
 ========================================= */
-
 .bracelet-gallery {
     display: flex;
     align-items: stretch;
     min-width: 0;
 }
-
 .bracelet-photos {
     display: flex;
     align-items: center;
@@ -2287,7 +1732,6 @@ a.postcards-order-button {
     width: 100%;
     min-width: 0;
 }
-
 .bracelet-photos img {
     display: block;
     width: 100%;
@@ -2298,13 +1742,11 @@ a.postcards-order-button {
     object-position: center;
     border-radius: 14px;
 }
-
 .products-slide .bracelet-info {
     height: auto;
     min-width: 0;
     box-sizing: border-box;
 }
-
 @media (max-width: 750px) {
     .bracelet-photos img {
         height: auto;
@@ -2313,9 +1755,6 @@ a.postcards-order-button {
         aspect-ratio: 4 / 5;
     }
 }
-
-
-/* Кнопка внешней покупки */
 .bracelet-info a.postcards-order-button {
     display: block;
     box-sizing: border-box;
@@ -2323,29 +1762,22 @@ a.postcards-order-button {
 }
 
 /* =========================================
-   АДАПТАЦИЯ ДЛЯ ПЛАНШЕТОВ И ТЕЛЕФОНОВ
+   АДАПТАЦИЯ ТОВАРОВ
 ========================================= */
-
 @media (max-width: 900px) {
     .products-slide .postcards-content {
         grid-template-columns: minmax(0, 1.2fr) minmax(230px, 1fr);
         gap: 20px;
     }
-
     .products-slide .postcards-info {
         padding: 22px;
     }
-
     .bracelet-photos img {
         height: 350px;
     }
 }
-
 @media (max-width: 750px) {
-    .products-carousel {
-        gap: 6px;
-    }
-
+    .products-carousel { gap: 6px; }
     .products-arrow-prev,
     .products-arrow-next {
         flex-basis: 32px;
@@ -2353,35 +1785,42 @@ a.postcards-order-button {
         height: 32px;
         font-size: 20px;
     }
-
     .products-slide .postcards-content {
         grid-template-columns: minmax(0, 1fr);
         gap: 22px;
     }
-
     .products-slide .postcards-info {
         height: auto;
         padding: 22px;
     }
-
     .products-slide .postcards-info h3 {
         font-size: 24px;
     }
-
     .bracelet-photos {
         gap: 8px;
     }
-
     .bracelet-photos img {
         height: 300px;
     }
-}
-
-@media (max-width: 400px) {
-    .products-carousel {
-        gap: 4px;
+    .postcards-section {
+        padding: 45px 0;
     }
-
+    .postcards-content {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    .postcards-carousel-track img {
+        height: 320px;
+    }
+    .postcards-info {
+        padding: 22px;
+    }
+    .postcards-price {
+        font-size: 30px;
+    }
+}
+@media (max-width: 400px) {
+    .products-carousel { gap: 4px; }
     .products-arrow-prev,
     .products-arrow-next {
         flex-basis: 28px;
@@ -2389,23 +1828,389 @@ a.postcards-order-button {
         height: 28px;
         font-size: 18px;
     }
-
     .products-slide .postcards-info {
         padding: 17px;
     }
-
     .bracelet-photos {
         gap: 5px;
     }
-
     .bracelet-photos img {
         height: 230px;
     }
+    .postcards-carousel { gap: 6px; }
+    .postcards-arrow {
+        flex-basis: 32px;
+        width: 32px;
+        height: 32px;
+        font-size: 20px;
+    }
+    .postcards-carousel-track img {
+        height: 260px;
+    }
 }
-
-/* Учитываем системную настройку уменьшения анимации */
 @media (prefers-reduced-motion: reduce) {
-    .products-carousel-track {
+    .products-carousel-track,
+    .postcards-carousel-track {
         transition: none;
     }
+}
+
+/* =========================================
+   СОГЛАСИЯ В ФОРМАХ ЗАКАЗА
+========================================= */
+.legal-consent-field {
+    display: grid;
+    grid-template-columns: 20px minmax(0, 1fr);
+    align-items: start;
+    gap: 10px;
+    margin: 14px 0;
+    color: #333;
+    font-size: 13px;
+    line-height: 1.55;
+}
+.legal-consent-field input[type=checkbox] {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: #8a7965;
+    cursor: pointer;
+}
+.legal-consent-field label {
+    cursor: pointer;
+}
+.legal-consent-field a,
+.privacy-footer-links a {
+    color: #725d47;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.privacy-footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px 18px;
+    margin: 24px 0 18px;
+    font-size: 13px;
+}
+.cookie-settings-link {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #a18b6f;
+    font: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+/* =========================================
+   COOKIE BANNER
+========================================= */
+.cookie-banner[hidden],
+.cookie-settings-modal[hidden] {
+    display: none !important;
+}
+.cookie-banner {
+    position: fixed;
+    z-index: 20000;
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 20px 22px;
+    background: #fffdf9;
+    color: #252525;
+    border: 1px solid #d8ccbb;
+    border-radius: 14px;
+    box-shadow: 0 12px 45px rgba(0, 0, 0, .22);
+}
+.cookie-banner-copy {
+    flex: 1;
+}
+.cookie-banner-copy h2 {
+    margin: 0 0 7px;
+    font-size: 19px;
+}
+.cookie-banner-copy p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+}
+.cookie-banner-copy a {
+    color: #725d47;
+    text-decoration: underline;
+}
+.cookie-banner-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+}
+.cookie-button {
+    border-radius: 8px;
+    border: 1px solid #8a7965;
+    padding: 10px 13px;
+    font: inherit;
+    font-size: 13px;
+    line-height: 1.35;
+    cursor: pointer;
+}
+.cookie-button-primary {
+    background: #8a7965;
+    border-color: #8a7965;
+    color: #fff;
+}
+.cookie-button-secondary {
+    background: transparent;
+    color: #4a4035;
+}
+.cookie-button:focus-visible,
+.cookie-settings-close:focus-visible {
+    outline: 3px solid #b18b5c;
+    outline-offset: 3px;
+}
+.cookie-settings-modal {
+    position: fixed;
+    z-index: 20001;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 18px;
+}
+.cookie-settings-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .65);
+}
+.cookie-settings-dialog {
+    position: relative;
+    width: min(100%, 560px);
+    max-height: 90vh;
+    overflow: auto;
+    padding: 30px;
+    background: #fffdf9;
+    color: #252525;
+    border-radius: 14px;
+    box-shadow: 0 15px 60px rgba(0, 0, 0, .3);
+}
+.cookie-settings-dialog h2 {
+    margin: 0 36px 12px 0;
+    font-size: 25px;
+}
+.cookie-settings-dialog p {
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 0 0 16px;
+}
+.cookie-settings-close {
+    position: absolute;
+    top: 8px;
+    right: 14px;
+    border: 0;
+    background: transparent;
+    font-size: 30px;
+    cursor: pointer;
+}
+.cookie-category {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 16px 0;
+    border-top: 1px solid #e5ddd2;
+}
+.cookie-category p {
+    margin: 6px 0 0;
+    color: #5f5a54;
+    font-size: 13px;
+}
+.cookie-switch-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: max-content;
+    font-size: 13px;
+}
+.cookie-switch-label input {
+    accent-color: #8a7965;
+    width: 17px;
+    height: 17px;
+}
+.cookie-settings-warning {
+    color: #6b6258;
+    font-size: 12px !important;
+}
+.cookie-settings-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+@media (max-width: 780px) {
+    .cookie-banner {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        display: block;
+        padding: 17px;
+    }
+    .cookie-banner-actions {
+        justify-content: stretch;
+        margin-top: 13px;
+    }
+    .cookie-banner-actions .cookie-button {
+        flex: 1 1 100%;
+    }
+    .cookie-settings-dialog {
+        padding: 26px 20px;
+    }
+    .cookie-category {
+        display: block;
+    }
+    .cookie-switch-label {
+        margin-top: 10px;
+    }
+}
+
+/* =========================================
+   ЮРИДИЧЕСКИЕ ДОКУМЕНТЫ (privacy.html и т.п.)
+========================================= */
+.privacy-document {
+    width: min(92%, 900px);
+    margin: 0 auto;
+    padding: 48px 0 70px;
+    color: #27231f;
+}
+.privacy-document h1 {
+    margin: 0 0 12px;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.2;
+}
+.privacy-document h2 {
+    margin: 30px 0 10px;
+    font-size: 22px;
+}
+.privacy-document h3 {
+    margin: 22px 0 8px;
+    font-size: 18px;
+}
+.privacy-document p,
+.privacy-document li {
+    font-size: 15px;
+    line-height: 1.75;
+}
+.privacy-document ul,
+.privacy-document ol {
+    padding-left: 24px;
+    margin: 10px 0 18px;
+}
+.privacy-document a {
+    color: #725d47;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.privacy-document .document-date {
+    color: #6c6258;
+    font-size: 13px;
+}
+.privacy-document .document-back {
+    display: inline-block;
+    margin: 0 0 22px;
+}
+.privacy-document .document-note {
+    padding: 14px 16px;
+    background: #f0ebe3;
+    border-left: 3px solid #a18b6f;
+    border-radius: 4px;
+}
+
+/* =========================================
+   СТАРАЯ СТРУКТУРА ОТКРЫТОК (на случай, если HTML использует .postcards вместо .postcards-section)
+   Эти стили не конфликтуют с новой структурой, т.к. используют другие классы.
+========================================= */
+.postcards {
+    padding: 70px 0;
+    background: #f7f3ed;
+}
+.postcards-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(220px, .7fr);
+    gap: 42px;
+    align-items: center;
+}
+.postcards-description {
+    line-height: 1.7;
+    margin: 0 0 22px;
+}
+.postcards-counter {
+    text-align: center;
+    margin: 12px 0 0;
+}
+.postcards-order {
+    text-align: center;
+    padding: 30px 24px;
+    background: #fff;
+    border-radius: 12px;
+}
+.postcards-modal[hidden] {
+    display: none;
+}
+.postcards-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: grid;
+    place-items: center;
+    padding: 18px;
+}
+.postcards-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .62);
+}
+.postcards-modal-dialog {
+    position: relative;
+    width: min(100%, 480px);
+    max-height: 90vh;
+    overflow: auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 15px 60px rgba(0, 0, 0, .25);
+}
+.postcards-modal-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    border: 0;
+    background: transparent;
+    font-size: 30px;
+    cursor: pointer;
+}
+#postcards-order-form {
+    display: grid;
+    gap: 10px;
+    margin-top: 22px;
+}
+#postcards-order-form input,
+#postcards-order-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cfc8bf;
+    border-radius: 7px;
+    font: inherit;
+    box-sizing: border-box;
+}
+.postcards-form-error {
+    color: #a52222;
+}
+@media (max-width: 700px) {
+    .postcards { padding: 48px 0; }
+    .postcards-layout { grid-template-columns: 1fr; gap: 24px; }
+    .postcards-modal-dialog { padding: 26px 20px; }
 }
