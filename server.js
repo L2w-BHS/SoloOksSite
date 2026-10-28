@@ -30,6 +30,10 @@ const BOOK_AMOUNT = 1500;
 const POSTCARD_AMOUNT = 250;
 const PAYMENT_TIME_MS = 15 * 60 * 1000;
 
+// Версии документов. Меняй при публикации новой редакции.
+const OFFER_VERSION = "2026-10-28";
+const PERSONAL_DATA_CONSENT_VERSION = "2026-10-28";
+
 const dbPath =
     process.env.DB_PATH || path.join(__dirname, "orders.db");
 
@@ -37,7 +41,7 @@ const db = new Database(dbPath);
 db.pragma("journal_mode = WAL");
 
 // ==========================================
-// 1. ТАБЛИЦЫ SQLITE
+// 1. ТАБЛИЦЫ SQLITE И МИГРАЦИЯ
 // ==========================================
 
 db.exec(`
@@ -45,6 +49,7 @@ db.exec(`
         order_id TEXT PRIMARY KEY,
         full_name TEXT NOT NULL,
         phone TEXT NOT NULL,
+        city TEXT NOT NULL DEFAULT '',
         postcode TEXT NOT NULL DEFAULT '',
         address TEXT NOT NULL DEFAULT '',
         social TEXT,
@@ -54,32 +59,15 @@ db.exec(`
         delivery_method TEXT NOT NULL DEFAULT '',
         payment_id TEXT,
         expires_at TEXT,
-        google_sheets_sent INTEGER NOT NULL DEFAULT 0
+        google_sheets_sent INTEGER NOT NULL DEFAULT 0,
+
+        offer_accepted INTEGER NOT NULL DEFAULT 0,
+        personal_data_consent INTEGER NOT NULL DEFAULT 0,
+        offer_version TEXT,
+        consent_version TEXT,
+        consented_at TEXT
     )
 `);
-
-function addMissingColumns(tableName, definitions) {
-    const columns = db.prepare(
-        `PRAGMA table_info(${tableName})`
-    ).all();
-
-    const existing = new Set(columns.map(column => column.name));
-
-    for (const [name, definition] of definitions) {
-        if (!existing.has(name)) {
-            db.exec(
-                `ALTER TABLE ${tableName} ADD COLUMN ${name} ${definition}`
-            );
-        }
-    }
-}
-
-addMissingColumns("orders", [
-    ["delivery_method", "TEXT NOT NULL DEFAULT ''"],
-    ["payment_id", "TEXT"],
-    ["expires_at", "TEXT"],
-    ["google_sheets_sent", "INTEGER NOT NULL DEFAULT 0"]
-]);
 
 db.exec(`
     CREATE TABLE IF NOT EXISTS postcard_orders (
@@ -91,9 +79,61 @@ db.exec(`
         created_at TEXT NOT NULL,
         payment_id TEXT,
         expires_at TEXT,
-        google_sheets_sent INTEGER NOT NULL DEFAULT 0
+        google_sheets_sent INTEGER NOT NULL DEFAULT 0,
+
+        offer_accepted INTEGER NOT NULL DEFAULT 0,
+        personal_data_consent INTEGER NOT NULL DEFAULT 0,
+        offer_version TEXT,
+        consent_version TEXT,
+        consented_at TEXT
     )
 `);
+
+function addMissingColumns(tableName, definitions) {
+    // Имена таблиц здесь задаются только самим сервером.
+    const columns = db.prepare(
+        `PRAGMA table_info(${tableName})`
+    ).all();
+
+    const existing = new Set(
+        columns.map(column => column.name)
+    );
+
+    for (const [name, definition] of definitions) {
+        if (!existing.has(name)) {
+            db.exec(
+                `ALTER TABLE ${tableName} ADD COLUMN ${name} ${definition}`
+            );
+        }
+    }
+}
+
+// Обновляем старую базу без удаления существующих заказов.
+const orderColumns = [
+    ["city", "TEXT NOT NULL DEFAULT ''"],
+    ["delivery_method", "TEXT NOT NULL DEFAULT ''"],
+    ["payment_id", "TEXT"],
+    ["expires_at", "TEXT"],
+    ["google_sheets_sent", "INTEGER NOT NULL DEFAULT 0"],
+    ["offer_accepted", "INTEGER NOT NULL DEFAULT 0"],
+    ["personal_data_consent", "INTEGER NOT NULL DEFAULT 0"],
+    ["offer_version", "TEXT"],
+    ["consent_version", "TEXT"],
+    ["consented_at", "TEXT"]
+];
+
+addMissingColumns("orders", orderColumns);
+
+addMissingColumns("postcard_orders", [
+    ["payment_id", "TEXT"],
+    ["expires_at", "TEXT"],
+    ["google_sheets_sent", "INTEGER NOT NULL DEFAULT 0"],
+    ["offer_accepted", "INTEGER NOT NULL DEFAULT 0"],
+    ["personal_data_consent", "INTEGER NOT NULL DEFAULT 0"],
+    ["offer_version", "TEXT"],
+    ["consent_version", "TEXT"],
+    ["consented_at", "TEXT"]
+]);
 
 db.exec(`
     CREATE UNIQUE INDEX IF NOT EXISTS idx_orders_payment_id
@@ -108,7 +148,41 @@ db.exec(`
 `);
 
 // ==========================================
-// 2. EXPRESS
+// 2. ПРОВЕРКА ЮРИДИЧЕСКИХ СОГЛАСИЙ
+// ==========================================
+
+// HTML-формы отправляют отмеченный checkbox как "on".
+// JSON-форма может отправлять true.
+// Не принимаем произвольные строки за согласие.
+function checkboxIsAccepted(value) {
+    return (
+        value === true ||
+        value === "true" ||
+        value === "on" ||
+        value === "1"
+    );
+}
+
+function hasRequiredConsents(body) {
+    return (
+        checkboxIsAccepted(body?.offerAccepted) &&
+        checkboxIsAccepted(body?.personalDataConsent)
+    );
+}
+
+function consentError(res) {
+    return res.status(400).json({
+        error:
+            "Для оформления заказа необходимо принять оферту " +
+            "и отдельно дать согласие на обработку персональных данных.",
+        message:
+            "Для оформления заказа необходимо принять оферту " +
+            "и отдельно дать согласие на обработку персональных данных."
+    });
+}
+
+// ==========================================
+// 3. EXPRESS
 // ==========================================
 
 app.use(express.json({ limit: "20kb" }));
@@ -119,22 +193,24 @@ app.get("/api/status", (req, res) => {
     res.json({
         message: "Сервер работает!",
         database: "SQLite подключена",
-        bookGoogleSheets: GOOGLE_SHEETS_URL && GOOGLE_SHEETS_SECRET
-            ? "Настроена"
-            : "Не настроена",
+        bookGoogleSheets:
+            GOOGLE_SHEETS_URL && GOOGLE_SHEETS_SECRET
+                ? "Настроена"
+                : "Не настроена",
         postcardGoogleSheets:
             POSTCARD_GOOGLE_SHEETS_URL &&
             POSTCARD_GOOGLE_SHEETS_SECRET
                 ? "Настроена"
                 : "Не настроена",
-        payment: YOOKASSA_SHOP_ID && YOOKASSA_SECRET_KEY
-            ? "Ключи ЮKassa настроены"
-            : "Не настроены ключи ЮKassa"
+        payment:
+            YOOKASSA_SHOP_ID && YOOKASSA_SECRET_KEY
+                ? "Ключи ЮKassa настроены"
+                : "Не настроены ключи ЮKassa"
     });
 });
 
 // ==========================================
-// 3. API ЮKASSA
+// 4. API ЮKASSA
 // ==========================================
 
 async function yookassaRequest(url, options = {}) {
@@ -176,23 +252,55 @@ async function yookassaRequest(url, options = {}) {
 }
 
 // ==========================================
-// 4. SQLITE: ЗАПРОСЫ
+// 5. SQLITE: ЗАПРОСЫ
 // ==========================================
 
 // Книга
 const saveBookOrder = db.prepare(`
     INSERT INTO orders (
-        order_id, full_name, phone, postcode, address, social,
-        amount, status, created_at, delivery_method, expires_at
+        order_id,
+        full_name,
+        phone,
+        city,
+        postcode,
+        address,
+        social,
+        amount,
+        status,
+        created_at,
+        delivery_method,
+        expires_at,
+        offer_accepted,
+        personal_data_consent,
+        offer_version,
+        consent_version,
+        consented_at
     )
     VALUES (
-        @orderId, @fullName, @phone, '', '', @social,
-        @amount, @status, @createdAt, @deliveryMethod, @expiresAt
+        @orderId,
+        @fullName,
+        @phone,
+        @city,
+        '',
+        '',
+        @social,
+        @amount,
+        @status,
+        @createdAt,
+        @deliveryMethod,
+        @expiresAt,
+        @offerAccepted,
+        @personalDataConsent,
+        @offerVersion,
+        @consentVersion,
+        @consentedAt
     )
 `);
 
 const updateBookPayment = db.prepare(`
-    UPDATE orders SET payment_id = ? WHERE order_id = ?
+    UPDATE orders
+    SET payment_id = ?
+    WHERE order_id = ?
 `);
 
 const findBookOrder = db.prepare(`
@@ -206,17 +314,39 @@ const findBookOrderByPayment = db.prepare(`
 // Открытки
 const savePostcardOrder = db.prepare(`
     INSERT INTO postcard_orders (
-        order_id, phone, postal_address, amount,
-        status, created_at, expires_at
+        order_id,
+        phone,
+        postal_address,
+        amount,
+        status,
+        created_at,
+        expires_at,
+        offer_accepted,
+        personal_data_consent,
+        offer_version,
+        consent_version,
+        consented_at
     )
     VALUES (
-        @orderId, @phone, @postalAddress, @amount,
-        @status, @createdAt, @expiresAt
+        @orderId,
+        @phone,
+        @postalAddress,
+        @amount,
+        @status,
+        @createdAt,
+        @expiresAt,
+        @offerAccepted,
+        @personalDataConsent,
+        @offerVersion,
+        @consentVersion,
+        @consentedAt
     )
 `);
 
 const updatePostcardPayment = db.prepare(`
-    UPDATE postcard_orders SET payment_id = ? WHERE order_id = ?
+    UPDATE postcard_orders
+    SET payment_id = ?
+    WHERE order_id = ?
 `);
 
 const findPostcardOrder = db.prepare(`
@@ -228,12 +358,14 @@ const findPostcardOrderByPayment = db.prepare(`
 `);
 
 // ==========================================
-// 5. GOOGLE SHEETS
+// 6. GOOGLE SHEETS
 // ==========================================
 
 async function postToGoogleSheets(url, secret, payload) {
     if (!url || !secret) {
-        throw new Error("Google Sheets для этого типа заказа не настроена.");
+        throw new Error(
+            "Google Sheets для этого типа заказа не настроена."
+        );
     }
 
     const response = await fetch(url, {
@@ -283,6 +415,7 @@ async function sendBookToGoogleSheets(order) {
             orderId: order.order_id,
             fullName: order.full_name,
             phone: order.phone,
+            city: order.city || "",
             deliveryMethod: order.delivery_method,
             postcode: order.postcode || "",
             address: order.address || "",
@@ -311,7 +444,7 @@ async function sendPostcardToGoogleSheets(order) {
 }
 
 // ==========================================
-// 6. ПОВТОРНАЯ ОТПРАВКА ОПЛАЧЕННЫХ ЗАКАЗОВ
+// 7. ПОВТОРНАЯ ОТПРАВКА ОПЛАЧЕННЫХ ЗАКАЗОВ
 // ==========================================
 
 async function sendPaidOrdersToSheets() {
@@ -335,7 +468,10 @@ async function sendPaidOrdersToSheets() {
                 WHERE order_id = ? AND status = 'paid'
             `).run(order.order_id);
 
-            console.log("Заказ книги отправлен в Google:", order.order_id);
+            console.log(
+                "Заказ книги отправлен в Google:",
+                order.order_id
+            );
         } catch (error) {
             console.error(
                 "Ошибка отправки книги в Google:",
@@ -368,7 +504,7 @@ async function sendPaidOrdersToSheets() {
 }
 
 // ==========================================
-// 7. ИСТЕЧЕНИЕ СРОКА ОПЛАТЫ
+// 8. ИСТЕЧЕНИЕ СРОКА ОПЛАТЫ
 // ==========================================
 
 function expireUnpaidOrders() {
@@ -398,34 +534,41 @@ function expireUnpaidOrders() {
 }
 
 // ==========================================
-// 8. СОЗДАНИЕ ЗАКАЗА КНИГИ — 1500 ₽
-/*
-   Сохраняем существующий маршрут книги.
-*/
+// 9. СОЗДАНИЕ ЗАКАЗА КНИГИ — 1500 ₽
 // ==========================================
 
 app.post("/api/create-order", async (req, res) => {
     const {
         fullName,
         phone,
+        city,
         deliveryMethod,
         social
     } = req.body || {};
 
+    // Проверяем согласия на стороне сервера.
+    if (!hasRequiredConsents(req.body)) {
+        return consentError(res);
+    }
+
     if (
         typeof fullName !== "string" || !fullName.trim() ||
         typeof phone !== "string" || !phone.trim() ||
-        typeof deliveryMethod !== "string" || !deliveryMethod.trim() ||
+        typeof city !== "string" || !city.trim() ||
+        typeof deliveryMethod !== "string" ||
+        !deliveryMethod.trim() ||
         (social !== undefined && typeof social !== "string")
     ) {
         return res.status(400).json({
-            message: "Заполни ФИО, телефон и способ доставки."
+            message:
+                "Заполни ФИО, телефон, город и способ доставки."
         });
     }
 
     if (
         fullName.trim().length > 200 ||
         phone.trim().length > 50 ||
+        city.trim().length > 100 ||
         deliveryMethod.trim().length > 200 ||
         (typeof social === "string" && social.length > 500)
     ) {
@@ -440,16 +583,27 @@ app.post("/api/create-order", async (req, res) => {
         });
     }
 
+    const now = new Date();
+
     const order = {
         orderId: crypto.randomUUID(),
         fullName: fullName.trim(),
         phone: phone.trim(),
+        city: city.trim(),
         deliveryMethod: deliveryMethod.trim(),
         social: typeof social === "string" ? social.trim() : "",
         amount: BOOK_AMOUNT,
         status: "pending",
-        createdAt: new Date().toISOString(),
-        expiresAt: new Date(Date.now() + PAYMENT_TIME_MS).toISOString()
+        createdAt: now.toISOString(),
+        expiresAt: new Date(
+            now.getTime() + PAYMENT_TIME_MS
+        ).toISOString(),
+
+        offerAccepted: 1,
+        personalDataConsent: 1,
+        offerVersion: OFFER_VERSION,
+        consentVersion: PERSONAL_DATA_CONSENT_VERSION,
+        consentedAt: now.toISOString()
     };
 
     try {
@@ -471,7 +625,8 @@ app.post("/api/create-order", async (req, res) => {
                     type: "redirect",
                     return_url: `${SITE_URL}/?payment=return`
                 },
-                description: `Предзаказ книги. Заказ ${order.orderId}`,
+                description:
+                    `Предзаказ книги. Заказ ${order.orderId}`,
                 metadata: {
                     order_id: order.orderId,
                     order_type: "book"
@@ -484,13 +639,21 @@ app.post("/api/create-order", async (req, res) => {
             !payment.confirmation ||
             !payment.confirmation.confirmation_url
         ) {
-            throw new Error("ЮKassa не вернула ссылку для оплаты.");
+            throw new Error(
+                "ЮKassa не вернула ссылку для оплаты."
+            );
         }
 
         updateBookPayment.run(payment.id, order.orderId);
 
         console.log("Создан заказ книги:", order.orderId);
+        console.log("Город:", order.city);
         console.log("Создан платёж:", payment.id);
+        console.log(
+            "Согласия записаны для заказа книги:",
+            order.orderId,
+            order.consentedAt
+        );
 
         return res.status(201).json({
             orderId: order.orderId,
@@ -498,10 +661,14 @@ app.post("/api/create-order", async (req, res) => {
             status: "pending",
             paymentUrl: payment.confirmation.confirmation_url,
             expiresAt: order.expiresAt,
-            message: "Заказ создан. Оплатите его в течение 15 минут."
+            message:
+                "Заказ создан. Оплатите его в течение 15 минут."
         });
     } catch (error) {
-        console.error("Ошибка создания заказа книги:", error.message);
+        console.error(
+            "Ошибка создания заказа книги:",
+            error.message
+        );
 
         db.prepare(`
             UPDATE orders
@@ -510,24 +677,32 @@ app.post("/api/create-order", async (req, res) => {
         `).run(order.orderId);
 
         return res.status(502).json({
-            message: "Не удалось создать платёж. Попробуй позже."
+            message:
+                "Не удалось создать платёж. Попробуй позже."
         });
     }
 });
 
 // ==========================================
-// 9. СОЗДАНИЕ ЗАКАЗА ОТКРЫТКИ — 250 ₽
+// 10. СОЗДАНИЕ ЗАКАЗА ОТКРЫТКИ — 250 ₽
 // ==========================================
 
 app.post("/api/postcard/create-payment", async (req, res) => {
     const { phone, postalAddress } = req.body || {};
 
+    // Проверяем согласия на стороне сервера.
+    if (!hasRequiredConsents(req.body)) {
+        return consentError(res);
+    }
+
     if (
         typeof phone !== "string" || !phone.trim() ||
-        typeof postalAddress !== "string" || !postalAddress.trim()
+        typeof postalAddress !== "string" ||
+        !postalAddress.trim()
     ) {
         return res.status(400).json({
-            error: "Укажи номер телефона и адрес почтового отделения."
+            error:
+                "Укажи номер телефона и адрес почтового отделения."
         });
     }
 
@@ -541,10 +716,14 @@ app.post("/api/postcard/create-payment", async (req, res) => {
         });
     }
 
-    if (cleanPhone.length > 50 || cleanAddress.length > 1000 ||
-        cleanAddress.length < 5) {
+    if (
+        cleanPhone.length > 50 ||
+        cleanAddress.length > 1000 ||
+        cleanAddress.length < 5
+    ) {
         return res.status(400).json({
-            error: "Проверь телефон и адрес почтового отделения."
+            error:
+                "Проверь телефон и адрес почтового отделения."
         });
     }
 
@@ -555,9 +734,12 @@ app.post("/api/postcard/create-payment", async (req, res) => {
         !POSTCARD_GOOGLE_SHEETS_SECRET
     ) {
         return res.status(503).json({
-            error: "Оплата или таблица открыток не настроена на сервере."
+            error:
+                "Оплата или таблица открыток не настроена на сервере."
         });
     }
+
+    const now = new Date();
 
     const order = {
         orderId: crypto.randomUUID(),
@@ -565,8 +747,16 @@ app.post("/api/postcard/create-payment", async (req, res) => {
         postalAddress: cleanAddress,
         amount: POSTCARD_AMOUNT,
         status: "pending",
-        createdAt: new Date().toISOString(),
-        expiresAt: new Date(Date.now() + PAYMENT_TIME_MS).toISOString()
+        createdAt: now.toISOString(),
+        expiresAt: new Date(
+            now.getTime() + PAYMENT_TIME_MS
+        ).toISOString(),
+
+        offerAccepted: 1,
+        personalDataConsent: 1,
+        offerVersion: OFFER_VERSION,
+        consentVersion: PERSONAL_DATA_CONSENT_VERSION,
+        consentedAt: now.toISOString()
     };
 
     try {
@@ -586,9 +776,11 @@ app.post("/api/postcard/create-payment", async (req, res) => {
                 capture: true,
                 confirmation: {
                     type: "redirect",
-                    return_url: `${SITE_URL}/?postcard_payment=return`
+                    return_url:
+                        `${SITE_URL}/?postcard_payment=return`
                 },
-                description: `Открытка. Заказ ${order.orderId}`,
+                description:
+                    `Открытка. Заказ ${order.orderId}`,
                 metadata: {
                     order_id: order.orderId,
                     order_type: "postcard"
@@ -601,13 +793,29 @@ app.post("/api/postcard/create-payment", async (req, res) => {
             !payment.confirmation ||
             !payment.confirmation.confirmation_url
         ) {
-            throw new Error("ЮKassa не вернула ссылку для оплаты.");
+            throw new Error(
+                "ЮKassa не вернула ссылку для оплаты."
+            );
         }
 
-        updatePostcardPayment.run(payment.id, order.orderId);
+        updatePostcardPayment.run(
+            payment.id,
+            order.orderId
+        );
 
-        console.log("Создан заказ открытки:", order.orderId);
-        console.log("Создан платёж открытки:", payment.id);
+        console.log(
+            "Создан заказ открытки:",
+            order.orderId
+        );
+        console.log(
+            "Создан платёж открытки:",
+            payment.id
+        );
+        console.log(
+            "Согласия записаны для заказа открытки:",
+            order.orderId,
+            order.consentedAt
+        );
 
         return res.status(201).json({
             orderId: order.orderId,
@@ -615,10 +823,14 @@ app.post("/api/postcard/create-payment", async (req, res) => {
             status: "pending",
             paymentUrl: payment.confirmation.confirmation_url,
             expiresAt: order.expiresAt,
-            message: "Заказ создан. Оплатите его в течение 15 минут."
+            message:
+                "Заказ создан. Оплатите его в течение 15 минут."
         });
     } catch (error) {
-        console.error("Ошибка создания заказа открытки:", error.message);
+        console.error(
+            "Ошибка создания заказа открытки:",
+            error.message
+        );
 
         db.prepare(`
             UPDATE postcard_orders
@@ -627,13 +839,14 @@ app.post("/api/postcard/create-payment", async (req, res) => {
         `).run(order.orderId);
 
         return res.status(502).json({
-            error: "Не удалось создать платёж. Попробуй позже."
+            error:
+                "Не удалось создать платёж. Попробуй позже."
         });
     }
 });
 
 // ==========================================
-// 10. УВЕДОМЛЕНИЯ ЮKASSA
+// 11. УВЕДОМЛЕНИЯ ЮKASSA
 // ==========================================
 
 app.post("/api/yookassa-webhook", async (req, res) => {
@@ -645,20 +858,29 @@ app.post("/api/yookassa-webhook", async (req, res) => {
             return res.sendStatus(200);
         }
 
-        // Запрашиваем фактическое состояние платежа у ЮKassa.
+        // Получаем реальное состояние платежа от ЮKassa.
         const payment = await yookassaRequest(
             `/payments/${encodeURIComponent(paymentId)}`
         );
 
-        if (payment.status !== "succeeded" || payment.paid !== true) {
+        if (
+            payment.status !== "succeeded" ||
+            payment.paid !== true
+        ) {
             return res.sendStatus(200);
         }
 
         const orderId = payment.metadata?.order_id;
         const orderType = payment.metadata?.order_type;
 
-        if (!orderId || !["book", "postcard"].includes(orderType)) {
-            console.error("Нет корректных метаданных платежа:", paymentId);
+        if (
+            !orderId ||
+            !["book", "postcard"].includes(orderType)
+        ) {
+            console.error(
+                "Нет корректных метаданных платежа:",
+                paymentId
+            );
             return res.sendStatus(200);
         }
 
@@ -685,11 +907,14 @@ app.post("/api/yookassa-webhook", async (req, res) => {
             order.payment_id !== paymentId ||
             paidAmount !== expectedAmount
         ) {
-            console.error("Не совпали ID или сумма платежа:", paymentId);
+            console.error(
+                "Не совпали ID или сумма платежа:",
+                paymentId
+            );
             return res.sendStatus(200);
         }
 
-        // Заказ считается оплаченным только после проверки ЮKassa.
+        // Обновляем только заказ с проверенным платежом.
         if (orderType === "postcard") {
             db.prepare(`
                 UPDATE postcard_orders
@@ -713,8 +938,6 @@ app.post("/api/yookassa-webhook", async (req, res) => {
             orderId
         );
 
-        // Отправляем только подтверждённые оплаты.
-        // Если Google временно недоступен, фоновая задача повторит отправку.
         await sendPaidOrdersToSheets();
 
         return res.sendStatus(200);
@@ -729,36 +952,48 @@ app.post("/api/yookassa-webhook", async (req, res) => {
 });
 
 // ==========================================
-// 11. ФОНОВЫЕ ЗАДАЧИ
+// 12. ФОНОВЫЕ ЗАДАЧИ
 // ==========================================
 
 expireUnpaidOrders();
 
 sendPaidOrdersToSheets().catch(error => {
-    console.error("Стартовая отправка в Google:", error.message);
+    console.error(
+        "Стартовая отправка в Google:",
+        error.message
+    );
 });
 
-const expiryTimer = setInterval(expireUnpaidOrders, 30000);
+const expiryTimer = setInterval(
+    expireUnpaidOrders,
+    30000
+);
 
 const sheetsTimer = setInterval(() => {
     sendPaidOrdersToSheets().catch(error => {
-        console.error("Ошибка фоновой отправки:", error.message);
+        console.error(
+            "Ошибка фоновой отправки:",
+            error.message
+        );
     });
 }, 60000);
 
 // ==========================================
-// 12. ЗАПУСК
+// 13. ЗАПУСК И ЗАВЕРШЕНИЕ
 // ==========================================
 
-app.listen(PORT, "127.0.0.1", () => {
+const server = app.listen(PORT, "127.0.0.1", () => {
     console.log(`Сайт запущен на порту ${PORT}`);
 });
 
 function shutdown() {
     clearInterval(expiryTimer);
     clearInterval(sheetsTimer);
-    db.close();
-    process.exit(0);
+
+    server.close(() => {
+        db.close();
+        process.exit(0);
+    });
 }
 
 process.on("SIGINT", shutdown);
