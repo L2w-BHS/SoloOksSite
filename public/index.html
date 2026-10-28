@@ -1798,6 +1798,10 @@ document.addEventListener("DOMContentLoaded", function () {
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
 
+            // Передаём серверу подтверждённые согласия как boolean.
+            data.offerAccepted = form.elements.offerAccepted.checked;
+            data.personalDataConsent = form.elements.personalDataConsent.checked;
+
             const response = await fetch("/api/create-order", {
                 method: "POST",
                 headers: {
