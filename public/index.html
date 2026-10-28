@@ -331,183 +331,6 @@
         </div>
     </section>
 
-    <!-- СУВЕНИРНАЯ ПРОДУКЦИЯ И ОТКРЫТКИ -->
-<section class="postcards-section" id="postcards">
-    <div class="container">
-
-        <h2 class="postcards-title">
-            Сувенирная продукция и открытки
-        </h2>
-
-        <div class="postcards-content">
-
-            <!-- Галерея открыток -->
-            <div class="postcards-gallery">
-                <div class="postcards-carousel">
-
-                    <button
-                        class="postcards-arrow postcards-arrow-prev"
-                        type="button"
-                        aria-label="Предыдущая открытка"
-                    >
-                        &#10094;
-                    </button>
-
-                    <div class="postcards-carousel-window">
-                        <div class="postcards-carousel-track">
-
-                            <img
-                                src="./images/otkr.jpg"
-                                alt="Открытка из серии Урал БЕЗ каблуков"
-                            >
-
-                            <img
-                                src="./images/otkr1.jpg"
-                                alt="Открытка из серии Урал БЕЗ каблуков"
-                            >
-
-                            <img
-                                src="./images/otkr2.jpg"
-                                alt="Открытка из серии Урал БЕЗ каблуков"
-                            >
-
-                            <img
-                                src="./images/otkr3.jpg"
-                                alt="Открытка из серии Урал БЕЗ каблуков"
-                            >
-
-                            <img
-                                src="./images/otkr4.jpg"
-                                alt="Открытка из серии Урал БЕЗ каблуков"
-                            >
-
-                            <img
-                                src="./images/otkr5.jpg"
-                                alt="Открытка из серии Урал БЕЗ каблуков"
-                            >
-
-                        </div>
-                    </div>
-
-                    <button
-                        class="postcards-arrow postcards-arrow-next"
-                        type="button"
-                        aria-label="Следующая открытка"
-                    >
-                        &#10095;
-                    </button>
-
-                </div>
-
-                <div
-                    class="postcards-dots"
-                    aria-label="Выбор открытки"
-                ></div>
-            </div>
-
-            <!-- Описание и заказ -->
-            <div class="postcards-info">
-
-                <h3>Открытки «Урал БЕЗ каблуков»</h3>
-
-                <p>
-                    Уникальная серия открыток, посвящённая красоте,
-                    характеру и атмосфере Урала.
-                </p>
-
-                <p>
-                    Художник — Олег Бронников.
-                </p>
-
-                <p>
-                    Открытка станет приятным подарком для близких
-                    или памятным сувениром для себя.
-                </p>
-
-                <p>
-                    Отправка осуществляется Почтой России.
-                    Стоимость отправки уже включена в цену.
-                    По желанию можно получить автограф автора.
-                </p>
-
-                <div class="postcards-price">250 ₽</div>
-
-                <button
-                    class="button postcards-order-button"
-                    type="button"
-                    onclick="document.getElementById('postcard-order-modal').style.display='flex'"
-                >
-                    Заказать
-                </button>
-
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<!-- МОДАЛЬНОЕ ОКНО ЗАКАЗА ОТКРЫТКИ -->
-<div
-    class="modal"
-    id="postcard-order-modal"
-    style="display: none;"
->
-    <div class="modal-content">
-
-        <button
-            class="modal-close"
-            type="button"
-            aria-label="Закрыть"
-            onclick="document.getElementById('postcard-order-modal').style.display='none'"
-        >
-            &times;
-        </button>
-
-        <h2>Заказ открытки</h2>
-
-        <p>
-            Стоимость заказа — 250 ₽, включая отправку.
-        </p>
-
-        <form id="postcard-order-form">
-
-            <label for="postcard-phone">
-                Номер телефона
-            </label>
-
-            <input
-                type="tel"
-                id="postcard-phone"
-                name="phone"
-                placeholder="+7 (___) ___-__-__"
-                autocomplete="tel"
-                required
-            >
-
-            <label for="postcard-address">
-                Адрес почтового отделения
-            </label>
-
-            <textarea
-                id="postcard-address"
-                name="postalAddress"
-                placeholder="Город, индекс и адрес отделения Почты России"
-                rows="3"
-                required
-            ></textarea>
-
-            <button
-                type="submit"
-                class="button"
-            >
-                Перейти к оплате — 250 ₽
-            </button>
-
-        </form>
-    </div>
-</div>
-
-
     <!-- ================================= -->
     <!-- ОТЗЫВЫ: КАРУСЕЛЬ -->
     <!-- ================================= -->
@@ -704,6 +527,278 @@
             </div>
         </div>
     </section>
+
+ 
+<!-- СУВЕНИРНАЯ ПРОДУКЦИЯ И ОТКРЫТКИ -->
+<section class="postcards-section" id="postcards">
+    <div class="container">
+
+        <h2 class="postcards-title">
+            Открытки и сувенирная продукция
+        </h2>
+
+        <h1 class="postcards2-title">
+            Здесь вы можете купить открытки и сувенирную продукцию.
+            Это не просто открытки, браслеты и нужные в походе вещицы –
+            это эксклюзивные вещи, которые не найдешь в магазинах
+            и на маркетплейсах. Но главное, покупая этот товар,
+            вы поддерживаете проект Оксаны Соло.
+        </h1>
+
+        <!-- Карусель целых карточек товаров -->
+        <div class="products-carousel">
+
+            <button
+                class="postcards-arrow products-arrow-prev"
+                type="button"
+                aria-label="Предыдущий товар"
+            >
+                &#10094;
+            </button>
+
+            <div class="products-carousel-window">
+                <div class="products-carousel-track">
+
+                    <!-- КАРТОЧКА 1: ОТКРЫТКИ -->
+                    <article class="products-slide">
+
+                        <div class="postcards-content">
+
+                            <!-- Старая карусель фотографий открыток -->
+                            <div class="postcards-gallery">
+                                <div class="postcards-carousel">
+
+                                    <button
+                                        class="postcards-arrow postcards-arrow-prev"
+                                        type="button"
+                                        aria-label="Предыдущая открытка"
+                                    >
+                                        &#10094;
+                                    </button>
+
+                                    <div class="postcards-carousel-window">
+                                        <div class="postcards-carousel-track">
+
+                                            <img src="./images/otkr.jpg"
+                                                 alt="Открытка Урал БЕЗ каблуков">
+
+                                            <img src="./images/otkr1.jpg"
+                                                 alt="Открытка Урал БЕЗ каблуков">
+
+                                            <img src="./images/otkr2.jpg"
+                                                 alt="Открытка Урал БЕЗ каблуков">
+
+                                            <img src="./images/otkr3.jpg"
+                                                 alt="Открытка Урал БЕЗ каблуков">
+
+                                            <img src="./images/otkr4.jpg"
+                                                 alt="Открытка Урал БЕЗ каблуков">
+
+                                            <img src="./images/otkr5.jpg"
+                                                 alt="Открытка Урал БЕЗ каблуков">
+
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        class="postcards-arrow postcards-arrow-next"
+                                        type="button"
+                                        aria-label="Следующая открытка"
+                                    >
+                                        &#10095;
+                                    </button>
+
+                                </div>
+
+                                <div class="postcards-dots"
+                                     aria-label="Выбор открытки"></div>
+                            </div>
+
+                            <!-- Описание открыток -->
+                            <div class="postcards-info">
+
+                                <h3>Открытки «Урал БЕЗ каблуков»</h3>
+
+                                <p>
+                                    Уникальная серия открыток, посвящённая
+                                    красоте, характеру и атмосфере Урала.
+                                </p>
+
+                                <p>
+                                    Художник — Олег Бронников.
+                                </p>
+
+                                <p>
+                                    Открытка станет приятным подарком
+                                    для близких или памятным сувениром
+                                    для себя.
+                                </p>
+
+                                <p>
+                                    Отправка осуществляется Почтой России.
+                                    Стоимость отправки уже включена в цену.
+                                    По желанию можно получить автограф автора.
+                                </p>
+
+                                <div class="postcards-price">250 ₽</div>
+
+                                <button
+                                    class="button postcards-order-button"
+                                    type="button"
+                                    onclick="document.getElementById('postcard-order-modal').style.display='flex'"
+                                >
+                                    Заказать открытки
+                                </button>
+
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- КАРТОЧКА 2: БРАСЛЕТ -->
+                    <article class="products-slide">
+
+                        <div class="postcards-content">
+
+
+                    <!-- Одна фотография браслета -->
+                    <div class="postcards-gallery bracelet-gallery">
+
+                        <div class="bracelet-photos">
+                            <img
+                                src="./images/ykrash.jpg"
+                                alt="Серебряный браслет Solo"
+                            >
+                        </div>
+
+                    </div>
+
+
+                            <!-- Описание браслета -->
+                            <div class="postcards-info bracelet-info">
+
+                                <h3>Браслет Solo</h3>
+
+                                <p>
+                                    Серебряный утончённый браслет-цепочка Solo.
+                                    Создан компанией «Экстремальные украшения
+                                    EXJE» Олега Чегодаева в соавторстве
+                                    с путешественницей Оксаной Соло (Лыткиной).
+                                </p>
+
+                                <p>
+                                    Элегантный браслет подойдёт любителям
+                                    неброских, но изящных украшений
+                                    с особенным смыслом.
+                                </p>
+
+                                <p>
+                                    Длина регулируется за счёт дополнительных
+                                    звеньев от 13,5 до 21 см, поэтому подойдёт
+                                    на любой обхват руки в этом диапазоне.
+                                </p>
+
+                                <p><strong>Вес:</strong> 2,97 г</p>
+
+                                <p><strong>Габариты:</strong> 28 × 10 × 2 мм</p>
+
+                                <p><strong>Материал:</strong> серебро 925 пробы</p>
+
+                                <div class="postcards-price">2 800 ₽</div>
+
+                                <a
+                                    class="button postcards-order-button"
+                                    href="https://www.exje.ru/product/chain-bracelet-solo"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Купить на сайте EXJE
+                                </a>
+
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+
+            <button
+                class="postcards-arrow products-arrow-next"
+                type="button"
+                aria-label="Следующий товар"
+            >
+                &#10095;
+            </button>
+
+        </div>
+
+        <div class="products-carousel-dots"
+             aria-label="Выбор товара"></div>
+
+    </div>
+</section>
+
+
+
+<!-- МОДАЛЬНОЕ ОКНО ЗАКАЗА ОТКРЫТКИ -->
+<div
+    class="modal"
+    id="postcard-order-modal"
+    style="display: none;"
+>
+    <div class="modal-content">
+
+        <button
+            class="modal-close"
+            type="button"
+            aria-label="Закрыть"
+            onclick="document.getElementById('postcard-order-modal').style.display='none'"
+        >
+            &times;
+        </button>
+
+        <h2>Заказ открытки</h2>
+
+        <p>
+            Стоимость заказа — 250 ₽, включая отправку.
+        </p>
+
+        <form id="postcard-order-form">
+
+            <label for="postcard-phone">
+                Номер телефона
+            </label>
+
+            <input
+                type="tel"
+                id="postcard-phone"
+                name="phone"
+                placeholder="+7 (___) ___-__-__"
+                autocomplete="tel"
+                required
+            >
+
+            <label for="postcard-address">
+                Адрес почтового отделения
+            </label>
+
+            <textarea
+                id="postcard-address"
+                name="postalAddress"
+                placeholder="Город, индекс и адрес отделения Почты России"
+                rows="3"
+                required
+            ></textarea>
+
+            <button
+                type="submit"
+                class="button"
+            >
+                Перейти к оплате — 250 ₽
+            </button>
+
+        </form>
+    </div>
+</div>
 
 
     <!-- ================================= -->
@@ -2271,93 +2366,201 @@ if (phone) {
 
 
 <script>
+
 document.addEventListener("DOMContentLoaded", () => {
+
     // ==========================================
-    // 1. КАРУСЕЛЬ ОТКРЫТОК
+    // 1. КАРУСЕЛЬ ЦЕЛЫХ ТОВАРОВ
     // ==========================================
 
-    const carousel = document.querySelector(".postcards-carousel");
-    const track = document.querySelector(".postcards-carousel-track");
-    const dotsContainer = document.querySelector(".postcards-dots");
-    const prevButton = document.querySelector(".postcards-arrow-prev");
-    const nextButton = document.querySelector(".postcards-arrow-next");
+    const productsCarousel = document.querySelector(".products-carousel");
+    const productsTrack = document.querySelector(".products-carousel-track");
+    const productsDotsContainer = document.querySelector(".products-carousel-dots");
+    const productsPrev = document.querySelector(".products-arrow-prev");
+    const productsNext = document.querySelector(".products-arrow-next");
 
-    if (carousel && track && dotsContainer) {
-        const images = Array.from(track.querySelectorAll("img"));
-        let currentIndex = 0;
+    if (productsCarousel && productsTrack && productsDotsContainer) {
+        const products = Array.from(productsTrack.querySelectorAll(".products-slide"));
+        let currentProduct = 0;
 
-        // Создаём точки переключения
-        dotsContainer.innerHTML = "";
+        productsDotsContainer.innerHTML = "";
 
-        const dots = images.map((image, index) => {
+        const productDots = products.map((product, index) => {
+            const dot = document.createElement("button");
+
+            dot.type = "button";
+            dot.className = "products-dot";
+            dot.setAttribute(
+                "aria-label",
+                index === 0 ? "Открытки" : "Браслет Solo"
+            );
+
+            dot.addEventListener("click", () => showProduct(index));
+
+            productsDotsContainer.appendChild(dot);
+            return dot;
+        });
+
+        function showProduct(index) {
+            if (!products.length) return;
+
+            currentProduct = (index + products.length) % products.length;
+
+            productsTrack.style.transform =
+                `translateX(-${currentProduct * 100}%)`;
+
+            productDots.forEach((dot, i) => {
+                dot.classList.toggle("active", i === currentProduct);
+                dot.setAttribute(
+                    "aria-current",
+                    i === currentProduct ? "true" : "false"
+                );
+            });
+
+            products.forEach((product, i) => {
+                product.setAttribute(
+                    "aria-hidden",
+                    i === currentProduct ? "false" : "true"
+                );
+            });
+        }
+
+        productsPrev?.addEventListener("click", () => {
+            showProduct(currentProduct - 1);
+        });
+
+        productsNext?.addEventListener("click", () => {
+            showProduct(currentProduct + 1);
+        });
+
+        // Поддержка свайпа пальцем и мышью
+        let startX = 0;
+        let startY = 0;
+        let isDragging = false;
+
+        productsCarousel.addEventListener("touchstart", event => {
+            startX = event.touches[0].clientX;
+            startY = event.touches[0].clientY;
+        }, { passive: true });
+
+        productsCarousel.addEventListener("touchend", event => {
+            const endX = event.changedTouches[0].clientX;
+            const endY = event.changedTouches[0].clientY;
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+
+            // Не мешаем вертикальной прокрутке страницы
+            if (Math.abs(deltaX) > 60 && Math.abs(deltaX) > Math.abs(deltaY)) {
+                showProduct(currentProduct + (deltaX < 0 ? 1 : -1));
+            }
+        }, { passive: true });
+
+        productsCarousel.addEventListener("keydown", event => {
+            if (event.key === "ArrowLeft") {
+                showProduct(currentProduct - 1);
+            }
+
+            if (event.key === "ArrowRight") {
+                showProduct(currentProduct + 1);
+            }
+        });
+
+        showProduct(0);
+    }
+
+
+    // ==========================================
+    // 2. КАРУСЕЛЬ ФОТОГРАФИЙ ОТКРЫТОК
+    // ==========================================
+
+    // Ищем карусель только внутри карточки открыток.
+    const postcardProduct = document.querySelector(
+        '.products-slide .postcards-gallery:not(.bracelet-gallery)'
+    );
+
+    const postcardCarousel = postcardProduct?.querySelector(".postcards-carousel");
+    const postcardTrack = postcardProduct?.querySelector(".postcards-carousel-track");
+    const postcardDotsContainer = postcardProduct?.querySelector(".postcards-dots");
+    const postcardPrev = postcardProduct?.querySelector(".postcards-arrow-prev");
+    const postcardNext = postcardProduct?.querySelector(".postcards-arrow-next");
+
+    if (postcardCarousel && postcardTrack && postcardDotsContainer) {
+        const images = Array.from(postcardTrack.querySelectorAll("img"));
+        let currentImage = 0;
+
+        postcardDotsContainer.innerHTML = "";
+
+        const imageDots = images.map((image, index) => {
             const dot = document.createElement("button");
 
             dot.type = "button";
             dot.className = "postcards-dot";
             dot.setAttribute("aria-label", `Открытка ${index + 1}`);
 
-            dot.addEventListener("click", () => {
-                showImage(index);
-            });
+            dot.addEventListener("click", () => showImage(index));
 
-            dotsContainer.appendChild(dot);
+            postcardDotsContainer.appendChild(dot);
             return dot;
         });
 
         function showImage(index) {
             if (!images.length) return;
 
-            currentIndex = (index + images.length) % images.length;
+            currentImage = (index + images.length) % images.length;
 
-            // Перемещаем карусель
-            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            postcardTrack.style.transform =
+                `translateX(-${currentImage * 100}%)`;
 
-            dots.forEach((dot, i) => {
-                dot.classList.toggle("active", i === currentIndex);
+            imageDots.forEach((dot, i) => {
+                dot.classList.toggle("active", i === currentImage);
                 dot.setAttribute(
                     "aria-current",
-                    i === currentIndex ? "true" : "false"
+                    i === currentImage ? "true" : "false"
                 );
             });
 
             images.forEach((image, i) => {
                 image.setAttribute(
                     "aria-hidden",
-                    i === currentIndex ? "false" : "true"
+                    i === currentImage ? "false" : "true"
                 );
             });
         }
 
-        prevButton?.addEventListener("click", () => {
-            showImage(currentIndex - 1);
+        postcardPrev?.addEventListener("click", () => {
+            showImage(currentImage - 1);
         });
 
-        nextButton?.addEventListener("click", () => {
-            showImage(currentIndex + 1);
+        postcardNext?.addEventListener("click", () => {
+            showImage(currentImage + 1);
         });
 
-        // Переключение стрелками клавиатуры
-        carousel.addEventListener("keydown", (event) => {
+        postcardCarousel.addEventListener("keydown", event => {
             if (event.key === "ArrowLeft") {
-                showImage(currentIndex - 1);
+                showImage(currentImage - 1);
             }
 
             if (event.key === "ArrowRight") {
-                showImage(currentIndex + 1);
+                showImage(currentImage + 1);
             }
         });
 
         showImage(0);
     }
 
+
     // ==========================================
-    // 2. МОДАЛЬНОЕ ОКНО ЗАКАЗА
+    // 3. МОДАЛЬНОЕ ОКНО ЗАКАЗА ОТКРЫТОК
     // ==========================================
 
     const modal = document.getElementById("postcard-order-modal");
     const form = document.getElementById("postcard-order-form");
 
-    const openButton = document.querySelector(".postcards-order-button");
+    // Только кнопка внутри карточки открыток открывает форму.
+    const openButton = document.querySelector(
+        '.products-slide:first-child .postcards-order-button'
+    );
+
     const closeButton = modal?.querySelector(".modal-close");
 
     function openModal() {
@@ -2379,40 +2582,34 @@ document.addEventListener("DOMContentLoaded", () => {
     openButton?.addEventListener("click", openModal);
     closeButton?.addEventListener("click", closeModal);
 
-    // Закрытие при клике за пределами формы
-    modal?.addEventListener("click", (event) => {
+    modal?.addEventListener("click", event => {
         if (event.target === modal) {
             closeModal();
         }
     });
 
-    // Закрытие клавишей Escape
-    document.addEventListener("keydown", (event) => {
+    document.addEventListener("keydown", event => {
         if (event.key === "Escape" && modal?.style.display === "flex") {
             closeModal();
         }
     });
 
+
     // ==========================================
-    // 3. ОТПРАВКА ЗАКАЗА НА СЕРВЕР
+    // 4. ОТПРАВКА ЗАКАЗА ОТКРЫТОК НА СЕРВЕР
     // ==========================================
 
     if (form) {
-        form.addEventListener("submit", async (event) => {
+        form.addEventListener("submit", async event => {
             event.preventDefault();
 
             const phoneInput = form.querySelector('[name="phone"]');
-            const addressInput = form.querySelector(
-                '[name="postalAddress"]'
-            );
-            const submitButton = form.querySelector(
-                'button[type="submit"]'
-            );
+            const addressInput = form.querySelector('[name="postalAddress"]');
+            const submitButton = form.querySelector('button[type="submit"]');
 
             const phone = phoneInput?.value.trim() || "";
             const postalAddress = addressInput?.value.trim() || "";
 
-            // Проверяем телефон
             const digits = phone.replace(/\D/g, "");
 
             if (digits.length < 10 || digits.length > 15) {
@@ -2421,7 +2618,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // Проверяем адрес
             if (postalAddress.length < 5) {
                 alert(
                     "Укажи город, почтовый индекс и адрес отделения Почты России."
@@ -2438,19 +2634,16 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             try {
-                const response = await fetch(
-                    "/api/postcard/create-payment",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            phone,
-                            postalAddress
-                        })
-                    }
-                );
+                const response = await fetch("/api/postcard/create-payment", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        phone,
+                        postalAddress
+                    })
+                });
 
                 const result = await response.json().catch(() => ({}));
 
@@ -2461,7 +2654,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
                 }
 
-                // Сервер должен вернуть ссылку на оплату ЮKassa
                 if (!result.paymentUrl) {
                     throw new Error(
                         "Сервер пока не вернул ссылку на оплату. " +
@@ -2469,7 +2661,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
                 }
 
-                // Переходим на страницу оплаты
                 window.location.assign(result.paymentUrl);
 
             } catch (error) {
@@ -2488,6 +2679,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
 });
 </script>
 

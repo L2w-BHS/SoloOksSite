@@ -1800,6 +1800,14 @@ button:hover,
     text-align: center;
 }
 
+.postcards2-title {
+    margin-bottom: 35px;
+    color: #cebba2;
+    font-size: clamp(5px, 4vw, 20px);
+    line-height: 1.25;
+    text-align: center;
+}
+
 .postcards-content {
     display: grid;
     grid-template-columns: minmax(0, 1.5fr) minmax(260px, 1fr);
@@ -2088,4 +2096,316 @@ button:hover,
 .postcards-dots .postcards-dot:not(.active):hover {
     background: #bbb;
     border-color: #555;
+}
+
+
+/* =========================================
+   КАРУСЕЛЬ СУВЕНИРОВ И ОТКРЫТОК
+========================================= */
+
+/* Скрываем описание неактивного товара */
+.postcards-info[hidden] {
+    display: none !important;
+}
+
+/* Ссылки-кнопки оформляются так же, как кнопки */
+a.postcards-order-button {
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+/* Длинное описание браслета */
+.postcards-info[data-product="bracelet"] p {
+    margin-bottom: 14px;
+    line-height: 1.7;
+}
+
+/* Цена браслета */
+.postcards-info[data-product="bracelet"] .postcards-price {
+    margin-top: 20px;
+}
+
+/* Делаем карточку браслета удобной для длинного текста */
+@media (min-width: 751px) {
+    .postcards-info[data-product="bracelet"] {
+        align-self: stretch;
+    }
+}
+
+/* Мобильная версия */
+@media (max-width: 750px) {
+    .postcards-info[data-product="bracelet"] {
+        padding: 22px;
+    }
+
+    .postcards-info[data-product="bracelet"] p {
+        font-size: 15px;
+    }
+}
+
+
+/* =========================================
+   КАРУСЕЛЬ ЦЕЛЫХ КАРТОЧЕК ТОВАРОВ
+========================================= */
+
+.products-carousel {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+}
+
+.products-carousel-window {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+.products-carousel-track {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    transition: transform 0.45s ease;
+}
+
+.products-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* Внутреннее расположение фото и описания */
+.products-slide .postcards-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(260px, 1fr);
+    align-items: center;
+    gap: 30px;
+    height: 100%;
+}
+
+/* Галерея внутри карточки */
+.products-slide .postcards-gallery {
+    width: 100%;
+    min-width: 0;
+}
+
+/* Информация о товаре */
+.products-slide .postcards-info {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+}
+
+/* Заголовок товара */
+.products-slide .postcards-info h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #e0c39b;
+    font-size: clamp(22px, 2.5vw, 30px);
+    line-height: 1.3;
+}
+
+/* Стрелки переключения всей карточки */
+.products-arrow-prev,
+.products-arrow-next {
+    position: relative;
+    z-index: 2;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e6cda7;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d4b58a, #b8996c);
+    color: #211a12;
+    font-size: 24px;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.products-arrow-prev:hover,
+.products-arrow-next:hover {
+    background: linear-gradient(135deg, #e2c69e, #c5a77b);
+    transform: scale(1.06);
+}
+
+/* Точки выбора товара */
+.products-carousel-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.products-carousel-dots .products-dot {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
+    padding: 0;
+    border: 2px solid #96836d;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.products-carousel-dots .products-dot.active {
+    background: #e5c99a;
+    border-color: #e5c99a;
+    transform: scale(1.15);
+}
+
+
+/* =========================================
+   ОДНА ФОТОГРАФИЯ БРАСЛЕТА
+========================================= */
+
+.bracelet-gallery {
+    display: flex;
+    align-items: stretch;
+    min-width: 0;
+}
+
+.bracelet-photos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+}
+
+.bracelet-photos img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 420px;
+    max-height: 650px;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 14px;
+}
+
+.products-slide .bracelet-info {
+    height: auto;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+@media (max-width: 750px) {
+    .bracelet-photos img {
+        height: auto;
+        min-height: 0;
+        max-height: 420px;
+        aspect-ratio: 4 / 5;
+    }
+}
+
+
+/* Кнопка внешней покупки */
+.bracelet-info a.postcards-order-button {
+    display: block;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+/* =========================================
+   АДАПТАЦИЯ ДЛЯ ПЛАНШЕТОВ И ТЕЛЕФОНОВ
+========================================= */
+
+@media (max-width: 900px) {
+    .products-slide .postcards-content {
+        grid-template-columns: minmax(0, 1.2fr) minmax(230px, 1fr);
+        gap: 20px;
+    }
+
+    .products-slide .postcards-info {
+        padding: 22px;
+    }
+
+    .bracelet-photos img {
+        height: 350px;
+    }
+}
+
+@media (max-width: 750px) {
+    .products-carousel {
+        gap: 6px;
+    }
+
+    .products-arrow-prev,
+    .products-arrow-next {
+        flex-basis: 32px;
+        width: 32px;
+        height: 32px;
+        font-size: 20px;
+    }
+
+    .products-slide .postcards-content {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 22px;
+    }
+
+    .products-slide .postcards-info {
+        height: auto;
+        padding: 22px;
+    }
+
+    .products-slide .postcards-info h3 {
+        font-size: 24px;
+    }
+
+    .bracelet-photos {
+        gap: 8px;
+    }
+
+    .bracelet-photos img {
+        height: 300px;
+    }
+}
+
+@media (max-width: 400px) {
+    .products-carousel {
+        gap: 4px;
+    }
+
+    .products-arrow-prev,
+    .products-arrow-next {
+        flex-basis: 28px;
+        width: 28px;
+        height: 28px;
+        font-size: 18px;
+    }
+
+    .products-slide .postcards-info {
+        padding: 17px;
+    }
+
+    .bracelet-photos {
+        gap: 5px;
+    }
+
+    .bracelet-photos img {
+        height: 230px;
+    }
+}
+
+/* Учитываем системную настройку уменьшения анимации */
+@media (prefers-reduced-motion: reduce) {
+    .products-carousel-track {
+        transition: none;
+    }
 }
