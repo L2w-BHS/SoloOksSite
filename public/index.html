@@ -329,6 +329,182 @@
         </div>
     </section>
 
+    <!-- СУВЕНИРНАЯ ПРОДУКЦИЯ И ОТКРЫТКИ -->
+<section class="postcards-section" id="postcards">
+    <div class="container">
+
+        <h2 class="postcards-title">
+            Сувенирная продукция и открытки
+        </h2>
+
+        <div class="postcards-content">
+
+            <!-- Галерея открыток -->
+            <div class="postcards-gallery">
+                <div class="postcards-carousel">
+
+                    <button
+                        class="postcards-arrow postcards-arrow-prev"
+                        type="button"
+                        aria-label="Предыдущая открытка"
+                    >
+                        &#10094;
+                    </button>
+
+                    <div class="postcards-carousel-window">
+                        <div class="postcards-carousel-track">
+
+                            <img
+                                src="./images/otkr.jpg"
+                                alt="Открытка из серии Урал БЕЗ каблуков"
+                            >
+
+                            <img
+                                src="./images/otkr1.jpg"
+                                alt="Открытка из серии Урал БЕЗ каблуков"
+                            >
+
+                            <img
+                                src="./images/otkr2.jpg"
+                                alt="Открытка из серии Урал БЕЗ каблуков"
+                            >
+
+                            <img
+                                src="./images/otkr3.jpg"
+                                alt="Открытка из серии Урал БЕЗ каблуков"
+                            >
+
+                            <img
+                                src="./images/otkr4.jpg"
+                                alt="Открытка из серии Урал БЕЗ каблуков"
+                            >
+
+                            <img
+                                src="./images/otkr5.jpg"
+                                alt="Открытка из серии Урал БЕЗ каблуков"
+                            >
+
+                        </div>
+                    </div>
+
+                    <button
+                        class="postcards-arrow postcards-arrow-next"
+                        type="button"
+                        aria-label="Следующая открытка"
+                    >
+                        &#10095;
+                    </button>
+
+                </div>
+
+                <div
+                    class="postcards-dots"
+                    aria-label="Выбор открытки"
+                ></div>
+            </div>
+
+            <!-- Описание и заказ -->
+            <div class="postcards-info">
+
+                <h3>Открытки «Урал БЕЗ каблуков»</h3>
+
+                <p>
+                    Уникальная серия открыток, посвящённая красоте,
+                    характеру и атмосфере Урала.
+                </p>
+
+                <p>
+                    Художник — Олег Бронников.
+                </p>
+
+                <p>
+                    Открытка станет приятным подарком для близких
+                    или памятным сувениром для себя.
+                </p>
+
+                <p>
+                    Отправка осуществляется Почтой России.
+                    Стоимость отправки уже включена в цену.
+                    По желанию можно получить автограф автора.
+                </p>
+
+                <div class="postcards-price">250 ₽</div>
+
+                <button
+                    class="button postcards-order-button"
+                    type="button"
+                    onclick="document.getElementById('postcard-order-modal').style.display='flex'"
+                >
+                    Заказать
+                </button>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- МОДАЛЬНОЕ ОКНО ЗАКАЗА ОТКРЫТКИ -->
+<div
+    class="modal"
+    id="postcard-order-modal"
+    style="display: none;"
+>
+    <div class="modal-content">
+
+        <button
+            class="modal-close"
+            type="button"
+            aria-label="Закрыть"
+            onclick="document.getElementById('postcard-order-modal').style.display='none'"
+        >
+            &times;
+        </button>
+
+        <h2>Заказ открытки</h2>
+
+        <p>
+            Стоимость заказа — 250 ₽, включая отправку.
+        </p>
+
+        <form id="postcard-order-form">
+
+            <label for="postcard-phone">
+                Номер телефона
+            </label>
+
+            <input
+                type="tel"
+                id="postcard-phone"
+                name="phone"
+                placeholder="+7 (___) ___-__-__"
+                autocomplete="tel"
+                required
+            >
+
+            <label for="postcard-address">
+                Адрес почтового отделения
+            </label>
+
+            <textarea
+                id="postcard-address"
+                name="postalAddress"
+                placeholder="Город, индекс и адрес отделения Почты России"
+                rows="3"
+                required
+            ></textarea>
+
+            <button
+                type="submit"
+                class="button"
+            >
+                Перейти к оплате — 250 ₽
+            </button>
+
+        </form>
+    </div>
+</div>
+
 
     <!-- ================================= -->
     <!-- ОТЗЫВЫ: КАРУСЕЛЬ -->
@@ -2078,6 +2254,229 @@ if (phone) {
     });
 }
 </script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // ==========================================
+    // 1. КАРУСЕЛЬ ОТКРЫТОК
+    // ==========================================
+
+    const carousel = document.querySelector(".postcards-carousel");
+    const track = document.querySelector(".postcards-carousel-track");
+    const dotsContainer = document.querySelector(".postcards-dots");
+    const prevButton = document.querySelector(".postcards-arrow-prev");
+    const nextButton = document.querySelector(".postcards-arrow-next");
+
+    if (carousel && track && dotsContainer) {
+        const images = Array.from(track.querySelectorAll("img"));
+        let currentIndex = 0;
+
+        // Создаём точки переключения
+        dotsContainer.innerHTML = "";
+
+        const dots = images.map((image, index) => {
+            const dot = document.createElement("button");
+
+            dot.type = "button";
+            dot.className = "postcards-dot";
+            dot.setAttribute("aria-label", `Открытка ${index + 1}`);
+
+            dot.addEventListener("click", () => {
+                showImage(index);
+            });
+
+            dotsContainer.appendChild(dot);
+            return dot;
+        });
+
+        function showImage(index) {
+            if (!images.length) return;
+
+            currentIndex = (index + images.length) % images.length;
+
+            // Перемещаем карусель
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle("active", i === currentIndex);
+                dot.setAttribute(
+                    "aria-current",
+                    i === currentIndex ? "true" : "false"
+                );
+            });
+
+            images.forEach((image, i) => {
+                image.setAttribute(
+                    "aria-hidden",
+                    i === currentIndex ? "false" : "true"
+                );
+            });
+        }
+
+        prevButton?.addEventListener("click", () => {
+            showImage(currentIndex - 1);
+        });
+
+        nextButton?.addEventListener("click", () => {
+            showImage(currentIndex + 1);
+        });
+
+        // Переключение стрелками клавиатуры
+        carousel.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowLeft") {
+                showImage(currentIndex - 1);
+            }
+
+            if (event.key === "ArrowRight") {
+                showImage(currentIndex + 1);
+            }
+        });
+
+        showImage(0);
+    }
+
+    // ==========================================
+    // 2. МОДАЛЬНОЕ ОКНО ЗАКАЗА
+    // ==========================================
+
+    const modal = document.getElementById("postcard-order-modal");
+    const form = document.getElementById("postcard-order-form");
+
+    const openButton = document.querySelector(".postcards-order-button");
+    const closeButton = modal?.querySelector(".modal-close");
+
+    function openModal() {
+        if (!modal) return;
+
+        modal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+
+        modal.querySelector('input[name="phone"]')?.focus();
+    }
+
+    function closeModal() {
+        if (!modal) return;
+
+        modal.style.display = "none";
+        document.body.style.overflow = "";
+    }
+
+    openButton?.addEventListener("click", openModal);
+    closeButton?.addEventListener("click", closeModal);
+
+    // Закрытие при клике за пределами формы
+    modal?.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Закрытие клавишей Escape
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && modal?.style.display === "flex") {
+            closeModal();
+        }
+    });
+
+    // ==========================================
+    // 3. ОТПРАВКА ЗАКАЗА НА СЕРВЕР
+    // ==========================================
+
+    if (form) {
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const phoneInput = form.querySelector('[name="phone"]');
+            const addressInput = form.querySelector(
+                '[name="postalAddress"]'
+            );
+            const submitButton = form.querySelector(
+                'button[type="submit"]'
+            );
+
+            const phone = phoneInput?.value.trim() || "";
+            const postalAddress = addressInput?.value.trim() || "";
+
+            // Проверяем телефон
+            const digits = phone.replace(/\D/g, "");
+
+            if (digits.length < 10 || digits.length > 15) {
+                alert("Проверь номер телефона и попробуй ещё раз.");
+                phoneInput?.focus();
+                return;
+            }
+
+            // Проверяем адрес
+            if (postalAddress.length < 5) {
+                alert(
+                    "Укажи город, почтовый индекс и адрес отделения Почты России."
+                );
+                addressInput?.focus();
+                return;
+            }
+
+            const originalButtonText = submitButton?.textContent;
+
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = "Подготавливаем оплату...";
+            }
+
+            try {
+                const response = await fetch(
+                    "/api/postcard/create-payment",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            phone,
+                            postalAddress
+                        })
+                    }
+                );
+
+                const result = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.error ||
+                        "Не удалось создать заказ. Попробуй позже."
+                    );
+                }
+
+                // Сервер должен вернуть ссылку на оплату ЮKassa
+                if (!result.paymentUrl) {
+                    throw new Error(
+                        "Сервер пока не вернул ссылку на оплату. " +
+                        "Возможно, обработчик оплаты ещё не настроен."
+                    );
+                }
+
+                // Переходим на страницу оплаты
+                window.location.assign(result.paymentUrl);
+
+            } catch (error) {
+                console.error("Ошибка заказа открытки:", error);
+
+                alert(
+                    error.message ||
+                    "Не удалось отправить заказ. Проверь соединение и попробуй ещё раз."
+                );
+
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent =
+                        originalButtonText || "Перейти к оплате — 250 ₽";
+                }
+            }
+        });
+    }
+});
+</script>
+
 
 </body>
 </html>

@@ -1779,3 +1779,313 @@ button:hover,
     }
 }
 
+/* =========================================
+   СУВЕНИРНАЯ ПРОДУКЦИЯ И ОТКРЫТКИ
+========================================= */
+
+.postcards-section {
+    padding: 70px 0;
+    color: #f5ead8;
+}
+
+.postcards-section .container {
+    max-width: 1100px;
+}
+
+.postcards-title {
+    margin-bottom: 35px;
+    color: #e0c39b;
+    font-size: clamp(28px, 4vw, 38px);
+    line-height: 1.25;
+    text-align: center;
+}
+
+.postcards-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(260px, 1fr);
+    align-items: center;
+    gap: 40px;
+}
+
+.postcards-gallery {
+    min-width: 0;
+    text-align: center;
+}
+
+.postcards-carousel {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.postcards-carousel-window {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 14px;
+}
+
+.postcards-carousel-track {
+    display: flex;
+    transition: transform 0.35s ease;
+}
+
+.postcards-carousel-track img {
+    display: block;
+    flex: 0 0 100%;
+    width: 100%;
+    height: 420px;
+    object-fit: contain;
+    border-radius: 14px;
+}
+
+.postcards-arrow {
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid #e6cda7;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d4b58a, #b8996c);
+    color: #211a12;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.postcards-arrow:hover {
+    background: linear-gradient(135deg, #e2c69e, #c5a77b);
+}
+
+.postcards-dots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 18px;
+}
+
+.postcards-dot {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #96836d;
+    cursor: pointer;
+}
+
+.postcards-dot.is-active {
+    background: #e4c59a;
+    transform: scale(1.25);
+}
+
+.postcards-info {
+    padding: 30px;
+    border: 1px solid rgba(211, 184, 145, 0.35);
+    border-radius: 16px;
+    background: rgba(41, 37, 31, 0.9);
+}
+
+.postcards-info p {
+    margin-bottom: 18px;
+    color: #f0e7da;
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+.postcards-price {
+    margin: 25px 0;
+    color: #e0c39b;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.postcards-order-button {
+    display: inline-block;
+    width: 100%;
+    padding: 15px 25px;
+    border: 1px solid #e6cda7;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #d4b58a, #b8996c);
+    color: #211a12;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.postcards-order-button:hover {
+    background: linear-gradient(135deg, #e2c69e, #c5a77b);
+    transform: translateY(-2px);
+}
+
+/* Форма заказа открыток */
+
+#postcard-order-modal {
+    overflow-y: auto;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+#postcard-order-modal .modal-content {
+    width: 100%;
+    max-width: 500px;
+    max-height: none;
+    margin: auto;
+    padding: 35px;
+    border-radius: 14px;
+}
+
+#postcard-order-modal h2 {
+    margin-bottom: 12px;
+    color: #29251f;
+    font-size: 26px;
+}
+
+#postcard-order-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#postcard-order-form label {
+    margin-top: 10px;
+    font-weight: 700;
+}
+
+#postcard-order-form input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d5d0c8;
+    border-radius: 8px;
+    background: #fff;
+    color: #222;
+    font: inherit;
+    font-size: 16px;
+}
+
+#postcard-order-form input:focus {
+    outline: 2px solid #a99a84;
+    outline-offset: 1px;
+}
+
+#postcard-order-form button {
+    width: 100%;
+    margin-top: 15px;
+}
+
+/* Адаптация для телефонов */
+
+@media (max-width: 750px) {
+    .postcards-section {
+        padding: 45px 0;
+    }
+
+    .postcards-content {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .postcards-carousel-track img {
+        height: 320px;
+    }
+
+    .postcards-info {
+        padding: 22px;
+    }
+
+    .postcards-price {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 400px) {
+    .postcards-carousel {
+        gap: 6px;
+    }
+
+    .postcards-arrow {
+        flex-basis: 32px;
+        width: 32px;
+        height: 32px;
+        font-size: 20px;
+    }
+
+    .postcards-carousel-track img {
+        height: 260px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .postcards-carousel-track {
+        transition: none;
+    }
+}
+
+
+/* Крестик закрытия формы заказа открытки */
+#postcard-order-modal .modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    left: auto;
+
+    width: 44px;
+    height: 44px;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 36px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* Контейнер формы — точка отсчёта для крестика */
+#postcard-order-modal .modal-content {
+    position: relative;
+}
+
+
+/* Точки карусели открыток */
+.postcards-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.postcards-dots .postcards-dot {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
+    padding: 0;
+
+    border: 2px solid #777;
+    border-radius: 50%;
+    background: transparent;
+
+    cursor: pointer;
+    opacity: 1;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+/* Активная фотография */
+.postcards-dots .postcards-dot.active,
+.postcards-dots .postcards-dot[aria-current="true"] {
+    background: #e5c99a;
+    border-color: #e5c99a;
+}
+
+/* Наведение на неактивную точку */
+.postcards-dots .postcards-dot:not(.active):hover {
+    background: #bbb;
+    border-color: #555;
+}
