@@ -2078,55 +2078,132 @@ a.postcards-order-button {
 }
 
 /* =========================================
-   ЮРИДИЧЕСКИЕ ДОКУМЕНТЫ (privacy.html и т.п.)
+   ЮРИДИЧЕСКИЕ ДОКУМЕНТЫ (privacy.html, offer.html, cookie-policy.html, personal-data-consent.html)
+   Оформлены в стиле сайта: тёмный фон с горами,
+   Sansation, бежевые акценты.
 ========================================= */
 .privacy-document {
     width: min(92%, 900px);
     margin: 0 auto;
-    padding: 48px 0 70px;
-    color: #27231f;
+    padding: 80px 0 70px;
+    color: #f0e7da;
 }
 .privacy-document h1 {
-    margin: 0 0 12px;
-    font-size: clamp(28px, 4vw, 42px);
+    margin: 0 0 16px;
+    font-size: clamp(30px, 5vw, 46px);
     line-height: 1.2;
+    color: #fffaf2;
+    text-shadow: 0 3px 12px rgba(0, 0, 0, 0.65);
 }
 .privacy-document h2 {
-    margin: 30px 0 10px;
-    font-size: 22px;
+    margin: 38px 0 14px;
+    font-size: 24px;
+    line-height: 1.3;
+    color: #e0c39b;
 }
 .privacy-document h3 {
-    margin: 22px 0 8px;
-    font-size: 18px;
+    margin: 28px 0 10px;
+    font-size: 19px;
+    color: #e0c39b;
 }
 .privacy-document p,
 .privacy-document li {
-    font-size: 15px;
-    line-height: 1.75;
+    font-size: 16px;
+    line-height: 1.8;
+}
+.privacy-document p {
+    margin: 0 0 16px;
 }
 .privacy-document ul,
 .privacy-document ol {
     padding-left: 24px;
-    margin: 10px 0 18px;
+    margin: 12px 0 22px;
 }
 .privacy-document a {
-    color: #725d47;
+    color: #e5c99a;
     text-decoration: underline;
     text-underline-offset: 3px;
+    transition: color 0.2s ease;
+}
+.privacy-document a:hover {
+    color: #f0d9b3;
 }
 .privacy-document .document-date {
-    color: #6c6258;
-    font-size: 13px;
+    color: #b0a598;
+    font-size: 14px;
+    margin-bottom: 28px;
 }
 .privacy-document .document-back {
-    display: inline-block;
-    margin: 0 0 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 28px;
+    padding: 12px 22px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #d4b58a, #b8996c);
+    color: #211a12;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow:
+        0 4px 18px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+.privacy-document .document-back:hover {
+    background: linear-gradient(135deg, #e2c69e, #c5a77b);
+    transform: translateY(-2px);
 }
 .privacy-document .document-note {
-    padding: 14px 16px;
-    background: #f0ebe3;
-    border-left: 3px solid #a18b6f;
-    border-radius: 4px;
+    padding: 18px 20px;
+    background: rgba(190, 155, 111, 0.13);
+    border-left: 3px solid #c7a477;
+    border-radius: 0 10px 10px 0;
+    margin: 22px 0;
+    font-size: 15px;
+    line-height: 1.7;
+}
+.privacy-document .document-note strong {
+    color: #f0d7b2;
+}
+.privacy-document .document-toc {
+    padding: 22px 26px;
+    background: rgba(41, 37, 31, 0.8);
+    border: 1px solid rgba(211, 184, 145, 0.35);
+    border-radius: 14px;
+    margin: 28px 0;
+}
+.privacy-document .document-toc h3 {
+    margin-top: 0;
+    margin-bottom: 14px;
+}
+.privacy-document .document-toc ul {
+    margin: 0;
+    padding-left: 20px;
+}
+.privacy-document .document-toc li {
+    margin-bottom: 8px;
+}
+@media (max-width: 700px) {
+    .privacy-document {
+        padding: 50px 0 40px;
+    }
+    .privacy-document h1 {
+        font-size: clamp(26px, 7vw, 34px);
+    }
+    .privacy-document h2 {
+        font-size: 21px;
+        margin-top: 30px;
+    }
+    .privacy-document p,
+    .privacy-document li {
+        font-size: 15px;
+        line-height: 1.7;
+    }
+    .privacy-document .document-back {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
+    }
 }
 
 /* =========================================
