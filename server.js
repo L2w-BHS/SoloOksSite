@@ -947,21 +947,28 @@ app.post("/api/postcard/create-payment", async (req, res) => {
 // ==========================================
 
 async function createDigitalPayment(req, res, productType) {
-    console.log("ПРОВЕРКА ЦИФРОВОЙ ФОРМЫ:", {
-    bodyKeys: Object.keys(req.body || {}),
-    fullNameType: typeof fullName,
-    fullNameLength: typeof fullName === "string" ? fullName.trim().length : null,
-    phoneType: typeof phone,
-    phoneLength: typeof phone === "string" ? phone.trim().length : null,
-    emailType: typeof email,
-    emailLength: typeof email === "string" ? email.trim().length : null,
-    emailValid: typeof email === "string"
-        ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
-        : false
-});
     const { fullName, phone, email, social } = req.body || {};
 
-    if (!hasRequiredConsents(req.body)) return consentError(res);
+    // Безопасная диагностика: личные данные не выводятся.
+    console.log("ПРОВЕРКА ЦИФРОВОЙ ФОРМЫ:", {
+        bodyKeys: Object.keys(req.body || {}),
+        fullNameType: typeof fullName,
+        fullNameLength: typeof fullName === "string"
+            ? fullName.trim().length : null,
+        phoneType: typeof phone,
+        phoneLength: typeof phone === "string"
+            ? phone.trim().length : null,
+        emailType: typeof email,
+        emailLength: typeof email === "string"
+            ? email.trim().length : null,
+        emailValid: typeof email === "string"
+            ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+            : false
+    });
+
+    if (!hasRequiredConsents(req.body)) {
+        return consentError(res);
+    }
 
     if (
         typeof fullName !== "string" || !fullName.trim() ||
@@ -976,11 +983,14 @@ async function createDigitalPayment(req, res, productType) {
     }
 
     if (
-        fullName.trim().length > 200 || phone.trim().length > 50 ||
+        fullName.trim().length > 200 ||
+        phone.trim().length > 50 ||
         email.trim().length > 254 ||
         (typeof social === "string" && social.length > 500)
     ) {
-        return res.status(400).json({ error: "Некоторые поля слишком длинные." });
+        return res.status(400).json({
+            error: "Некоторые поля слишком длинные."
+        });
     }
 
     const sheetReady = productType === "ebook"
@@ -994,6 +1004,7 @@ async function createDigitalPayment(req, res, productType) {
     }
 
     const now = new Date();
+
     const order = {
         orderId: crypto.randomUUID(),
         productType,
@@ -1004,7 +1015,9 @@ async function createDigitalPayment(req, res, productType) {
         amount: DIGITAL_BOOK_AMOUNT,
         status: "pending",
         createdAt: now.toISOString(),
-        expiresAt: new Date(now.getTime() + PAYMENT_TIME_MS).toISOString(),
+        expiresAt: new Date(
+            now.getTime() + PAYMENT_TIME_MS
+        ).toISOString(),
         offerVersion: OFFER_VERSION,
         consentVersion: PERSONAL_DATA_CONSENT_VERSION,
         consentedAt: now.toISOString()
@@ -1012,7 +1025,11 @@ async function createDigitalPayment(req, res, productType) {
 
     try {
         saveDigitalOrder.run(order);
-        const label = productType === "ebook" ? "Электронная книга PDF" : "Аудиокнига";
+
+        const label = productType === "ebook"
+            ? "Электронная книга PDF"
+            : "Аудиокнига";
+
         const payment = await yookassaRequest("/payments", {
             method: "POST",
             headers: {
@@ -1020,14 +1037,20 @@ async function createDigitalPayment(req, res, productType) {
                 "Idempotence-Key": order.orderId
             },
             body: JSON.stringify({
-                amount: { value: DIGITAL_BOOK_AMOUNT.toFixed(2), currency: "RUB" },
+                amount: {
+                    value: DIGITAL_BOOK_AMOUNT.toFixed(2),
+                    currency: "RUB"
+                },
                 capture: true,
                 confirmation: {
                     type: "redirect",
                     return_url: `${SITE_URL}/?digital_payment=return`
                 },
                 description: `${label}. Заказ ${order.orderId}`,
-                metadata: { order_id: order.orderId, order_type: productType }
+                metadata: {
+                    order_id: order.orderId,
+                    order_type: productType
+                }
             })
         });
 
@@ -1035,8 +1058,13 @@ async function createDigitalPayment(req, res, productType) {
             throw new Error("ЮKassa не вернула ссылку для оплаты.");
         }
 
-        db.prepare("UPDATE digital_orders SET payment_id = ? WHERE order_id = ?")
-            .run(payment.id, order.orderId);
+        db.prepare(`
+            UPDATE digital_orders
+            SET payment_id = ?
+            WHERE order_id = ?
+        `).run(payment.id, order.orderId);
+
+        console.log("Создан цифровой заказ:", order.orderId);
 
         return res.status(201).json({
             orderId: order.orderId,
@@ -1045,11 +1073,19 @@ async function createDigitalPayment(req, res, productType) {
             expiresAt: order.expiresAt,
             message: "Заказ создан. Оплатите его в течение 15 минут."
         });
+
     } catch (error) {
         console.error("Ошибка цифрового заказа:", error.message);
-        db.prepare("UPDATE digital_orders SET status = 'payment_error' WHERE order_id = ?")
-            .run(order.orderId);
-        return res.status(502).json({ error: "Не удалось создать платёж. Попробуй позже." });
+
+        db.prepare(`
+            UPDATE digital_orders
+            SET status = 'payment_error'
+            WHERE order_id = ?
+        `).run(order.orderId);
+
+        return res.status(502).json({
+            error: "Не удалось создать платёж. Попробуй позже."
+        });
     }
 }
 
