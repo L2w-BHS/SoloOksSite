@@ -20,6 +20,12 @@ const POSTCARD_GOOGLE_SHEETS_URL =
 const POSTCARD_GOOGLE_SHEETS_SECRET =
     process.env.POSTCARD_GOOGLE_SHEETS_SECRET;
 
+// Отдельные таблицы электронного и аудиоиздания
+const EBOOK_GOOGLE_SHEETS_URL = process.env.EBOOK_GOOGLE_SHEETS_URL;
+const EBOOK_GOOGLE_SHEETS_SECRET = process.env.EBOOK_GOOGLE_SHEETS_SECRET;
+const AUDIO_GOOGLE_SHEETS_URL = process.env.AUDIO_GOOGLE_SHEETS_URL;
+const AUDIO_GOOGLE_SHEETS_SECRET = process.env.AUDIO_GOOGLE_SHEETS_SECRET;
+
 const YOOKASSA_SHOP_ID = process.env.YOOKASSA_SHOP_ID;
 const YOOKASSA_SECRET_KEY = process.env.YOOKASSA_SECRET_KEY;
 
@@ -28,6 +34,7 @@ const SITE_URL = (process.env.SITE_URL || "https://solooksshop.ru")
 
 const BOOK_AMOUNT = 1500;
 const POSTCARD_AMOUNT = 250;
+const DIGITAL_BOOK_AMOUNT = 1000;
 const PAYMENT_TIME_MS = 15 * 60 * 1000;
 
 // Версии документов. Меняй при публикации новой редакции.
@@ -70,6 +77,26 @@ db.exec(`
 `);
 
 db.exec(`
+    CREATE TABLE IF NOT EXISTS digital_orders (
+        order_id TEXT PRIMARY KEY,
+        product_type TEXT NOT NULL,
+        full_name TEXT NOT NULL,
+        phone TEXT NOT NULL,
+        email TEXT NOT NULL,
+        social TEXT NOT NULL DEFAULT '',
+        amount INTEGER NOT NULL,
+        status TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        payment_id TEXT,
+        expires_at TEXT,
+        google_sheets_sent INTEGER NOT NULL DEFAULT 0,
+        offer_accepted INTEGER NOT NULL DEFAULT 0,
+        personal_data_consent INTEGER NOT NULL DEFAULT 0,
+        offer_version TEXT,
+        consent_version TEXT,
+        consented_at TEXT
+    );
+
     CREATE TABLE IF NOT EXISTS postcard_orders (
         order_id TEXT PRIMARY KEY,
         phone TEXT NOT NULL,
@@ -202,6 +229,12 @@ app.get("/api/status", (req, res) => {
             POSTCARD_GOOGLE_SHEETS_SECRET
                 ? "Настроена"
                 : "Не настроена",
+        ebookGoogleSheets:
+            EBOOK_GOOGLE_SHEETS_URL && EBOOK_GOOGLE_SHEETS_SECRET
+                ? "Настроена" : "Не настроена",
+        audioGoogleSheets:
+            AUDIO_GOOGLE_SHEETS_URL && AUDIO_GOOGLE_SHEETS_SECRET
+                ? "Настроена" : "Не настроена",
         payment:
             YOOKASSA_SHOP_ID && YOOKASSA_SECRET_KEY
                 ? "Ключи ЮKassa настроены"
@@ -357,6 +390,22 @@ const findPostcardOrderByPayment = db.prepare(`
     SELECT * FROM postcard_orders WHERE payment_id = ?
 `);
 
+const saveDigitalOrder = db.prepare(`
+    INSERT INTO digital_orders (
+        order_id, product_type, full_name, phone, email, social,
+        amount, status, created_at, expires_at, offer_accepted,
+        personal_data_consent, offer_version, consent_version, consented_at
+    ) VALUES (
+        @orderId, @productType, @fullName, @phone, @email, @social,
+        @amount, @status, @createdAt, @expiresAt, 1, 1,
+        @offerVersion, @consentVersion, @consentedAt
+    )
+`);
+
+const findDigitalOrder = db.prepare(`
+    SELECT * FROM digital_orders WHERE order_id = ?
+`);
+
 // ==========================================
 // 6. GOOGLE SHEETS
 // ==========================================
@@ -443,6 +492,25 @@ async function sendPostcardToGoogleSheets(order) {
     );
 }
 
+async function sendDigitalOrderToGoogleSheets(order) {
+    const isEbook = order.product_type === "ebook";
+    return postToGoogleSheets(
+        isEbook ? EBOOK_GOOGLE_SHEETS_URL : AUDIO_GOOGLE_SHEETS_URL,
+        isEbook ? EBOOK_GOOGLE_SHEETS_SECRET : AUDIO_GOOGLE_SHEETS_SECRET,
+        {
+            orderType: order.product_type,
+            orderId: order.order_id,
+            fullName: order.full_name,
+            phone: order.phone,
+            email: order.email,
+            social: order.social || "",
+            amount: order.amount,
+            status: "paid",
+            createdAt: order.created_at
+        }
+    );
+}
+
 // ==========================================
 // 7. ПОВТОРНАЯ ОТПРАВКА ОПЛАЧЕННЫХ ЗАКАЗОВ
 // ==========================================
@@ -455,6 +523,11 @@ async function sendPaidOrdersToSheets() {
 
     const postcards = db.prepare(`
         SELECT * FROM postcard_orders
+        WHERE status = 'paid' AND google_sheets_sent = 0
+    `).all();
+
+    const digitalOrders = db.prepare(`
+        SELECT * FROM digital_orders
         WHERE status = 'paid' AND google_sheets_sent = 0
     `).all();
 
@@ -501,6 +574,20 @@ async function sendPaidOrdersToSheets() {
             );
         }
     }
+
+    for (const order of digitalOrders) {
+        try {
+            await sendDigitalOrderToGoogleSheets(order);
+            db.prepare(`
+                UPDATE digital_orders
+                SET google_sheets_sent = 1
+                WHERE order_id = ? AND status = 'paid'
+            `).run(order.order_id);
+            console.log("Цифровой заказ отправлен в Google:", order.order_id);
+        } catch (error) {
+            console.error("Ошибка отправки цифрового заказа:", error.message);
+        }
+    }
 }
 
 // ==========================================
@@ -526,7 +613,15 @@ function expireUnpaidOrders() {
           AND expires_at <= ?
     `).run(now);
 
-    const total = books.changes + postcards.changes;
+    const digital = db.prepare(`
+        UPDATE digital_orders
+        SET status = 'expired'
+        WHERE status = 'pending'
+          AND expires_at IS NOT NULL
+          AND expires_at <= ?
+    `).run(now);
+
+    const total = books.changes + postcards.changes + digital.changes;
 
     if (total > 0) {
         console.log("Истёк срок оплаты заказов:", total);
@@ -846,6 +941,113 @@ app.post("/api/postcard/create-payment", async (req, res) => {
 });
 
 // ==========================================
+// ЦИФРОВЫЕ ВЕРСИИ: PDF И АУДИО — 1000 ₽
+// ==========================================
+
+async function createDigitalPayment(req, res, productType) {
+    const { fullName, phone, email, social } = req.body || {};
+
+    if (!hasRequiredConsents(req.body)) return consentError(res);
+
+    if (
+        typeof fullName !== "string" || !fullName.trim() ||
+        typeof phone !== "string" || !phone.trim() ||
+        typeof email !== "string" || !email.trim() ||
+        !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email.trim()) ||
+        (social !== undefined && typeof social !== "string")
+    ) {
+        return res.status(400).json({
+            error: "Заполни ФИО, телефон и корректный адрес электронной почты."
+        });
+    }
+
+    if (
+        fullName.trim().length > 200 || phone.trim().length > 50 ||
+        email.trim().length > 254 ||
+        (typeof social === "string" && social.length > 500)
+    ) {
+        return res.status(400).json({ error: "Некоторые поля слишком длинные." });
+    }
+
+    const sheetReady = productType === "ebook"
+        ? EBOOK_GOOGLE_SHEETS_URL && EBOOK_GOOGLE_SHEETS_SECRET
+        : AUDIO_GOOGLE_SHEETS_URL && AUDIO_GOOGLE_SHEETS_SECRET;
+
+    if (!YOOKASSA_SHOP_ID || !YOOKASSA_SECRET_KEY || !sheetReady) {
+        return res.status(503).json({
+            error: "Оплата или таблица этого цифрового издания ещё не настроена."
+        });
+    }
+
+    const now = new Date();
+    const order = {
+        orderId: crypto.randomUUID(),
+        productType,
+        fullName: fullName.trim(),
+        phone: phone.trim(),
+        email: email.trim(),
+        social: typeof social === "string" ? social.trim() : "",
+        amount: DIGITAL_BOOK_AMOUNT,
+        status: "pending",
+        createdAt: now.toISOString(),
+        expiresAt: new Date(now.getTime() + PAYMENT_TIME_MS).toISOString(),
+        offerVersion: OFFER_VERSION,
+        consentVersion: PERSONAL_DATA_CONSENT_VERSION,
+        consentedAt: now.toISOString()
+    };
+
+    try {
+        saveDigitalOrder.run(order);
+        const label = productType === "ebook" ? "Электронная книга PDF" : "Аудиокнига";
+        const payment = await yookassaRequest("/payments", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Idempotence-Key": order.orderId
+            },
+            body: JSON.stringify({
+                amount: { value: DIGITAL_BOOK_AMOUNT.toFixed(2), currency: "RUB" },
+                capture: true,
+                confirmation: {
+                    type: "redirect",
+                    return_url: `${SITE_URL}/?digital_payment=return`
+                },
+                description: `${label}. Заказ ${order.orderId}`,
+                metadata: { order_id: order.orderId, order_type: productType }
+            })
+        });
+
+        if (!payment.id || !payment.confirmation?.confirmation_url) {
+            throw new Error("ЮKassa не вернула ссылку для оплаты.");
+        }
+
+        db.prepare("UPDATE digital_orders SET payment_id = ? WHERE order_id = ?")
+            .run(payment.id, order.orderId);
+
+        return res.status(201).json({
+            orderId: order.orderId,
+            amount: order.amount,
+            paymentUrl: payment.confirmation.confirmation_url,
+            expiresAt: order.expiresAt,
+            message: "Заказ создан. Оплатите его в течение 15 минут."
+        });
+    } catch (error) {
+        console.error("Ошибка цифрового заказа:", error.message);
+        db.prepare("UPDATE digital_orders SET status = 'payment_error' WHERE order_id = ?")
+            .run(order.orderId);
+        return res.status(502).json({ error: "Не удалось создать платёж. Попробуй позже." });
+    }
+}
+
+app.post("/api/ebook/create-payment", (req, res) =>
+    createDigitalPayment(req, res, "ebook")
+);
+
+app.post("/api/audio/create-payment", (req, res) =>
+    createDigitalPayment(req, res, "audio")
+);
+
+// ==========================================
 // 11. УВЕДОМЛЕНИЯ ЮKASSA
 // ==========================================
 
@@ -875,7 +1077,7 @@ app.post("/api/yookassa-webhook", async (req, res) => {
 
         if (
             !orderId ||
-            !["book", "postcard"].includes(orderType)
+            !["book", "postcard", "ebook", "audio"].includes(orderType)
         ) {
             console.error(
                 "Нет корректных метаданных платежа:",
@@ -888,6 +1090,8 @@ app.post("/api/yookassa-webhook", async (req, res) => {
 
         if (orderType === "postcard") {
             order = findPostcardOrder.get(orderId);
+        } else if (orderType === "ebook" || orderType === "audio") {
+            order = findDigitalOrder.get(orderId);
         } else {
             order = findBookOrder.get(orderId);
         }
@@ -922,6 +1126,12 @@ app.post("/api/yookassa-webhook", async (req, res) => {
                 WHERE order_id = ?
                   AND payment_id = ?
                   AND status != 'paid'
+            `).run(orderId, paymentId);
+        } else if (orderType === "ebook" || orderType === "audio") {
+            db.prepare(`
+                UPDATE digital_orders
+                SET status = 'paid'
+                WHERE order_id = ? AND payment_id = ? AND status != 'paid'
             `).run(orderId, paymentId);
         } else {
             db.prepare(`
