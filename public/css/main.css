@@ -2291,3 +2291,16 @@ a.postcards-order-button {
     .postcards-layout { grid-template-columns: 1fr; gap: 24px; }
     .postcards-modal-dialog { padding: 26px 20px; }
 }
+
+.digital-cover {
+width: 100%;
+height: 520px;
+object-fit: contain;
+}
+
+@media (max-width: 600px) {
+    /* Здесь укажи класс изображения электронной книги */
+    .digital-cover {
+        height: 430px;
+    }
+}
