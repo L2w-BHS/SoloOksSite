@@ -336,8 +336,11 @@
             <h2>Онлайн-версии книги</h2>
             <p class="digital-intro">Выберите удобный формат и оформите заказ онлайн.</p>
 
-            <div class="digital-carousel" aria-label="Онлайн-версии книги">
-                <article class="digital-card">
+            <div class="digital-carousel" aria-label="Онлайн-версии книги" tabindex="0">
+                <button class="digital-arrow digital-arrow-prev" type="button" aria-label="Предыдущий формат">‹</button>
+                <div class="digital-carousel-window">
+                    <div class="digital-carousel-track">
+                <article class="digital-card digital-slide">
                     <div class="digital-cover">
                         <img src="./images/elkniga.jpg" alt="Электронная версия книги «Урал БЕЗ каблуков. Афера века»">
                     </div>
@@ -366,7 +369,7 @@
                     </div>
                 </article>
 
-                <article class="digital-card">
+                <article class="digital-card digital-slide">
                     <div class="digital-cover digital-audio-cover" aria-label="Иллюстрация аудиокниги">
                         <div class="audio-art">
                             <span class="audio-headphones">♫</span>
@@ -393,18 +396,24 @@
                         </form>
                     </div>
                 </article>
+                    </div>
+                </div>
+                <button class="digital-arrow digital-arrow-next" type="button" aria-label="Следующий формат">›</button>
             </div>
-            <p class="digital-scroll-hint">На телефоне карточки можно листать свайпом ← →</p>
+            <div class="digital-carousel-dots" aria-label="Выбор формата"></div>
+            <p class="digital-scroll-hint">Листайте форматы стрелками или свайпом ← →</p>
         </div>
     </section>
 
     <style>
         .digital-section{padding:64px 0;background:#f1ede6}
-        .digital-section h2{text-align:center}
-        .digital-intro,.digital-scroll-hint{text-align:center}
-        .digital-carousel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;overflow-x:auto;scroll-snap-type:x mandatory}
-        .digital-card{min-width:0;background:#fff;border-radius:18px;padding:24px;box-shadow:0 8px 30px #0000000d;scroll-snap-align:start}
-        .digital-cover{height:240px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;background:#f7f4ef;border-radius:12px;overflow:hidden}
+        .digital-section h2,.digital-intro,.digital-scroll-hint{text-align:center}
+        .digital-carousel{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;align-items:center;gap:14px;max-width:900px;margin:28px auto 0}
+        .digital-carousel-window{min-width:0;overflow:hidden;border-radius:18px}
+        .digital-carousel-track{display:flex;transition:transform .35s ease;will-change:transform;touch-action:pan-y;cursor:grab}
+        .digital-carousel-track.is-dragging{cursor:grabbing;transition:none}
+        .digital-card{box-sizing:border-box;flex:0 0 100%;min-width:0;background:#fff;border-radius:18px;padding:28px;box-shadow:0 8px 30px #0000000d}
+        .digital-cover{height:390px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;background:#f7f4ef;border-radius:12px;overflow:hidden}
         .digital-cover img{width:100%;height:100%;object-fit:contain}
         .digital-format{font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.7}
         .digital-info h3{margin:8px 0}
@@ -417,6 +426,12 @@
         .digital-consent input{margin-top:3px;flex:0 0 auto}
         .digital-submit{width:100%;margin-top:6px}
         .digital-note,.digital-form-message{font-size:13px;line-height:1.45}
+        .digital-form-message{min-height:18px;color:#9a332b}
+        .digital-arrow{width:46px;height:46px;border:0;border-radius:50%;background:#fff;color:#292929;font-size:30px;line-height:1;cursor:pointer;box-shadow:0 3px 14px #00000018}
+        .digital-arrow:disabled{opacity:.4;cursor:default}
+        .digital-carousel-dots{display:flex;justify-content:center;gap:9px;margin:16px auto}
+        .digital-dot{width:10px;height:10px;border:0;border-radius:50%;padding:0;background:#c7beb2;cursor:pointer}
+        .digital-dot.active{background:#292929;transform:scale(1.2)}
         .digital-audio-cover{background:linear-gradient(135deg,#282b35,#68594f);color:#fff}
         .audio-art{display:flex;flex-direction:column;align-items:center;gap:16px;letter-spacing:.12em}
         .audio-headphones{font-size:72px}
@@ -424,7 +439,8 @@
         .audio-art strong{font-size:22px}
         .audio-art small{font-size:11px}
         .digital-audio-description{line-height:1.6;min-height:100px}
-        @media(max-width:760px){.digital-section{padding:42px 0}.digital-carousel{display:flex;gap:14px}.digital-card{flex:0 0 88%;padding:18px}.digital-cover{height:210px}.digital-scroll-hint{font-size:13px}}
+        @media(max-width:760px){.digital-section{padding:42px 0}.digital-carousel{grid-template-columns:32px minmax(0,1fr) 32px;gap:7px}.digital-arrow{width:32px;height:32px;font-size:23px}.digital-card{padding:18px}.digital-cover{height:300px}.digital-scroll-hint{font-size:13px}}
+        @media(max-width:420px){.digital-cover{height:250px}.digital-card{padding:14px}}
     </style>
 
     <!-- ================================= -->
@@ -2184,57 +2200,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-<!-- =========================================
-     РЕКВИЗИТЫ, УСЛОВИЯ ЗАКАЗА И ПУБЛИЧНАЯ ОФЕРТА
-     Вставить перед закрывающим тегом 
-<script>
-document.querySelectorAll(".digital-form").forEach(form => {
-    form.addEventListener("submit", async event => {
-        event.preventDefault();
-        const button = form.querySelector('button[type="submit"]');
-        const message = form.querySelector(".digital-form-message");
-        const product = form.dataset.product;
-        const data = Object.fromEntries(new FormData(form).entries());
-        data.offerAccepted = form.elements.offerAccepted.checked;
-        data.personalDataConsent = form.elements.personalDataConsent.checked;
-        data.consentVersion = "2026-10-28";
 
-        if (!data.offerAccepted || !data.personalDataConsent) {
-            message.textContent = "Пожалуйста, отметьте оба согласия.";
-            return;
-        }
-
-        const originalText = button.textContent;
-        button.disabled = true;
-        button.textContent = "Подготавливаем оплату...";
-        message.textContent = "";
-
-        try {
-            const response = await fetch(
-                product === "ebook"
-                    ? "/api/ebook/create-payment"
-                    : "/api/audio/create-payment",
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data)
-                }
-            );
-            const result = await response.json().catch(() => ({}));
-            if (!response.ok) throw new Error(result.error || "Не удалось создать заказ.");
-            if (!result.paymentUrl) throw new Error("Сервер не вернул ссылку на оплату.");
-            window.location.assign(result.paymentUrl);
-        } catch (error) {
-            message.textContent = error.message || "Ошибка отправки заказа.";
-            button.disabled = false;
-            button.textContent = originalText;
-        }
-    });
-});
-</script>
-
-</body>
-========================================= -->
 
 <section class="legal-section" id="legal">
     <div class="legal-container">
@@ -2645,6 +2611,132 @@ document.addEventListener("DOMContentLoaded", () => {
 
         showProduct(0);
     }
+
+
+    // ==========================================
+    // КАРУСЕЛЬ ЦИФРОВЫХ ВЕРСИЙ КНИГИ
+    // ==========================================
+    const digitalCarousel = document.querySelector(".digital-carousel");
+    const digitalTrack = document.querySelector(".digital-carousel-track");
+    const digitalDotsBox = document.querySelector(".digital-carousel-dots");
+    const digitalPrev = document.querySelector(".digital-arrow-prev");
+    const digitalNext = document.querySelector(".digital-arrow-next");
+
+    if (digitalCarousel && digitalTrack && digitalDotsBox) {
+        const slides = Array.from(digitalTrack.querySelectorAll(".digital-slide"));
+        let activeSlide = 0;
+        let pointerStartX = 0;
+        let pointerStartY = 0;
+        let dragging = false;
+        digitalDotsBox.innerHTML = "";
+
+        const dots = slides.map((slide, index) => {
+            const dot = document.createElement("button");
+            dot.type = "button";
+            dot.className = "digital-dot";
+            dot.setAttribute("aria-label", `Показать формат ${index + 1}`);
+            dot.addEventListener("click", () => showDigitalSlide(index));
+            digitalDotsBox.appendChild(dot);
+            return dot;
+        });
+
+        function showDigitalSlide(index) {
+            if (!slides.length) return;
+            activeSlide = (index + slides.length) % slides.length;
+            digitalTrack.style.transform = `translateX(-${activeSlide * 100}%)`;
+            dots.forEach((dot, i) => {
+                dot.classList.toggle("active", i === activeSlide);
+                dot.setAttribute("aria-current", i === activeSlide ? "true" : "false");
+            });
+            slides.forEach((slide, i) => slide.setAttribute("aria-hidden", i === activeSlide ? "false" : "true"));
+        }
+
+        digitalPrev?.addEventListener("click", () => showDigitalSlide(activeSlide - 1));
+        digitalNext?.addEventListener("click", () => showDigitalSlide(activeSlide + 1));
+        digitalCarousel.addEventListener("keydown", event => {
+            if (event.key === "ArrowLeft") showDigitalSlide(activeSlide - 1);
+            if (event.key === "ArrowRight") showDigitalSlide(activeSlide + 1);
+        });
+        digitalTrack.addEventListener("pointerdown", event => {
+            if (event.pointerType === "mouse" && event.button !== 0) return;
+            pointerStartX = event.clientX;
+            pointerStartY = event.clientY;
+            dragging = true;
+            digitalTrack.classList.add("is-dragging");
+        });
+        digitalTrack.addEventListener("pointerup", event => {
+            if (!dragging) return;
+            dragging = false;
+            digitalTrack.classList.remove("is-dragging");
+            const dx = event.clientX - pointerStartX;
+            const dy = event.clientY - pointerStartY;
+            if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) showDigitalSlide(activeSlide + (dx < 0 ? 1 : -1));
+        });
+        digitalTrack.addEventListener("pointercancel", () => { dragging = false; digitalTrack.classList.remove("is-dragging"); });
+        showDigitalSlide(0);
+    }
+
+
+    // ==========================================
+    // ОПЛАТА ЭЛЕКТРОННОЙ И АУДИОКНИГИ
+    // ==========================================
+    document.querySelectorAll(".digital-form").forEach(digitalForm => {
+        digitalForm.addEventListener("submit", async event => {
+            event.preventDefault();
+            const button = digitalForm.querySelector('button[type="submit"]');
+            const message = digitalForm.querySelector(".digital-form-message");
+            const product = digitalForm.dataset.product;
+            const fullName = digitalForm.elements.fullName.value.trim();
+            const phone = digitalForm.elements.phone.value.trim();
+            const email = digitalForm.elements.email.value.trim();
+            const social = digitalForm.elements.social.value.trim();
+            const offerAccepted = digitalForm.elements.offerAccepted.checked;
+            const personalDataConsent = digitalForm.elements.personalDataConsent.checked;
+
+            if (!fullName || !phone || !email) {
+                message.textContent = "Заполните ФИО, телефон и электронную почту.";
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                message.textContent = "Проверьте адрес электронной почты.";
+                digitalForm.elements.email.focus();
+                return;
+            }
+            const phoneDigits = phone.replace(/\D/g, "");
+            if (phoneDigits.length < 10 || phoneDigits.length > 15) {
+                message.textContent = "Проверьте номер телефона.";
+                digitalForm.elements.phone.focus();
+                return;
+            }
+            if (!offerAccepted || !personalDataConsent) {
+                message.textContent = "Для заказа необходимо принять оферту и дать согласие на обработку персональных данных.";
+                return;
+            }
+
+            const originalText = button.textContent;
+            button.disabled = true;
+            button.textContent = "Подготавливаем оплату...";
+            message.textContent = "";
+            try {
+                const endpoint = product === "ebook" ? "/api/ebook/create-payment" : product === "audio" ? "/api/audio/create-payment" : null;
+                if (!endpoint) throw new Error("Неизвестный тип цифрового товара.");
+                const response = await fetch(endpoint, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ fullName, phone, email, social, offerAccepted, personalDataConsent, consentVersion: "2026-10-28" })
+                });
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(result.error || "Не удалось создать заказ. Попробуйте позже.");
+                if (!result.paymentUrl) throw new Error("Сервер не вернул ссылку на оплату.");
+                window.location.assign(result.paymentUrl);
+            } catch (error) {
+                console.error("Ошибка оплаты цифрового товара:", error);
+                message.textContent = error.message || "Не удалось создать заказ.";
+                button.disabled = false;
+                button.textContent = originalText;
+            }
+        });
+    });
 
 
     // ==========================================
