@@ -14,6 +14,7 @@
     >
 
     <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="/news.css">
 </head>
 <body>
     <!-- ================================= -->
@@ -640,6 +641,19 @@
         </div>
     </section>
 
+
+    <!-- НОВОСТИ И СОБЫТИЯ -->
+    <section class="site-news" id="site-news">
+        <div class="container">
+            <div class="site-news-heading">
+                <div><span class="site-news-kicker">ЖИЗНЬ ПРОЕКТА</span><h2>Новости и события</h2>
+                <p>Самое интересное о книге, путешествиях и новых проектах.</p></div>
+                <a class="site-news-all" href="/news">Все новости <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="site-news-grid" id="home-news-list"><p class="news-loading">Загружаем новости…</p></div>
+        </div>
+    </section>
+    <script src="/js/home-news.js" defer></script>
 
 <!-- СУВЕНИРНАЯ ПРОДУКЦИЯ И ОТКРЫТКИ -->
 <section class="postcards-section" id="postcards">
@@ -1817,11 +1831,20 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.querySelector('input[name="phone"]')?.focus();
     }
 
+    // Исправленная версия: обязательно сбрасываем inline display
+    // и добавляем защиту от отсутствия элементов.
     function closeModal() {
+        if (!modal) return;
+
+        modal.style.display = "none";
         modal.classList.remove("active");
         modal.setAttribute("aria-hidden", "true");
+
         document.body.style.overflow = "";
-        openButton.focus();
+
+        if (openButton) {
+            openButton.focus();
+        }
     }
 
     function startCountdown(expiresAt) {

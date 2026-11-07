@@ -4,6 +4,7 @@ require("dotenv").config();
 const express = require("express");
 const path = require("node:path");
 const crypto = require("node:crypto");
+const fs = require("node:fs");
 const Database = require("better-sqlite3");
 
 const app = express();
@@ -214,7 +215,7 @@ function consentError(res) {
 // 3. EXPRESS
 // ==========================================
 
-app.use(express.json({ limit: "20kb" }));
+app.use(express.json({ limit: "7mb" }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -243,6 +244,145 @@ app.get("/api/status", (req, res) => {
                 : "Не настроены ключи ЮKassa"
     });
 });
+
+// ==========================================
+// НОВОСТИ САЙТА И ЗАКРЫТАЯ АДМИНКА
+// ==========================================
+const NEWS_UPLOAD_DIR = path.join(__dirname, "public", "uploads", "news");
+fs.mkdirSync(NEWS_UPLOAD_DIR, { recursive: true });
+app.use("/uploads/news", express.static(NEWS_UPLOAD_DIR));
+
+db.exec(`
+    CREATE TABLE IF NOT EXISTS news (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        slug TEXT NOT NULL UNIQUE,
+        excerpt TEXT NOT NULL DEFAULT '',
+        content TEXT NOT NULL,
+        image TEXT NOT NULL DEFAULT '',
+        status TEXT NOT NULL DEFAULT 'draft',
+        published_at TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+    )
+`);
+
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
+const ADMIN_SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || "";
+const ADMIN_SESSION_MS = 7 * 24 * 60 * 60 * 1000;
+
+function safeEqual(a, b) {
+    const aa = Buffer.from(String(a));
+    const bb = Buffer.from(String(b));
+    return aa.length === bb.length && crypto.timingSafeEqual(aa, bb);
+}
+function makeAdminToken() {
+    const expires = Date.now() + ADMIN_SESSION_MS;
+    const payload = String(expires);
+    const signature = crypto.createHmac("sha256", ADMIN_SESSION_SECRET).update(payload).digest("hex");
+    return `${payload}.${signature}`;
+}
+function isAdmin(req) {
+    if (!ADMIN_PASSWORD || !ADMIN_SESSION_SECRET) return false;
+    const token = req.headers.cookie?.split(";").map(x => x.trim()).find(x => x.startsWith("news_admin="))?.slice("news_admin=".length);
+    if (!token) return false;
+    const [expires, signature] = token.split(".");
+    if (!expires || !signature || !/^\d+$/.test(expires) || Number(expires) < Date.now()) return false;
+    const expected = crypto.createHmac("sha256", ADMIN_SESSION_SECRET).update(expires).digest("hex");
+    return safeEqual(signature, expected);
+}
+function requireAdmin(req, res, next) {
+    if (!isAdmin(req)) return res.status(401).json({ error: "Требуется вход в админку." });
+    next();
+}
+function slugify(value) {
+    return String(value || "news").toLowerCase().trim()
+        .replace(/ё/g, "e").replace(/[^a-zа-я0-9]+/gi, "-").replace(/^-+|-+$/g, "") || "news";
+}
+function publicNewsQuery() {
+    return db.prepare(`SELECT id,title,slug,excerpt,image,published_at,created_at
+        FROM news WHERE status='published' AND (published_at IS NULL OR published_at <= ?)
+        ORDER BY COALESCE(published_at, created_at) DESC, id DESC`);
+}
+
+app.post("/api/admin/login", (req, res) => {
+    if (!ADMIN_PASSWORD || !ADMIN_SESSION_SECRET) {
+        return res.status(503).json({ error: "Админка не настроена. Добавьте ADMIN_PASSWORD и ADMIN_SESSION_SECRET в .env." });
+    }
+    if (!safeEqual(req.body?.password || "", ADMIN_PASSWORD)) {
+        return res.status(401).json({ error: "Неверный пароль." });
+    }
+    res.setHeader("Set-Cookie", `news_admin=${makeAdminToken()}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${ADMIN_SESSION_MS / 1000}`);
+    return res.json({ ok: true });
+});
+app.post("/api/admin/logout", (req, res) => {
+    res.setHeader("Set-Cookie", "news_admin=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0");
+    res.json({ ok: true });
+});
+app.get("/api/admin/check", requireAdmin, (req, res) => res.json({ ok: true }));
+app.get("/api/admin/news", requireAdmin, (req, res) => {
+    res.json(db.prepare("SELECT * FROM news ORDER BY updated_at DESC, id DESC").all());
+});
+app.post("/api/admin/news", requireAdmin, (req, res) => {
+    const { title, excerpt = "", content, image = "", status = "draft", publishedAt = "" } = req.body || {};
+    if (!String(title || "").trim() || !String(content || "").trim()) return res.status(400).json({ error: "Заполните заголовок и текст новости." });
+    const now = new Date().toISOString();
+    let slug = slugify(title);
+    if (db.prepare("SELECT id FROM news WHERE slug=?").get(slug)) slug += "-" + Date.now().toString(36);
+    const result = db.prepare(`INSERT INTO news(title,slug,excerpt,content,image,status,published_at,created_at,updated_at)
+        VALUES(?,?,?,?,?,?,?,?,?)`).run(String(title).trim(), slug, String(excerpt), String(content).trim(), String(image), status === "published" ? "published" : "draft", publishedAt || (status === "published" ? now : null), now, now);
+    res.status(201).json({ id: result.lastInsertRowid, slug });
+});
+app.put("/api/admin/news/:id", requireAdmin, (req, res) => {
+    const id = Number(req.params.id);
+    const old = db.prepare("SELECT * FROM news WHERE id=?").get(id);
+    if (!old) return res.sendStatus(404);
+    const b = req.body || {};
+    const title = String(b.title ?? old.title).trim();
+    const content = String(b.content ?? old.content).trim();
+    if (!title || !content) return res.status(400).json({ error: "Заголовок и текст обязательны." });
+    const status = b.status === "published" ? "published" : "draft";
+    const publishedAt = b.publishedAt !== undefined ? (b.publishedAt || null) : old.published_at;
+    db.prepare(`UPDATE news SET title=?,excerpt=?,content=?,image=?,status=?,published_at=?,updated_at=? WHERE id=?`)
+        .run(title, String(b.excerpt ?? old.excerpt), content, String(b.image ?? old.image), status, publishedAt || (status === "published" ? new Date().toISOString() : null), new Date().toISOString(), id);
+    res.json({ ok: true });
+});
+app.delete("/api/admin/news/:id", requireAdmin, (req, res) => {
+    const item = db.prepare("SELECT image FROM news WHERE id=?").get(Number(req.params.id));
+    if (!item) return res.sendStatus(404);
+    db.prepare("DELETE FROM news WHERE id=?").run(Number(req.params.id));
+    if (item.image?.startsWith("/uploads/news/")) {
+        const file = path.join(NEWS_UPLOAD_DIR, path.basename(item.image));
+        try { if (fs.existsSync(file)) fs.unlinkSync(file); } catch {}
+    }
+    res.json({ ok: true });
+});
+app.post("/api/admin/upload", requireAdmin, (req, res) => {
+    const data = String(req.body?.data || "");
+    const match = data.match(/^data:image\/(jpeg|png|webp|gif);base64,([a-z0-9+/=]+)$/i);
+    if (!match) return res.status(400).json({ error: "Поддерживаются JPG, PNG, WEBP и GIF." });
+    const buffer = Buffer.from(match[2], "base64");
+    if (!buffer.length || buffer.length > 5 * 1024 * 1024) return res.status(413).json({ error: "Фото должно быть не больше 5 МБ." });
+    const ext = match[1].toLowerCase() === "jpeg" ? "jpg" : match[1].toLowerCase();
+    const filename = `${crypto.randomUUID()}.${ext}`;
+    fs.writeFileSync(path.join(NEWS_UPLOAD_DIR, filename), buffer, { flag: "wx" });
+    res.status(201).json({ url: `/uploads/news/${filename}` });
+});
+app.get("/api/news", (req, res) => {
+    const limit = Math.min(Math.max(Number(req.query.limit) || 0, 0), 100);
+    let rows = publicNewsQuery().all(new Date().toISOString());
+    if (limit) rows = rows.slice(0, limit);
+    res.json(rows);
+});
+app.get("/api/news/:slug", (req, res) => {
+    const row = db.prepare(`SELECT * FROM news WHERE slug=? AND status='published'
+        AND (published_at IS NULL OR published_at <= ?)`).get(req.params.slug, new Date().toISOString());
+    if (!row) return res.sendStatus(404);
+    res.json(row);
+});
+app.get("/news", (req, res) => res.sendFile(path.join(__dirname, "public", "news.html")));
+app.get("/news/:slug", (req, res) => res.sendFile(path.join(__dirname, "public", "article.html")));
+app.get("/admin", (req, res) => res.sendFile(path.join(__dirname, "public", "admin.html")));
 
 // ==========================================
 // 4. API ЮKASSA
@@ -949,32 +1089,13 @@ app.post("/api/postcard/create-payment", async (req, res) => {
 async function createDigitalPayment(req, res, productType) {
     const { fullName, phone, email, social } = req.body || {};
 
-    // Безопасная диагностика: личные данные не выводятся.
-    console.log("ПРОВЕРКА ЦИФРОВОЙ ФОРМЫ:", {
-        bodyKeys: Object.keys(req.body || {}),
-        fullNameType: typeof fullName,
-        fullNameLength: typeof fullName === "string"
-            ? fullName.trim().length : null,
-        phoneType: typeof phone,
-        phoneLength: typeof phone === "string"
-            ? phone.trim().length : null,
-        emailType: typeof email,
-        emailLength: typeof email === "string"
-            ? email.trim().length : null,
-        emailValid: typeof email === "string"
-            ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
-            : false
-    });
-
-    if (!hasRequiredConsents(req.body)) {
-        return consentError(res);
-    }
+    if (!hasRequiredConsents(req.body)) return consentError(res);
 
     if (
         typeof fullName !== "string" || !fullName.trim() ||
         typeof phone !== "string" || !phone.trim() ||
         typeof email !== "string" || !email.trim() ||
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) ||
+        !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email.trim()) ||
         (social !== undefined && typeof social !== "string")
     ) {
         return res.status(400).json({
@@ -983,14 +1104,11 @@ async function createDigitalPayment(req, res, productType) {
     }
 
     if (
-        fullName.trim().length > 200 ||
-        phone.trim().length > 50 ||
+        fullName.trim().length > 200 || phone.trim().length > 50 ||
         email.trim().length > 254 ||
         (typeof social === "string" && social.length > 500)
     ) {
-        return res.status(400).json({
-            error: "Некоторые поля слишком длинные."
-        });
+        return res.status(400).json({ error: "Некоторые поля слишком длинные." });
     }
 
     const sheetReady = productType === "ebook"
@@ -1004,7 +1122,6 @@ async function createDigitalPayment(req, res, productType) {
     }
 
     const now = new Date();
-
     const order = {
         orderId: crypto.randomUUID(),
         productType,
@@ -1015,9 +1132,7 @@ async function createDigitalPayment(req, res, productType) {
         amount: DIGITAL_BOOK_AMOUNT,
         status: "pending",
         createdAt: now.toISOString(),
-        expiresAt: new Date(
-            now.getTime() + PAYMENT_TIME_MS
-        ).toISOString(),
+        expiresAt: new Date(now.getTime() + PAYMENT_TIME_MS).toISOString(),
         offerVersion: OFFER_VERSION,
         consentVersion: PERSONAL_DATA_CONSENT_VERSION,
         consentedAt: now.toISOString()
@@ -1025,11 +1140,7 @@ async function createDigitalPayment(req, res, productType) {
 
     try {
         saveDigitalOrder.run(order);
-
-        const label = productType === "ebook"
-            ? "Электронная книга PDF"
-            : "Аудиокнига";
-
+        const label = productType === "ebook" ? "Электронная книга PDF" : "Аудиокнига";
         const payment = await yookassaRequest("/payments", {
             method: "POST",
             headers: {
@@ -1037,20 +1148,14 @@ async function createDigitalPayment(req, res, productType) {
                 "Idempotence-Key": order.orderId
             },
             body: JSON.stringify({
-                amount: {
-                    value: DIGITAL_BOOK_AMOUNT.toFixed(2),
-                    currency: "RUB"
-                },
+                amount: { value: DIGITAL_BOOK_AMOUNT.toFixed(2), currency: "RUB" },
                 capture: true,
                 confirmation: {
                     type: "redirect",
                     return_url: `${SITE_URL}/?digital_payment=return`
                 },
                 description: `${label}. Заказ ${order.orderId}`,
-                metadata: {
-                    order_id: order.orderId,
-                    order_type: productType
-                }
+                metadata: { order_id: order.orderId, order_type: productType }
             })
         });
 
@@ -1058,13 +1163,8 @@ async function createDigitalPayment(req, res, productType) {
             throw new Error("ЮKassa не вернула ссылку для оплаты.");
         }
 
-        db.prepare(`
-            UPDATE digital_orders
-            SET payment_id = ?
-            WHERE order_id = ?
-        `).run(payment.id, order.orderId);
-
-        console.log("Создан цифровой заказ:", order.orderId);
+        db.prepare("UPDATE digital_orders SET payment_id = ? WHERE order_id = ?")
+            .run(payment.id, order.orderId);
 
         return res.status(201).json({
             orderId: order.orderId,
@@ -1073,19 +1173,11 @@ async function createDigitalPayment(req, res, productType) {
             expiresAt: order.expiresAt,
             message: "Заказ создан. Оплатите его в течение 15 минут."
         });
-
     } catch (error) {
         console.error("Ошибка цифрового заказа:", error.message);
-
-        db.prepare(`
-            UPDATE digital_orders
-            SET status = 'payment_error'
-            WHERE order_id = ?
-        `).run(order.orderId);
-
-        return res.status(502).json({
-            error: "Не удалось создать платёж. Попробуй позже."
-        });
+        db.prepare("UPDATE digital_orders SET status = 'payment_error' WHERE order_id = ?")
+            .run(order.orderId);
+        return res.status(502).json({ error: "Не удалось создать платёж. Попробуй позже." });
     }
 }
 
