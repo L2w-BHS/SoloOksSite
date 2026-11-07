@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Админка новостей — Оксана Соло</title>
+<link rel="stylesheet" href="/css/news.css">
+</head>
+<body class="news-admin-page">
+<main class="admin-shell">
+  <header class="admin-top"><a href="/" class="brand">ОКСАНА СОЛО</a><a href="/news">Открыть архив новостей ↗</a></header>
+  <section id="login-panel" class="admin-panel login-panel">
+    <span class="news-kicker">УПРАВЛЕНИЕ САЙТОМ</span><h1>Вход в админку</h1>
+    <form id="login-form"><label>Пароль администратора<input id="admin-password" type="password" autocomplete="current-password" required></label><button class="news-button" type="submit">Войти</button><p class="form-message" id="login-message"></p></form>
+  </section>
+  <section id="dashboard" hidden>
+    <div class="admin-heading"><div><span class="news-kicker">РЕДАКЦИЯ</span><h1>Новости и события</h1><p>Создавайте публикации, сохраняйте черновики или назначайте время выхода.</p></div><button id="logout-button" class="news-button news-button-light">Выйти</button></div>
+    <div class="admin-columns">
+      <section class="admin-panel editor-panel">
+        <h2 id="editor-title">Новая публикация</h2>
+        <form id="news-form">
+          <input type="hidden" id="news-id">
+          <label>Заголовок<input id="news-title" maxlength="180" required placeholder="Например, Новая глава путешествия"></label>
+          <label>Краткое описание<textarea id="news-excerpt" rows="3" maxlength="400" placeholder="Короткий текст для карточки"></textarea></label>
+          <label>Текст новости<textarea id="news-content" rows="9" placeholder="Полный текст публикации"></textarea></label>
+          <label>Фотография<input id="news-image-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif"></label>
+          <div id="image-status" class="image-status">Можно загрузить JPG, PNG, WEBP или GIF до 5 МБ.</div>
+          <input type="hidden" id="news-image">
+          <img id="image-preview" class="image-preview" alt="Предпросмотр фотографии" hidden>
+          <label>Статус<select id="news-status"><option value="draft">Черновик</option><option value="published">Опубликовать сразу</option><option value="scheduled">Запланировать</option></select></label>
+          <label id="schedule-field" hidden>Дата и время публикации<input id="news-scheduled-at" type="datetime-local"></label>
+          <div class="editor-actions"><button class="news-button" type="submit">Сохранить новость</button><button class="news-button news-button-light" id="reset-form" type="button">Очистить</button></div>
+          <p class="form-message" id="editor-message"></p>
+        </form>
+      </section>
+      <section class="admin-panel list-panel"><div class="list-heading"><h2>Все публикации</h2><button id="refresh-button" class="text-button" type="button">Обновить ↻</button></div><div id="admin-news-list" class="admin-news-list"><p>Загружаем…</p></div></section>
+    </div>
+  </section>
+</main>
+<script src="/js/admin.js" defer></script>
+</body></html>
