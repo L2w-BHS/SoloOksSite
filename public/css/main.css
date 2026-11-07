@@ -2624,3 +2624,167 @@ object-fit: contain;
 [hidden]{display:none!important}
 @media(max-width:900px){.site-news-grid,.news-archive{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-columns{grid-template-columns:1fr}.public-news-top,.admin-top{margin-bottom:55px}}
 @media(max-width:600px){.site-news{padding:55px 0}.site-news .container{padding:0 18px}.site-news-heading{align-items:flex-start;flex-direction:column;gap:14px;margin-bottom:26px}.site-news-heading h2{font-size:34px}.site-news-heading p{font-size:14px}.site-news-grid,.news-archive{grid-template-columns:1fr;gap:18px}.news-card-image{height:220px}.news-card-content{padding:20px}.news-card h3,.news-card h2{font-size:20px}.news-public-shell,.admin-shell{padding:20px 16px 55px}.public-news-top,.admin-top{margin-bottom:45px}.admin-heading{align-items:flex-start}.admin-heading h1,.public-news-heading h1{font-size:36px}.admin-panel{padding:20px}.login-panel{margin:8vh auto;padding:25px}.news-article{padding:22px}.item-actions{flex-direction:column;gap:5px}.admin-news-item{align-items:flex-start}}
+
+
+    
+  
+
+.news-button:hover {
+    transform: translateY(-1px);
+    border-color: #51483d;
+    background: #51483d;
+}
+
+.news-button:disabled { opacity: .6; cursor: wait; }
+
+.news-button-light {
+    border-color: #d9d0c5;
+    background: transparent;
+    color: var(--news-ink);
+}
+
+.news-button-light:hover {
+    border-color: #c5b7a6;
+    background: var(--news-bg);
+    color: var(--news-ink);
+}
+
+.editor-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 3px;
+}
+
+.form-message {
+    min-height: 18px;
+    margin: 0;
+    color: #54734c;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.form-message.error,
+.error { color: #b33b32; }
+
+.image-status {
+    margin-top: -9px;
+    color: var(--news-muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.image-preview {
+    display: block;
+    max-width: 100%;
+    max-height: 240px;
+    justify-self: start;
+    border: 1px solid var(--news-line);
+    border-radius: 4px;
+    object-fit: contain;
+    background: #fbfaf8;
+}
+
+/* Список новостей в админке */
+
+.list-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.list-heading h2 { margin-bottom: 20px; }
+
+.text-button {
+    padding: 5px 0;
+    border: 0;
+    background: none;
+    color: var(--news-accent-dark);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.text-button:hover { text-decoration: underline; }
+.text-button.danger { color: #b34b40; }
+
+.admin-news-list {
+    display: grid;
+    gap: 0;
+}
+
+.admin-news-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 18px 0;
+    border-top: 1px solid var(--news-line);
+}
+
+.admin-news-item-main {
+    display: grid;
+    min-width: 0;
+    gap: 8px;
+}
+
+.admin-news-item-main strong {
+    color: var(--news-ink);
+    font-size: 14px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.admin-news-item-main small {
+    color: var(--news-muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.status {
+    width: max-content;
+    max-width: 100%;
+    padding: 5px 9px;
+    border-radius: 3px;
+    background: #eee9e2;
+    color: #6e6254;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .03em;
+}
+
+.status-published { background: #e5efe5; color: #456a48; }
+.status-scheduled { background: #f5eddc; color: #896a32; }
+
+.item-actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 13px;
+}
+
+/* Убираем стандартные маркеры браузера для скрытых элементов */
+[hidden] { display: none !important; }
+
+/* -------------------------
+   Адаптация под планшеты
+------------------------- */
+
+@media (max-width: 900px) {
+    .site-news-grid,
+    .news-archive { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .admin-columns { grid-template-columns: 1fr; }
+    .public-news-top,
+    .admin-top { margin-bottom: 55px; }
+}
+
+/* -------------------------
+   Адаптация под телефоны
+------------------------- */
+
+@media (max-width: 600px) {
+    .site-news { padding: 56px 0; }
+}
