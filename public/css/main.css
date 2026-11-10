@@ -3798,3 +3798,48 @@ object-fit: contain;
         width: 100%;
     }
 }
+
+
+/* КРАСИВАЯ КНОПКА УДАЛЕНИЯ НОВОСТИ */
+
+.news-admin-page .item-actions .delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 40px;
+    padding: 0 16px;
+    border: 1px solid #e8c4bf !important;
+    border-radius: 9px;
+    background: #fff2f0 !important;
+    color: #b7473d !important;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.news-admin-page .item-actions .delete-button::before {
+    content: "♲";
+    font-size: 17px;
+    line-height: 1;
+}
+
+.news-admin-page .item-actions .delete-button:hover {
+    border-color: #cf8178 !important;
+    background: #fbe2df !important;
+    color: #96352e !important;
+    box-shadow: 0 4px 12px rgba(183, 71, 61, .12);
+    transform: translateY(-2px);
+}
+
+.news-admin-page .item-actions .delete-button:active {
+    transform: translateY(0);
+}
+
+.news-admin-page .item-actions .delete-button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    transform: none;
+}
