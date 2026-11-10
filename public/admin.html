@@ -1,40 +1,699 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Админка новостей — Оксана Соло</title>
-<link rel="stylesheet" href="/css/main.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Админка новостей — Оксана Соло</title>
+    <link rel="stylesheet" href="/css/main.css">
 </head>
+
 <body class="news-admin-page">
+
 <main class="admin-shell">
-  <header class="admin-top"><a href="/" class="brand">ОКСАНА СОЛО</a><a href="/news">Открыть архив новостей ↗</a></header>
-  <section id="login-panel" class="admin-panel login-panel">
-    <span class="news-kicker">УПРАВЛЕНИЕ САЙТОМ</span><h1>Вход в админку</h1>
-    <form id="login-form"><label>Пароль администратора<input id="admin-password" type="password" autocomplete="current-password" required></label><button class="news-button" type="submit">Войти</button><p class="form-message" id="login-message"></p></form>
-  </section>
-  <section id="dashboard" hidden>
-    <div class="admin-heading"><div><span class="news-kicker">РЕДАКЦИЯ</span><h1>Новости и события</h1><p>Создавайте публикации, сохраняйте черновики или назначайте время выхода.</p></div><button id="logout-button" class="news-button news-button-light">Выйти</button></div>
-    <div class="admin-columns">
-      <section class="admin-panel editor-panel">
-        <h2 id="editor-title">Новая публикация</h2>
-        <form id="news-form">
-          <input type="hidden" id="news-id">
-          <label>Заголовок<input id="news-title" maxlength="180" required placeholder="Например, Новая глава путешествия"></label>
-          <label>Краткое описание<textarea id="news-excerpt" rows="3" maxlength="400" placeholder="Короткий текст для карточки"></textarea></label>
-          <label>Текст новости<textarea id="news-content" rows="9" placeholder="Полный текст публикации"></textarea></label>
-          <label>Фотография<input id="news-image-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif"></label>
-          <div id="image-status" class="image-status">Можно загрузить JPG, PNG, WEBP или GIF до 5 МБ.</div>
-          <input type="hidden" id="news-image">
-          <img id="image-preview" class="image-preview" alt="Предпросмотр фотографии" hidden>
-          <label>Статус<select id="news-status"><option value="draft">Черновик</option><option value="published">Опубликовать сразу</option><option value="scheduled">Запланировать</option></select></label>
-          <label id="schedule-field" hidden>Дата и время публикации<input id="news-scheduled-at" type="datetime-local"></label>
-          <div class="editor-actions"><button class="news-button" type="submit">Сохранить новость</button><button class="news-button news-button-light" id="reset-form" type="button">Очистить</button></div>
-          <p class="form-message" id="editor-message"></p>
+
+    <header class="admin-top">
+        <a href="/" class="brand">ОКСАНА СОЛО</a>
+
+        <nav>
+            <a href="/">Открыть сайт ↗</a>
+            <a href="/news">Архив новостей ↗</a>
+        </nav>
+    </header>
+
+    <!-- ВХОД -->
+    <section id="login-panel" class="admin-panel login-panel">
+        <span class="news-kicker">УПРАВЛЕНИЕ САЙТОМ</span>
+
+        <h1>Добро пожаловать</h1>
+
+        <p>Войдите, чтобы управлять новостями и публикациями сайта.</p>
+
+        <form id="login-form">
+            <label>
+                Пароль администратора
+                <input
+                    id="admin-password"
+                    type="password"
+                    autocomplete="current-password"
+                    placeholder="Введите пароль"
+                    required
+                >
+            </label>
+
+            <button class="news-button" type="submit">
+                Войти в редакцию
+            </button>
+
+            <p class="form-message" id="login-message"></p>
         </form>
-      </section>
-      <section class="admin-panel list-panel"><div class="list-heading"><h2>Все публикации</h2><button id="refresh-button" class="text-button" type="button">Обновить ↻</button></div><div id="admin-news-list" class="admin-news-list"><p>Загружаем…</p></div></section>
-    </div>
-  </section>
+    </section>
+
+    <!-- АДМИНКА -->
+    <section id="dashboard" hidden>
+
+        <div class="admin-heading">
+            <div>
+                <span class="news-kicker">РЕДАКЦИЯ</span>
+                <h1>Новости и события</h1>
+                <p>Создавайте публикации, редактируйте их и управляйте архивом.</p>
+            </div>
+
+            <button
+                id="logout-button"
+                class="news-button news-button-light"
+                type="button"
+            >
+                Выйти
+            </button>
+        </div>
+
+        <div class="admin-columns">
+
+            <!-- РЕДАКТОР -->
+            <section class="admin-panel editor-panel">
+
+                <div class="editor-section-heading">
+                    <span>01</span>
+                    <div>
+                        <h2 id="editor-title">Новая публикация</h2>
+                        <p>Заполните информацию о новости.</p>
+                    </div>
+                </div>
+
+                <form id="news-form">
+
+                    <input type="hidden" id="news-id">
+
+                    <label>
+                        Заголовок новости
+                        <input
+                            id="news-title"
+                            type="text"
+                            maxlength="180"
+                            placeholder="Например, Новая глава путешествия"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Краткое описание
+                        <textarea
+                            id="news-excerpt"
+                            rows="3"
+                            maxlength="400"
+                            placeholder="Небольшой текст для карточки новости"
+                        ></textarea>
+                    </label>
+
+                    <label>
+                        Полный текст новости
+                        <textarea
+                            id="news-content"
+                            rows="10"
+                            placeholder="Напишите текст публикации..."
+                            required
+                        ></textarea>
+                    </label>
+
+                    <div class="editor-section-heading">
+                        <span>02</span>
+                        <div>
+                            <h2>Фотография</h2>
+                            <p>Главное изображение публикации.</p>
+                        </div>
+                    </div>
+
+                    <label>
+                        Выберите изображение
+                        <input
+                            id="news-image-file"
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp,image/gif"
+                        >
+                    </label>
+
+                    <div id="image-status" class="image-status">
+                        JPG, PNG, WEBP или GIF. Максимальный размер — 5 МБ.
+                    </div>
+
+                    <input type="hidden" id="news-image">
+
+                    <img
+                        id="image-preview"
+                        class="image-preview"
+                        alt="Предпросмотр фотографии"
+                        hidden
+                    >
+
+                    <div class="editor-section-heading">
+                        <span>03</span>
+                        <div>
+                            <h2>Публикация</h2>
+                            <p>Выберите, как сохранить новость.</p>
+                        </div>
+                    </div>
+
+                    <label>
+                        Статус новости
+                        <select id="news-status">
+                            <option value="draft">Сохранить как черновик</option>
+                            <option value="published">Опубликовать сразу</option>
+                        </select>
+                    </label>
+
+                    <p class="image-status">
+                        Отложенная публикация пока не подключена.
+                    </p>
+
+                    <div class="editor-actions">
+
+                        <button class="news-button" type="submit">
+                            Сохранить новость
+                        </button>
+
+                        <button
+                            class="news-button news-button-light"
+                            id="reset-form"
+                            type="button"
+                        >
+                            Очистить форму
+                        </button>
+
+                    </div>
+
+                    <p class="form-message" id="editor-message"></p>
+
+                </form>
+
+            </section>
+
+            <!-- СПИСОК НОВОСТЕЙ -->
+            <section class="admin-panel list-panel">
+
+                <div class="list-heading">
+                    <div>
+                        <h2>Все публикации</h2>
+                        <p>Управление созданными новостями.</p>
+                    </div>
+
+                    <button
+                        id="refresh-button"
+                        class="text-button"
+                        type="button"
+                    >
+                        Обновить ↻
+                    </button>
+                </div>
+
+                <div
+                    id="admin-news-list"
+                    class="admin-news-list"
+                >
+                    <p>Загружаем публикации...</p>
+                </div>
+
+            </section>
+
+        </div>
+    </section>
+
 </main>
-<script src="/js/admin.js" defer></script>
-</body></html>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const loginPanel = document.getElementById("login-panel");
+    const dashboard = document.getElementById("dashboard");
+
+    const loginForm = document.getElementById("login-form");
+    const loginMessage = document.getElementById("login-message");
+    const passwordInput = document.getElementById("admin-password");
+
+    const logoutButton = document.getElementById("logout-button");
+
+    const newsForm = document.getElementById("news-form");
+    const newsId = document.getElementById("news-id");
+    const newsTitle = document.getElementById("news-title");
+    const newsExcerpt = document.getElementById("news-excerpt");
+    const newsContent = document.getElementById("news-content");
+    const newsStatus = document.getElementById("news-status");
+
+    const imageFile = document.getElementById("news-image-file");
+    const imageInput = document.getElementById("news-image");
+    const imagePreview = document.getElementById("image-preview");
+    const imageStatus = document.getElementById("image-status");
+
+    const editorTitle = document.getElementById("editor-title");
+    const editorMessage = document.getElementById("editor-message");
+
+    const resetButton = document.getElementById("reset-form");
+    const refreshButton = document.getElementById("refresh-button");
+    const newsList = document.getElementById("admin-news-list");
+
+    let newsItems = [];
+    let uploading = false;
+
+    // Универсальный запрос к серверу
+    async function api(url, options = {}) {
+
+        const response = await fetch(url, {
+            credentials: "same-origin",
+            ...options,
+            headers: {
+                ...(options.headers || {})
+            }
+        });
+
+        let data = {};
+
+        try {
+            data = await response.json();
+        } catch {
+            data = {};
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || data.message || "Ошибка обращения к серверу."
+            );
+        }
+
+        return data;
+    }
+
+    function showMessage(element, message, success = false) {
+        element.textContent = message;
+        element.classList.toggle("success", success);
+        element.classList.toggle("error", !success);
+    }
+
+    // Переключение между входом и админкой
+    function showDashboard() {
+        loginPanel.hidden = true;
+        dashboard.hidden = false;
+        loadNews();
+    }
+
+    function showLogin() {
+        dashboard.hidden = true;
+        loginPanel.hidden = false;
+    }
+
+    // Проверка авторизации при открытии страницы
+    async function checkLogin() {
+        try {
+            await api("/api/admin/check");
+            showDashboard();
+        } catch {
+            showLogin();
+        }
+    }
+
+    // ВХОД
+    loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        showMessage(loginMessage, "Проверяем пароль...");
+
+        try {
+            await api("/api/admin/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    password: passwordInput.value
+                })
+            });
+
+            passwordInput.value = "";
+            loginMessage.textContent = "";
+
+            showDashboard();
+
+        } catch (error) {
+            showMessage(loginMessage, error.message);
+        }
+    });
+
+    // ВЫХОД
+    logoutButton.addEventListener("click", async () => {
+        try {
+            await api("/api/admin/logout", {
+                method: "POST"
+            });
+        } catch (error) {
+            console.error(error);
+        }
+
+        showLogin();
+    });
+
+    // ЗАГРУЗКА СПИСКА НОВОСТЕЙ
+    async function loadNews() {
+
+        newsList.textContent = "Загружаем публикации...";
+        refreshButton.disabled = true;
+
+        try {
+            newsItems = await api("/api/admin/news");
+            renderNews();
+
+        } catch (error) {
+            newsList.textContent = error.message;
+        } finally {
+            refreshButton.disabled = false;
+        }
+    }
+
+    // ОТОБРАЖЕНИЕ НОВОСТЕЙ
+    function renderNews() {
+
+        newsList.replaceChildren();
+
+        if (!newsItems.length) {
+            const empty = document.createElement("p");
+            empty.textContent = "Публикаций пока нет. Создайте первую новость.";
+            newsList.appendChild(empty);
+            return;
+        }
+
+        newsItems.forEach(item => {
+
+            const card = document.createElement("article");
+            card.className = "admin-news-item";
+
+            const info = document.createElement("div");
+            info.className = "admin-news-info";
+
+            const title = document.createElement("h3");
+            title.textContent = item.title;
+
+            const excerpt = document.createElement("p");
+            excerpt.textContent = item.excerpt || "Без краткого описания";
+
+            const date = document.createElement("small");
+
+            const dateValue = item.updated_at || item.created_at;
+
+            date.textContent = dateValue
+                ? new Date(dateValue).toLocaleString("ru-RU")
+                : "";
+
+            const status = document.createElement("span");
+            status.className = "news-status-badge";
+
+            if (item.status === "published") {
+                status.textContent = "Опубликовано";
+                status.classList.add("published");
+            } else {
+                status.textContent = "Черновик";
+                status.classList.add("draft");
+            }
+
+            info.append(title, excerpt, date, status);
+
+            const actions = document.createElement("div");
+            actions.className = "item-actions";
+
+            const editButton = document.createElement("button");
+            editButton.type = "button";
+            editButton.className = "news-button news-button-light";
+            editButton.textContent = "Редактировать";
+
+            editButton.addEventListener("click", () => {
+                editNews(item);
+            });
+
+            const deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.className = "news-button delete-button";
+            deleteButton.textContent = "Удалить";
+
+            deleteButton.addEventListener("click", () => {
+                deleteNews(item);
+            });
+
+            actions.append(editButton, deleteButton);
+
+            card.append(info, actions);
+
+            newsList.appendChild(card);
+        });
+    }
+
+    // РЕДАКТИРОВАНИЕ
+    function editNews(item) {
+
+        newsId.value = item.id;
+        newsTitle.value = item.title || "";
+        newsExcerpt.value = item.excerpt || "";
+        newsContent.value = item.content || "";
+        newsStatus.value = item.status === "published"
+            ? "published"
+            : "draft";
+
+        imageInput.value = item.image || "";
+
+        if (item.image) {
+            imagePreview.src = item.image;
+            imagePreview.hidden = false;
+            imageStatus.textContent = "Текущая фотография новости.";
+        } else {
+            imagePreview.hidden = true;
+            imagePreview.removeAttribute("src");
+            imageStatus.textContent = "Фотография не загружена.";
+        }
+
+        imageFile.value = "";
+
+        editorTitle.textContent = "Редактирование публикации";
+
+        showMessage(
+            editorMessage,
+            "Вы редактируете новость №" + item.id,
+            true
+        );
+
+        newsForm.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+
+    // УДАЛЕНИЕ
+    async function deleteNews(item) {
+
+        const confirmed = confirm(
+            'Удалить новость "' + item.title + '"?\n\nЭто действие нельзя отменить.'
+        );
+
+        if (!confirmed) return;
+
+        try {
+            await api("/api/admin/news/" + item.id, {
+                method: "DELETE"
+            });
+
+            if (String(newsId.value) === String(item.id)) {
+                resetForm();
+            }
+
+            await loadNews();
+
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+    // ПРЕДПРОСМОТР И ЗАГРУЗКА ФОТО
+    imageFile.addEventListener("change", async () => {
+
+        const file = imageFile.files[0];
+
+        if (!file) return;
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "image/gif"
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+            imageFile.value = "";
+            showMessage(imageStatus, "Выберите JPG, PNG, WEBP или GIF.");
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            imageFile.value = "";
+            showMessage(imageStatus, "Размер фотографии не должен превышать 5 МБ.");
+            return;
+        }
+
+        uploading = true;
+        imageStatus.textContent = "Загружаем фотографию...";
+
+        try {
+
+            const dataUrl = await new Promise((resolve, reject) => {
+
+                const reader = new FileReader();
+
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(
+                    new Error("Не удалось прочитать фотографию.")
+                );
+
+                reader.readAsDataURL(file);
+            });
+
+            const result = await api("/api/admin/upload", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    data: dataUrl
+                })
+            });
+
+            imageInput.value = result.url;
+            imagePreview.src = result.url;
+            imagePreview.hidden = false;
+
+            showMessage(
+                imageStatus,
+                "Фотография успешно загружена.",
+                true
+            );
+
+        } catch (error) {
+
+            imageFile.value = "";
+
+            showMessage(
+                imageStatus,
+                error.message
+            );
+
+        } finally {
+            uploading = false;
+        }
+    });
+
+    // СОХРАНЕНИЕ НОВОСТИ
+    newsForm.addEventListener("submit", async (event) => {
+
+        event.preventDefault();
+
+        if (uploading) {
+            showMessage(editorMessage, "Дождитесь окончания загрузки фотографии.");
+            return;
+        }
+
+        const title = newsTitle.value.trim();
+        const content = newsContent.value.trim();
+
+        if (!title || !content) {
+            showMessage(editorMessage, "Заполните заголовок и полный текст новости.");
+            return;
+        }
+
+        const saveButton = newsForm.querySelector('button[type="submit"]');
+
+        saveButton.disabled = true;
+        saveButton.textContent = "Сохраняем...";
+
+        const payload = {
+            title: title,
+            excerpt: newsExcerpt.value.trim(),
+            content: content,
+            image: imageInput.value,
+            status: newsStatus.value,
+            publishedAt: newsStatus.value === "published"
+                ? new Date().toISOString()
+                : ""
+        };
+
+        try {
+
+            if (newsId.value) {
+
+                await api("/api/admin/news/" + newsId.value, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                showMessage(editorMessage, "Новость успешно обновлена!", true);
+
+            } else {
+
+                await api("/api/admin/news", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                showMessage(editorMessage, "Новость успешно создана!", true);
+            }
+
+            resetForm(false);
+            await loadNews();
+
+        } catch (error) {
+
+            showMessage(editorMessage, error.message);
+
+        } finally {
+
+            saveButton.disabled = false;
+            saveButton.textContent = "Сохранить новость";
+        }
+    });
+
+    // ОЧИСТКА ФОРМЫ
+    function resetForm(clearMessage = true) {
+
+        newsForm.reset();
+
+        newsId.value = "";
+        imageInput.value = "";
+        imageFile.value = "";
+
+        imagePreview.hidden = true;
+        imagePreview.removeAttribute("src");
+
+        imageStatus.textContent =
+            "JPG, PNG, WEBP или GIF. Максимальный размер — 5 МБ.";
+
+        editorTitle.textContent = "Новая публикация";
+
+        if (clearMessage) {
+            editorMessage.textContent = "";
+            editorMessage.className = "form-message";
+        }
+    }
+
+    resetButton.addEventListener("click", () => {
+        resetForm();
+    });
+
+    // ОБНОВЛЕНИЕ СПИСКА
+    refreshButton.addEventListener("click", loadNews);
+
+    // Запуск
+    checkLogin();
+
+});
+</script>
+
+</body>
+</html>
