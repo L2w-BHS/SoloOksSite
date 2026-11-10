@@ -1095,7 +1095,7 @@ async function createDigitalPayment(req, res, productType) {
         typeof fullName !== "string" || !fullName.trim() ||
         typeof phone !== "string" || !phone.trim() ||
         typeof email !== "string" || !email.trim() ||
-        !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email.trim()) ||
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) ||
         (social !== undefined && typeof social !== "string")
     ) {
         return res.status(400).json({
