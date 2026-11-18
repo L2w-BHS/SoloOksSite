@@ -2974,8 +2974,8 @@ body.news-admin-page {
 
 /* Логотип */
 .partner-logo {
-    max-width: 180px;
-    max-height: 90px;
+    max-width: 360px;
+    max-height: 180px;
     width: 100%;
     object-fit: contain;
     display: block;
@@ -3063,4 +3063,94 @@ body.news-admin-page {
     color: var(--pink-deep); /* Фирменный розовый цвет, как у слова Solo */
     font-weight: 1000;        /* Сделал чуть жирнее (можешь убрать, если не нравится) */
     font-size: 16px
+}
+
+.partners-section .partners-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Одинаковая ширина и высота всех карточек */
+.partners-section .partner-tile {
+  box-sizing: border-box;
+  width: calc((100% - 40px) / 3);
+  flex: 0 0 calc((100% - 40px) / 3);
+  
+  padding: 24px 20px;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  background-color: #fcfafa;
+  text-decoration: none;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Жесткий контейнер под логотип — гарантирует, что текст будет строго на одном уровне */
+.partners-section .partner-logo-wrap {
+  width: 100%;
+  height: 110px;      /* Строго одинаковая высота зоны картинки во всех карточках */
+  flex-shrink: 0;     /* Запрещаем блоку сжиматься или растягиваться */
+  margin-bottom: 16px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;   /* Если увеличенный логотип выйдет за рамки, он не сдвинет текст */
+}
+
+/* Базовый размер логотипов */
+.partners-section .partner-logo {
+  max-width: 170px;
+  max-height: 95px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Увеличиваем «Кронидов» (2-я карточка) */
+.partners-section .partner-tile:nth-child(2) .partner-logo {
+  transform: scale(1.25);
+}
+
+/* Увеличиваем «Кавказскую тропу» (4-я карточка) */
+.partners-section .partner-tile:nth-child(4) .partner-logo {
+  transform: scale(1.3);
+}
+
+/* Текст строго по линейке */
+.partners-section .partner-name {
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333333;
+  line-height: 1.3;
+  
+  /* Фиксируем высоту под 2 строки текста, чтобы карточки не отличались по высоте */
+  min-height: 2.6em;
+  display: flex;
+  align-items: flex-start; /* Выравнивание строго по верхней границе первой строки */
+  justify-content: center;
+}
+
+/* Адаптив */
+@media (max-width: 960px) {
+  .partners-section .partner-tile {
+    width: calc((100% - 20px) / 2);
+    flex: 0 0 calc((100% - 20px) / 2);
+  }
+}
+
+@media (max-width: 600px) {
+  .partners-section .partner-tile {
+    width: 100%;
+    flex: 0 0 100%;
+  }
 }
