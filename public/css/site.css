@@ -3154,3 +3154,146 @@ body.news-admin-page {
     flex: 0 0 100%;
   }
 }
+
+.site-footer {
+  padding: 50px 0 30px;
+  text-align: left;
+}
+
+/* Размещаем две колонки слева с аккуратным отступом между ними */
+.site-footer .footer-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* Обе колонки прижаты к левому краю */
+  gap: 80px;                   /* Расстояние между колонками «Навигация» и «Связаться» */
+  margin-bottom: 40px;
+}
+
+/* Выстраиваем содержимое каждой колонки строго в столбик */
+.site-footer .footer-col,
+.site-footer .footer-grid > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left !important;
+  gap: 12px; /* Расстояние между пунктами в столбике */
+}
+
+/* Заголовки колонок (НАВИГАЦИЯ / СВЯЗАТЬСЯ) */
+.site-footer .footer-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+  opacity: 0.7;
+}
+
+/* Крупные и читаемые ссылки в обеих колонках */
+.site-footer .footer-grid a {
+  display: block;
+  font-size: 18px;      /* Увеличенный размер текста */
+  font-weight: 500;
+  line-height: 1.4;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.site-footer .footer-grid a:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+
+/* Нижняя полоса (копирайт и cookie) — тоже крупнее и слева */
+.site-footer .footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 15px;
+}
+
+.site-footer .footer-bottom a,
+.site-footer .cookie-settings-link {
+  font-size: 15px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* Адаптив для телефонов */
+@media (max-width: 600px) {
+  .site-footer .footer-grid {
+    flex-direction: column;
+    gap: 36px;
+  }
+}
+
+/* Опускаем блок с юридическими плашками ниже */
+.book-legal-links {
+  margin-top: 60px !important;    /* Увеличивает отступ сверху (было около 20-30px) */
+  margin-bottom: 30px !important; /* Отступ снизу перед самой нижней строкой подвала */
+  
+  /* Выравниваем плашки и кнопку в одну аккуратную линию по центру */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Убираем лишние точки-разделители <span> · </span>, так как у вас теперь плашки */
+.book-legal-links span {
+  display: none;
+}
+
+/* Контейнер кнопок и точек */
+.reviews-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+/* Исправляем кнопки .reviews-arrow */
+.reviews-controls .reviews-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  width: auto;              /* Сбрасываем узкую квадратную ширину */
+  min-width: 115px;         /* Делаем обе кнопки одинаковой аккуратной ширины */
+  height: 44px;
+  padding: 0 20px;
+  
+  white-space: nowrap;      /* Запрещаем перенос стрелки и слова на вторую строку */
+  line-height: 1;
+  
+  border-radius: 10px;
+  border: 1px solid #e5d8dc;
+  background-color: #ffffff;
+  color: #b05672;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reviews-controls .reviews-arrow:hover {
+  background-color: #fdf2f5;
+  border-color: #d6859f;
+}
+
+/* Аккуратный отступ для счетчика «Отзыв 1 из 11» снизу */
+.reviews-counter {
+  text-align: center;
+  margin-top: 12px;
+}
+
