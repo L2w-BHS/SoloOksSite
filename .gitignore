@@ -1,0 +1,11 @@
+.env
+.env.*
+node_modules/
+*.db
+*.sqlite
+*.sqlite3
+*.sqbpro
+orders.csv
+.DS_Store
+public/uploads/news/*
+!public/uploads/news/.gitkeep

@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fffafc">
+    <link rel="icon" href="./images/logo.jpg?v=3" type="image/jpeg">
+
+    <title>OksSolo — Оксана Соло | Путешествия и книги</title>
+    <meta name="description" content="Оксана Соло — путешественница и писатель. Автор книг о тропах в России и за рубежом.">
+
+    <link rel="stylesheet" href="./css/site.css">
+</head>
+<body>
+
+<!-- ============================================================
+     ШАПКА
+     ============================================================ -->
+<header class="site-header">
+    <div class="site-nav-wrap">
+        <a class="brand-mark" href="/" aria-label="OksSolo — главная">
+            <img src="./images/logo.png" alt="Oks" class="brand-logo">
+            <span class="brand-solo">Solo</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-label="Открыть меню" aria-expanded="false">☰</button>
+        <nav class="site-nav">
+            <a href="#about">Обо мне</a>
+            <a href="#books">Книги</a>
+            <a href="#news">Новости</a>
+            <a href="#postcards">Открытки</a>
+            <a href="#team">Команда</a>
+            <a href="#partners">Партнёры</a>
+        </nav>
+        <a class="nav-contact" href="https://vk.ru/solooks" rel="noopener" target="_blank">Связаться</a>
+    </div>
+</header>
+
+<main>
+
+<!-- ============================================================
+     ГЛАВНЫЙ ЭКРАН
+     ============================================================ -->
+<section class="home-hero" id="about">
+    <div class="home-shell hero-grid">
+        <div class="hero-photo-wrap">
+            <img src="./images/hero.jpg" alt="Оксана Соло" class="hero-photo">
+            <span class="hero-photo-note">Чудеса в походе — часть навигации.</span>
+        </div>
+        <div class="hero-copy">
+            <span class="eyebrow">ПУТЕШЕСТВЕННИЦА · ПИСАТЕЛЬ</span>
+            <h1>Оксана <em>Соло</em></h1>
+            <p class="hero-lead">Путешественница, писатель. Автор книг о тропах в России и за рубежом.</p>
+            <div class="hero-bio">
+                <p>Журналист, режиссёр, мама троих сыновей. В 2025 году прошла 2300 км по Большой уральской тропе соло — первая в России.</p>
+                <p>В 2026 году прошла 1600 км по Кавказской тропе. Первая обладательница Короны хребтов России.</p>
+                <p>Не спортсменка. Не туристка. Просто женщина, которая однажды решила изменить свою жизнь.</p>
+            </div>
+            <div class="hero-actions">
+                <button class="btn-primary" id="open-author-modal" type="button">Обо мне <span>↗</span></button>
+                <button class="btn-outline" id="open-media-modal" type="button">СМИ обо мне <span>↗</span></button>
+            </div>
+            <div class="hero-signature">
+                <img src="./images/logo.png" alt="S" class="signature-logo">
+                <span class="signature-solo">Solo</span>
+                <span class="signature-text">
+                <span class="text-pink">— Путь начинается не с первого шага,</span><br>
+                а с осознания, что тебе некуда отступать.
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     КНИГИ
+     ============================================================ -->
+<section class="home-section books-section" id="books">
+    <div class="home-shell">
+        <div class="section-heading">
+            <span class="eyebrow">ИСТОРИИ, КОТОРЫЕ СТАНОВЯТСЯ КНИГАМИ</span>
+            <h2>Книги</h2>
+            <p>Каждая дорога оставляет историю. Некоторые из них хочется сохранить на страницах.</p>
+        </div>
+
+        <div class="books-grid">
+            <a class="book-tile book-tile-active" href="/book-ural.html">
+                <div class="book-cover-frame">
+                    <img alt="Обложка книги Урал БЕЗ каблуков. Афера века" src="./images/book.jpg">
+                </div>
+                <div class="book-tile-meta">
+                    <span class="book-status">В продаже</span>
+                    <span class="book-arrow">↗</span>
+                </div>
+                <h3>Урал БЕЗ каблуков.<br>Афера века</h3>
+                <span class="book-more">Подробнее о книге</span>
+            </a>
+
+            <article class="book-tile book-coming">
+                <div class="coming-cover">
+                    <span>02</span>
+                    <strong>Скоро...</strong>
+                    <i>новая история уже в пути</i>
+                </div>
+                <div class="book-tile-meta">
+                    <span class="book-status status-soon">Скоро</span>
+                </div>
+                <h3>Шаг королевы</h3>
+                <span class="book-more">Книга готовится</span>
+            </article>
+
+            <article class="book-tile book-coming">
+                <div class="coming-cover coming-cover-alt">
+                    <span>03</span>
+                    <strong>Скоро...</strong>
+                    <i>следующая глава</i>
+                </div>
+                <div class="book-tile-meta">
+                    <span class="book-status status-soon">В разработке</span>
+                </div>
+                <h3>Новая книга</h3>
+                <span class="book-more">Название появится позже</span>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     НОВОСТИ
+     ============================================================ -->
+<section class="home-section news-section" id="news">
+    <div class="home-shell">
+        <div class="section-heading section-heading-row">
+            <div>
+                <span class="eyebrow">ИЗ ЖИЗНИ ПРОЕКТА</span>
+                <h2>Новости</h2>
+                <p>Новые маршруты, события и истории из жизни проекта.</p>
+            </div>
+            <a class="text-link" href="/news">Все новости <span>↗</span></a>
+        </div>
+        <div class="site-news-grid" id="home-news-list">
+            <p class="news-loading">Загружаем новости…</p>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<!-- ============================================================
+     ОТКРЫТКИ И СУВЕНИРЫ
+     ============================================================ -->
+<section class="postcards-section" id="postcards">
+    <div class="container">
+        <h2 class="postcards-title">Открытки и сувенирная продукция</h2>
+        <p class="postcards2-title">
+            Здесь вы можете купить открытки и сувенирную продукцию.
+            Это не просто открытки, браслеты и нужные в походе вещицы –
+            это эксклюзивные вещи, которые не найдешь в магазинах
+            и на маркетплейсах. Но главное, покупая этот товар,
+            вы поддерживаете проект Оксаны Соло.
+        </p>
+
+        <div class="products-carousel">
+            <button aria-label="Предыдущий товар" class="postcards-arrow products-arrow-prev" type="button">❮</button>
+            <div class="products-carousel-window">
+                <div class="products-carousel-track">
+                    <!-- КАРТОЧКА 1: ОТКРЫТКИ -->
+                    <article class="products-slide">
+                        <div class="postcards-content">
+                            <div class="postcards-gallery">
+                                <div class="postcards-prosto">
+                                    <img alt="Открытка Урал БЕЗ каблуков" src="./images/otkr6.jpg">
+                                </div>
+                                <br>
+                                <div class="postcards-number" aria-live="polite">Открытка № 1 из 6</div>
+                                <div class="postcards-carousel">
+                                    <button aria-label="Предыдущая открытка" class="postcards-arrow postcards-arrow-prev" type="button">❮</button>
+                                    <div class="postcards-carousel-window">
+                                        <div class="postcards-carousel-track">
+                                            <img alt="Открытка Урал БЕЗ каблуков" src="./images/otkr.jpg">
+                                            <img alt="Открытка Урал БЕЗ каблуков" src="./images/otkr1.jpg">
+                                            <img alt="Открытка Урал БЕЗ каблуков" src="./images/otkr2.jpg">
+                                            <img alt="Открытка Урал БЕЗ каблуков" src="./images/otkr3.jpg">
+                                            <img alt="Открытка Урал БЕЗ каблуков" src="./images/otkr4.jpg">
+                                            <img alt="Открытка Урал БЕЗ каблуков" src="./images/otkr5.jpg">
+                                        </div>
+                                    </div>
+                                    <button aria-label="Следующая открытка" class="postcards-arrow postcards-arrow-next" type="button">❯</button>
+                                </div>
+                                <div class="postcards-dots" aria-label="Выбор открытки"></div>
+                            </div>
+
+                            <div class="postcards-info">
+                                <h3>Открытки «Урал БЕЗ каблуков»</h3>
+                                <p>Уникальная серия открыток, посвящённая красоте, характеру и атмосфере Урала.</p>
+                                <p>Художник — Олег Бронников.</p>
+                                <p>Открытка станет приятным подарком для близких или памятным сувениром для себя.</p>
+                                <p>Отправка осуществляется Почтой России. Стоимость отправки уже включена в цену. По желанию можно получить автограф автора.</p>
+                                <div class="postcards-price">250 ₽ <span>за 1 экземпляр</span></div>
+                                <button class="button postcards-order-button" onclick="document.getElementById('postcard-order-modal').style.display='flex'" type="button">Заказать открытки</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- КАРТОЧКА 2: БРАСЛЕТ -->
+                    <article class="products-slide">
+                        <div class="postcards-content">
+                            <div class="postcards-gallery bracelet-gallery">
+                                <div class="bracelet-photos">
+                                    <img alt="Серебряный браслет Solo" src="./images/ykrash.jpg">
+                                </div>
+                            </div>
+                            <div class="postcards-info bracelet-info">
+                                <h3>Браслет Solo</h3>
+                                <p>Серебряный утончённый браслет-цепочка Solo. Создан компанией «Экстремальные украшения EXJE» Олега Чегодаева в соавторстве с путешественницей Оксаной Соло (Лыткиной).</p>
+                                <p>Элегантный браслет подойдёт любителям неброских, но изящных украшений с особенным смыслом.</p>
+                                <p>Длина регулируется за счёт дополнительных звеньев от 13,5 до 21 см, поэтому подойдёт на любой обхват руки в этом диапазоне.</p>
+                                <p><strong>Вес:</strong> 2,97 г</p>
+                                <p><strong>Габариты:</strong> 28 × 10 × 2 мм</p>
+                                <p><strong>Материал:</strong> серебро 925 пробы</p>
+                                <div class="postcards-price">2 800 ₽</div>
+                                <a class="button postcards-order-button" href="https://www.exje.ru/product/chain-bracelet-solo" rel="noopener noreferrer" target="_blank">Купить на сайте EXJE</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <button aria-label="Следующий товар" class="postcards-arrow products-arrow-next" type="button">❯</button>
+        </div>
+        <div class="products-carousel-dots" aria-label="Выбор товара"></div>
+    </div>
+</section>
+
+<!-- ============================================================
+     КОМАНДА
+     ============================================================ -->
+<section class="home-section team-section" id="team">
+    <div class="home-shell">
+        <div class="section-heading">
+            <span class="eyebrow">ЛЮДИ ЗА КАДРОМ</span>
+            <h2>Команда</h2>
+            <p>Те, кто помогает идеям становиться реальностью.</p>
+        </div>
+
+        <div class="team-grid">
+            <article class="team-card" data-team="0" role="button" tabindex="0" aria-label="Подробнее об участнике"
+                    data-name="Валерий Словцов" 
+                    data-role="Инструктор тренажерного зала" 
+                    data-desc="Среди воспитанников и выпускников есть призёры и чемпионы области по Бодибилдингу." 
+                    data-img="./images/team1.jpg">
+                <div class="team-avatar"><img src="./images/team1.jpg" alt="Валерий Словцов"></div>
+                <h3>Валерий Словцов</h3>
+                <p>Инструктор тренажерного зала</p>
+            </article>
+
+            <article class="team-card" data-team="1" role="button" tabindex="0" aria-label="Подробнее об участнике"
+                    data-name="Светлана Самасюк" 
+                    data-role="Имидж-стилист" 
+                    data-desc="Отвечает за образы, стиль и визуальное сопровождение проекта." 
+                    data-img="./images/team2.jpg">
+                <div class="team-avatar"><img src="./images/team2.jpg" alt="Светлана Самасюк"></div>
+                <h3>Светлана Самасюк</h3>
+                <p>Имидж-стилист</p>
+            </article>
+
+            <article class="team-card" data-team="2" role="button" tabindex="0" aria-label="Подробнее об участнике"
+                    data-name="Кирилл Кузнецов" 
+                    data-role="Редактор издательства «Геотер»" 
+                    data-desc="Помогает с текстами, редактурой и издательскими процессами." 
+                    data-img="./images/team3.jpg">
+                <div class="team-avatar"><img src="./images/team3.jpg" alt="Кирилл Кузнецов"></div>
+                <h3>Кирилл Кузнецов</h3>
+                <p>Редактор издательства «Геотер»</p>
+            </article>
+
+            <article class="team-card" data-team="3" role="button" tabindex="0" aria-label="Подробнее об участнике"
+                    data-name="Арсений Лыткин" 
+                    data-role="IT-помощь" 
+                    data-desc="Техническая поддержка сайта, настройка сервисов и помощь с цифровыми инструментами." 
+                    data-img="./images/team4.jpg">
+                <div class="team-avatar"><img src="./images/team4.jpg" alt="Арсений Лыткин"></div>
+                <h3>Арсений Лыткин</h3>
+                <p>IT-помощь</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     ПАРТНЁРЫ
+     ============================================================ -->
+<section class="home-section partners-section" id="partners">
+    <div class="home-shell">
+        <div class="section-heading">
+            <span class="eyebrow">ВМЕСТЕ МЫ МОЖЕМ БОЛЬШЕ</span>
+            <h2>Партнёры проекта</h2>
+            <p>Компании и люди, которые поддерживают наши идеи и маршруты.</p>
+        </div>
+
+        <div class="partners-grid">
+            <a class="partner-tile" href="https://koshkul.com/" rel="noopener" target="_blank">
+                <img src="./images/partner1.jpg" alt="Партнёр 01" class="partner-logo">
+                <p class="partner-name">Санаторий-профилакторий «Кошкуль»</p>
+            </a>
+            <a class="partner-tile" href="https://kronidov.ru/" rel="noopener" target="_blank">
+                <img src="./images/partner2.png" alt="Партнёр 02" class="partner-logo">
+                <p class="partner-name">«Кронидов»</p>
+            </a>
+            <a class="partner-tile" href="https://www.kant.ru/" rel="noopener" target="_blank">
+                <img src="./images/partner3.png" alt="Партнёр 03" class="partner-logo">
+                <p class="partner-name">«Кант»</p>
+            </a>
+            <a class="partner-tile" href="https://caucasiantrail.ru/kavkaznakablukah" rel="noopener" target="_blank">
+                <img src="./images/partner4.png" alt="Партнёр 04" class="partner-logo">
+                <p class="partner-name">«Кавказская тропа»</p>
+            </a>
+            <a class="partner-tile" href="https://www.greaturaltrail.ru/uralnakablukah" rel="noopener" target="_blank">
+                <img src="./images/partner5.png" alt="Партнёр 05" class="partner-logo">
+                <p class="partner-name">«Большая Уральская тропа»</p>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     МОДАЛКА ЗАКАЗА ОТКРЫТКИ
+     ============================================================ -->
+<div class="modal" id="postcard-order-modal" style="display: none;">
+    <div class="modal-content">
+        <button class="modal-close" type="button" aria-label="Закрыть" onclick="document.getElementById('postcard-order-modal').style.display='none'">×</button>
+        <h2>Заказ открытки</h2>
+        <p>Стоимость одной открытки — 250 ₽, включая отправку.</p>
+        <form id="postcard-order-form">
+            <label for="postcard-number">Номер выбранной открытки (№ 1–5)</label>
+            <input id="postcard-number" name="postcardNumber" type="number" inputmode="numeric" min="1" max="6" step="1" value="1" required>
+            <label for="postcard-phone">Номер телефона</label>
+            <input id="postcard-phone" name="phone" type="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required>
+            <label for="postcard-address">Адрес почтового отделения</label>
+            <textarea id="postcard-address" name="postalAddress" rows="3" placeholder="Город, индекс и адрес отделения Почты России" required></textarea>
+            <div class="legal-consent-field">
+                <input id="postcard-offer-accepted" name="offerAccepted" type="checkbox" value="yes" required>
+                <label for="postcard-offer-accepted">Я ознакомился(лась) и согласен(на) с условиями покупки, изложенными в <a href="/offer.html" rel="noopener noreferrer" target="_blank">публичной оферте</a>.</label>
+            </div>
+            <div class="legal-consent-field">
+                <input id="postcard-personal-data-consent" name="personalDataConsent" type="checkbox" value="yes" required>
+                <label for="postcard-personal-data-consent">Даю отдельное согласие на обработку персональных данных для оформления и исполнения заказа. <a href="/personal-data-consent.html" rel="noopener noreferrer" target="_blank">Текст согласия</a>; <a href="/privacy.html" rel="noopener noreferrer" target="_blank">политика обработки данных</a>.</label>
+            </div>
+            <input type="hidden" name="consentVersion" value="2026-10-28">
+            <button class="button" type="submit">Перейти к оплате — 250 ₽</button>
+        </form>
+    </div>
+</div>
+
+<!-- ============================================================
+     МОДАЛКА «ОБ АВТОРЕ»
+     ============================================================ -->
+<div class="modal info-modal" id="author-modal" aria-hidden="true">
+    <div class="modal-content info-modal-content" role="dialog" aria-modal="true" aria-labelledby="author-modal-title">
+        <button class="close" type="button" data-close-info="" aria-label="Закрыть окно">×</button>
+        <div class="info-modal-body">
+            <h2 id="author-modal-title">Об авторе</h2>
+            <p><strong>Оксана Лыткина (Оксана Соло)</strong> — журналист, режиссёр, путешественница, писатель. Директор АНО «Гордость Урала». До 2026 года - общественный представитель Агентства стратегических инициатив (АСИ) в Челябинской области по направлению «туризм».</p>
+            <p>Родилась 7 октября 1979 года. Замужем, трое сыновей.</p>
+            <p>Закончила Челябинскую государственную академию культуры и искусств по специальности «режиссёр». Прошла обучение в Санкт-Петербургском государственном институте кино и телевидения и на Высших курсах ВГИКа имени С. А. Герасимова — режиссура и продюсерство кино и телевидения.</p>
+            <p>Работала режиссёром, корреспондентом и ведущей на телеканале «Экран-ТВ» (1996–2017), директором Миасского бюро путешествий (2004–2020), PR-специалистом в Торгово-промышленной палате Миасса (2020). С 2021 года возглавляет АНО «Гордость Урала».</p>
+            <div class="info-divider"></div>
+            <h3>Что она сделала до того, как написала книгу</h3>
+            <p>Оксана — автор и руководитель нескольких социальных и туристических проектов:</p>
+            <ul>
+                <li><strong>Экотропа «Кошкуль»</strong> — победитель конкурса троп ООПТ Челябинской области (2020).</li>
+                <li><strong>Аудиогид «По дну Уральского океана»</strong> — победитель Всероссийской акции «Путешествуй легко» (2022).</li>
+                <li><strong>Аудиогид по Миассу</strong> — с самыми интересными и неизвестными фактами о городе.</li>
+                <li><strong>Общественное пространство «ЭКОточка».</strong></li>
+            </ul>
+            <div class="info-divider"></div>
+            <h3>Маршруты, которые она прошла</h3>
+            <p>Оксана не теоретик. Она прошла тысячи километров пешком — по разным странам и тропам:</p>
+            <ul class="route-list">
+                <li><strong>Путь Сантьяго</strong> (Португалия — Испания) — 300 км</li>
+                <li><strong>Ликийская тропа</strong> (Турция) — 500 км</li>
+                <li><strong>Карийская тропа</strong> (Турция) — 150 км</li>
+                <li><strong>Большая уральская тропа</strong> (Южный и Средний Урал) — 600 км</li>
+                <li><strong>Тропы Южного Урала</strong> (Зюраткуль, Зигальга)</li>
+                <li><strong>Большая Байкальская тропа</strong> — 100 км</li>
+                <li><strong>Большая Севастопольская тропа</strong> — 100 км</li>
+                <li><strong>Волжская тропа</strong> — 200 км</li>
+                <li><strong>Алханай Гооро</strong> (Забайкальский край) — 150 км</li>
+                <li><strong>Алтай</strong> (Шавлинские озёра) — 150 км</li>
+            </ul>
+            <div class="author-highlight">
+                <p>А в 2025 году она прошла <strong>2300 километров по Большой уральской тропе</strong> — одна, нон-стоп, от Орска до перевала Дятлова.</p>
+                <p class="author-highlight-ending">Первая в России. Об этом — её книга.</p>
+            </div>
+            <div class="info-divider"></div>
+            <h3>Моменты моего пути</h3>
+            <p>Путешествия, открытия и воспоминания.</p>
+            <div class="photo-carousel" aria-label="Фотографии автора">
+                <button class="photo-arrow" id="photo-prev" type="button" aria-label="Предыдущая фотография">←</button>
+                <div class="photo-carousel-window">
+                    <div class="photo-carousel-track" id="photo-track"></div>
+                </div>
+                <button class="photo-arrow" id="photo-next" type="button" aria-label="Следующая фотография">→</button>
+            </div>
+            <div class="photo-dots" id="photo-dots" aria-label="Выбрать фотографию"></div>
+            <p class="photo-counter" id="photo-counter" aria-live="polite">Фото 1 из 12</p>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     МОДАЛКА «СМИ ОБО МНЕ»
+     ============================================================ -->
+<div class="modal smi-modal" id="media-modal" aria-hidden="true">
+    <div class="modal-content smi-modal-content" role="dialog" aria-modal="true" aria-labelledby="media-modal-title">
+        <button class="smi-close" id="close-media-modal" type="button" aria-label="Закрыть окно">×</button>
+        <h2 id="media-modal-title">СМИ обо мне</h2>
+        <div class="smi-document" id="smi-content-container">
+            <p style="text-align: center; color: var(--muted); padding: 20px;">Загружаем публикации...</p>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     МОДАЛЬНОЕ ОКНО КОМАНДЫ
+     ============================================================ -->
+<div class="team-modal" id="team-modal" aria-hidden="true">
+    <div class="team-modal-backdrop" data-team-close></div>
+    <div class="team-modal-card" role="dialog" aria-modal="true" aria-labelledby="team-modal-name">
+        <button class="team-modal-close" type="button" data-team-close aria-label="Закрыть">×</button>
+        <div class="team-modal-avatar" id="team-modal-avatar"></div>
+        <span class="eyebrow">КОМАНДА OKSSOLO</span>
+        <h2 id="team-modal-name">Загрузка...</h2>
+        <p class="team-modal-role" id="team-modal-role">Загрузка...</p>
+        <p id="team-modal-description">Пожалуйста, подождите...</p>
+    </div>
+</div>
+
+<!-- ============================================================
+     ПОДВАЛ
+     ============================================================ -->
+<footer class="site-footer">
+    <div class="home-shell footer-grid">
+        <div>
+            <a class="brand-mark footer-brand" href="/">Oks<span>Solo</span></a>
+            <p>Путешествия, книги и люди, которые меняют мир вокруг себя.</p>
+        </div>
+        <div>
+            <span class="footer-label">НАВИГАЦИЯ</span>
+            <a href="#about">Обо мне</a>
+            <a href="#books">Книги</a>
+            <a href="/news">Новости</a>
+            <a href="#team">Команда</a>
+        </div>
+        <div>
+            <span class="footer-label">СВЯЗАТЬСЯ</span>
+            <a href="mailto:PRmiass@yandex.ru">PRmiass@yandex.ru</a>
+            <a href="https://vk.ru/solooks" rel="noopener" target="_blank">ВКонтакте</a>
+            <a href="https://dzen.ru/ambassador" rel="noopener" target="_blank">Дзен</a>
+            <a href="https://max.ru/u/f9LHodD0cOKoPlXvHjyeS63ThfyGuHkc5VVHCnR3w_8VFdgct9jYNwbEOpI" rel="noopener" target="_blank">MAX</a>
+        </div>
+    </div>
+    <div class="home-shell footer-bottom">
+        <span>© Оксана Соло, 2026</span>
+        <a href="/cookie-policy.html">Информация о cookie</a>
+        <button class="cookie-settings-link" id="cookie-settings-open" type="button">Настройки cookie</button>
+    </div>
+</footer>
+
+<!-- ============================================================
+     COOKIE-БАННЕР
+     ============================================================ -->
+<div class="cookie-banner" id="cookie-banner" role="dialog" aria-modal="false" aria-labelledby="cookie-banner-title" hidden>
+    <div class="cookie-banner-copy">
+        <h2 id="cookie-banner-title">Настройки cookie</h2>
+        <p>Сайт может использовать необходимые технические технологии. В проверенных HTML/JS-файлах счётчики аналитики и рекламные пиксели не обнаружены. Необязательные cookie по умолчанию выключены. <a href="/cookie-policy.html">Подробнее</a>.</p>
+    </div>
+    <div class="cookie-banner-actions">
+        <button class="cookie-button cookie-button-secondary" id="cookie-reject" type="button">Отказаться от необязательных</button>
+        <button class="cookie-button cookie-button-secondary" id="cookie-settings" type="button">Настроить</button>
+        <button class="cookie-button cookie-button-primary" id="cookie-accept" type="button">Разрешить необязательные</button>
+    </div>
+</div>
+
+<div class="cookie-settings-modal" id="cookie-settings-modal" role="dialog" aria-modal="true" aria-labelledby="cookie-settings-title" hidden>
+    <div class="cookie-settings-backdrop" data-cookie-close=""></div>
+    <div class="cookie-settings-dialog">
+        <button class="cookie-settings-close" type="button" data-cookie-close="" aria-label="Закрыть">×</button>
+        <h2 id="cookie-settings-title">Настройки cookie</h2>
+        <p>Вы можете отказаться от необязательных cookie. Технические технологии, необходимые для безопасности и работы заказа, могут оставаться активными.</p>
+        <div class="cookie-category">
+            <div>
+                <strong>Необходимые</strong>
+                <p>Нужны для базовой работы сайта и сохранения настроек. Их нельзя выключить этим переключателем.</p>
+            </div>
+            <label class="cookie-switch-label"><input type="checkbox" checked disabled> Всегда включены</label>
+        </div>
+        <div class="cookie-category">
+            <div>
+                <strong>Аналитические и рекламные</strong>
+                <p>Используются для статистики и рекламы. В проверенных файлах такие сервисы сейчас не обнаружены; их подключение потребует отдельной настройки блокировки до согласия.</p>
+            </div>
+            <label class="cookie-switch-label"><input id="cookie-analytics-toggle" type="checkbox"> Разрешить</label>
+        </div>
+        <p class="cookie-settings-warning">Выбор сохраняется в localStorage. Это окно само по себе не отключает cookie, которые сервер или платёжный сервис устанавливают независимо от страницы.</p>
+        <div class="cookie-settings-actions">
+            <button class="cookie-button cookie-button-primary" id="cookie-save-settings" type="button">Сохранить выбор</button>
+            <button class="cookie-button cookie-button-secondary" id="cookie-modal-reject" type="button">Отказаться от необязательных</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     СКРИПТЫ
+     ============================================================ -->
+<script src="./js/home-news.js" defer></script>
+<script src="./js/postcards.js" defer></script>
+
+<script>
+/* Скрипт модалки команды (жесткая привязка данных) */
+document.addEventListener("DOMContentLoaded", function () {
+    const teamCards = document.querySelectorAll(".team-card");
+    const teamModal = document.getElementById("team-modal");
+    
+    if (!teamModal) return;
+
+    const modalAvatar = document.getElementById("team-modal-avatar");
+    const modalName = document.getElementById("team-modal-name");
+    const modalRole = document.getElementById("team-modal-role");
+    const modalDesc = document.getElementById("team-modal-description");
+    const closeButtons = teamModal.querySelectorAll("[data-team-close]");
+
+    function openTeamModal(card) {
+        const name = card.getAttribute("data-name");
+        const role = card.getAttribute("data-role");
+        const desc = card.getAttribute("data-desc");
+        const img = card.getAttribute("data-img");
+
+        if (modalName) modalName.textContent = name;
+        if (modalRole) modalRole.textContent = role;
+        if (modalDesc) modalDesc.textContent = desc;
+        
+        if (modalAvatar && img) {
+            modalAvatar.innerHTML = `<img src="${img}" alt="${name}" style="width:100%; height:100%; object-fit:cover; display:block;">`;
+        }
+
+        teamModal.classList.add("is-open");
+        teamModal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeTeamModal() {
+        teamModal.classList.remove("is-open");
+        teamModal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+    }
+
+    teamCards.forEach(card => {
+        card.addEventListener("click", () => openTeamModal(card));
+        card.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                openTeamModal(card);
+            }
+        });
+    });
+
+    closeButtons.forEach(btn => {
+        btn.addEventListener("click", closeTeamModal);
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && teamModal.classList.contains("is-open")) {
+            closeTeamModal();
+        }
+    });
+});
+</script>
+
+<script>
+/* Скрипт модалок "Обо мне" и "СМИ" */
+document.addEventListener("DOMContentLoaded", function () {
+    const modalPairs = [
+        { modal: document.getElementById("author-modal"), openButton: document.getElementById("open-author-modal") },
+        { modal: document.getElementById("media-modal"),  openButton: document.getElementById("open-media-modal")  }
+    ];
+
+    let previouslyFocused = null;
+
+    function closeInfoModal(modal) {
+        if (!modal) return;
+        modal.classList.remove("active");
+        modal.setAttribute("aria-hidden", "true");
+        const anotherModalIsOpen = modalPairs.some(pair => pair.modal && pair.modal !== modal && pair.modal.classList.contains("active"));
+        if (!anotherModalIsOpen) document.body.style.overflow = "";
+        if (previouslyFocused && document.contains(previouslyFocused)) previouslyFocused.focus();
+    }
+
+    modalPairs.forEach(pair => {
+        if (!pair.modal || !pair.openButton) return;
+        const closeButtons = pair.modal.querySelectorAll("[data-close-info]");
+
+        pair.openButton.addEventListener("click", function () {
+            previouslyFocused = pair.openButton;
+            pair.modal.classList.add("active");
+            pair.modal.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+            const closeButton = pair.modal.querySelector("[data-close-info]");
+            if (closeButton) closeButton.focus();
+        });
+
+        closeButtons.forEach(button => {
+            button.addEventListener("click", function () { closeInfoModal(pair.modal); });
+        });
+
+        pair.modal.addEventListener("click", function (event) {
+            if (event.target === pair.modal) closeInfoModal(pair.modal);
+        });
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key !== "Escape") return;
+        const activePair = modalPairs.find(pair => pair.modal && pair.modal.classList.contains("active"));
+        if (activePair) closeInfoModal(activePair.modal);
+    });
+});
+</script>
+
+<script>
+/* Карусель фото в модалке "Обо мне" */
+document.addEventListener("DOMContentLoaded", function () {
+    const track = document.getElementById("photo-track");
+    const prev = document.getElementById("photo-prev");
+    const next = document.getElementById("photo-next");
+    const dotsContainer = document.getElementById("photo-dots");
+    const counter = document.getElementById("photo-counter");
+    const authorModal = document.getElementById("author-modal");
+    if (!track || !prev || !next || !dotsContainer || !counter) return;
+
+    const total = 12;
+    let current = 0;
+    const dots = [];
+
+    for (let i = 0; i < total; i++) {
+        const number = i + 5;
+        const slide = document.createElement("figure");
+        slide.className = "photo-carousel-slide";
+        const img = document.createElement("img");
+        img.src = `./images/oksana${number}.jpg`;
+        img.alt = `Оксана Соло — фотография ${number}`;
+        img.loading = i === 0 ? "eager" : "lazy";
+        slide.appendChild(img);
+        track.appendChild(slide);
+
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "photo-dot";
+        dot.setAttribute("aria-label", `Показать фото ${i + 1}`);
+        dot.addEventListener("click", function () { showPhoto(i); });
+        dotsContainer.appendChild(dot);
+        dots.push(dot);
+    }
+
+    function showPhoto(index) {
+        current = (index + total) % total;
+        track.style.transform = `translateX(-${current * 100}%)`;
+        dots.forEach(function (dot, i) {
+            const active = i === current;
+            dot.classList.toggle("is-active", active);
+            if (active) dot.setAttribute("aria-current", "true");
+            else dot.removeAttribute("aria-current");
+        });
+        counter.textContent = `Фото ${current + 1} из ${total}`;
+    }
+
+    prev.addEventListener("click", function () { showPhoto(current - 1); });
+    next.addEventListener("click", function () { showPhoto(current + 1); });
+    showPhoto(0);
+});
+</script>
+
+<script>
+/* Загрузка СМИ */
+document.addEventListener("DOMContentLoaded", function () {
+    const openBtn = document.getElementById("open-media-modal");
+    const container = document.getElementById("smi-content-container");
+    if (!openBtn || !container) return;
+
+    let isLoaded = false;
+
+    openBtn.addEventListener("click", async function () {
+        if (isLoaded) return;
+        try {
+            const response = await fetch("./smi-content.html");
+            if (!response.ok) throw new Error("Файл не найден");
+            const html = await response.text();
+            container.innerHTML = html;
+            isLoaded = true;
+        } catch (error) {
+            console.error("Ошибка загрузки СМИ:", error);
+            container.innerHTML = '<p style="color: red; text-align: center; padding: 20px;">Не удалось загрузить публикации.</p>';
+        }
+    });
+});
+</script>
+
+<script>
+/* Cookie-баннер */
+(function () {
+    const KEY = 'solooks_cookie_preferences_v1';
+    const banner = document.getElementById('cookie-banner');
+    const modal = document.getElementById('cookie-settings-modal');
+    const toggle = document.getElementById('cookie-analytics-toggle');
+    if (!banner || !modal || !toggle) return;
+
+    function read() {
+        try {
+            const v = JSON.parse(localStorage.getItem(KEY) || 'null');
+            if (v && typeof v.analytics === 'boolean') return v;
+        } catch (e) {}
+        return null;
+    }
+
+    function save(analytics) {
+        const value = { necessary: true, analytics: Boolean(analytics), updatedAt: new Date().toISOString(), version: 1 };
+        try { localStorage.setItem(KEY, JSON.stringify(value)); } catch (e) {}
+        banner.hidden = true;
+        modal.hidden = true;
+    }
+
+    function openSettings() {
+        const v = read();
+        toggle.checked = Boolean(v && v.analytics);
+        modal.hidden = false;
+        const close = modal.querySelector('[data-cookie-close]');
+        if (close) close.focus();
+    }
+
+    const existing = read();
+    if (!existing) banner.hidden = false;
+
+    document.getElementById('cookie-accept').addEventListener('click', () => save(true));
+    document.getElementById('cookie-reject').addEventListener('click', () => save(false));
+    document.getElementById('cookie-settings').addEventListener('click', openSettings);
+    const opener = document.getElementById('cookie-settings-open');
+    if (opener) opener.addEventListener('click', openSettings);
+    document.getElementById('cookie-save-settings').addEventListener('click', () => save(toggle.checked));
+    document.getElementById('cookie-modal-reject').addEventListener('click', () => save(false));
+    modal.querySelectorAll('[data-cookie-close]').forEach(el => el.addEventListener('click', () => { modal.hidden = true; }));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) modal.hidden = true; });
+})();
+</script>
+
+<script>
+/* Скрипт для открытия/закрытия мобильного меню */
+document.addEventListener("DOMContentLoaded", function () {
+    const navToggle = document.querySelector(".nav-toggle");
+    const siteNav = document.querySelector(".site-nav");
+
+    if (navToggle && siteNav) {
+        navToggle.addEventListener("click", function () {
+            // Переключаем класс is-open у меню
+            const isOpen = siteNav.classList.toggle("is-open");
+            // Меняем атрибут доступности
+            navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+            
+            // Меняем иконку с полосок на крестик и обратно
+            navToggle.innerHTML = isOpen ? "✕" : "☰";
+        });
+    }
+});
+</script>
+
+</body>
+</html>
