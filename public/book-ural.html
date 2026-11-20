@@ -61,8 +61,7 @@
             </div>
 
             <div class="book-detail-price">
-                <strong>1500 ₽</strong>
-                <span>Цена предзаказа · после выхода 1900 ₽</span>
+                <strong>2000 ₽</strong>
             </div>
 
             <div class="hero-actions">
@@ -114,11 +113,7 @@
 
         <div class="price-options">
             <div class="price-option">
-                <h3>Предзаказ</h3>
-                <p class="price">1500 ₽</p>
-            </div>
-            <div class="price-option">
-                <h3>После выхода</h3>
+                <h3>Цена за 1 экземпляр</h3>
                 <p class="price">1900 ₽</p>
             </div>
             <div class="price-option">
@@ -394,7 +389,7 @@
             <input type="hidden" name="consentVersion" value="2026-10-28">
 
             <p class="order-required-note">* — обязательные поля</p>
-            <button class="button order-submit" type="submit">Купить — 1500 ₽</button>
+            <button class="button order-submit" type="submit">Купить — 1900 ₽</button>
         </form>
 
         <div class="order-success" id="order-success" role="status" hidden>
@@ -759,7 +754,7 @@ document.addEventListener("DOMContentLoaded", function () {
             alert(error.message || "Не удалось связаться с сервером.");
         } finally {
             submitButton.disabled = false;
-            submitButton.textContent = "Купить — 1500 ₽";
+            submitButton.textContent = "Купить — 1900 ₽";
         }
     });
 });

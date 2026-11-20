@@ -33,7 +33,7 @@ const YOOKASSA_SECRET_KEY = process.env.YOOKASSA_SECRET_KEY;
 const SITE_URL = (process.env.SITE_URL || "https://solooksshop.ru")
     .replace(/\/+$/, "");
 
-const BOOK_AMOUNT = 1500;
+const BOOK_AMOUNT = 1900;
 const POSTCARD_AMOUNT = 250;
 const EBOOK_AMOUNT = 1000;
 const AUDIO_AMOUNT = 1000;
@@ -776,7 +776,7 @@ function expireUnpaidOrders() {
 }
 
 // ==========================================
-// 9. СОЗДАНИЕ ЗАКАЗА КНИГИ — 1500 ₽
+// 9. СОЗДАНИЕ ЗАКАЗА КНИГИ — 1900 ₽
 // ==========================================
 
 app.post("/api/create-order", async (req, res) => {
