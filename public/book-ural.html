@@ -164,7 +164,7 @@
                         <p>После оформления заказа в течении суток на вашу электронную почту будет выслан электронный экземпляр книги «Урал БЕЗ каблуков. Афера века» в формате PDF. Если возникнут какие-то вопросы с заказом, контактный телефон: +79222337765 (можно писать в МАХ).</p>
                     </div>
 
-                    <form class="digital-form" data-product="ebook">
+                    <form class="digital-form" data-product="ebook" novalidate>
                         <label>ФИО<input autocomplete="name" maxlength="200" name="fullName" required></label>
                         <label>Телефон<input autocomplete="tel" maxlength="50" name="phone" placeholder="+7 900 000-00-00" required type="tel"></label>
                         <label>Электронная почта<input autocomplete="email" maxlength="254" name="email" placeholder="name@example.com" required type="email"></label>
@@ -197,7 +197,7 @@
                     <p class="digital-price">1000 ₽</p>
                     <p class="digital-audio-description">Аудиоверсия книги «Урал БЕЗ каблуков. Афера века». Оформите заказ, и после оплаты информация о получении аудиокниги придёт на вашу электронную почту.</p>
 
-                    <form class="digital-form" data-product="audio">
+                    <form class="digital-form" data-product="audio" novalidate>
                         <label>ФИО<input autocomplete="name" maxlength="200" name="fullName" required></label>
                         <label>Телефон<input autocomplete="tel" maxlength="50" name="phone" placeholder="+7 900 000-00-00" required type="tel"></label>
                         <label>Электронная почта<input autocomplete="email" maxlength="254" name="email" placeholder="name@example.com" required type="email"></label>
@@ -783,46 +783,93 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 <script>
-/* Формы цифровых версий — электронная книга и аудио */
+/* Формы цифровых версий — отдельная проверка каждого поля */
 document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".digital-form").forEach(digitalForm => {
-        digitalForm.addEventListener("submit", async event => {
+    document.querySelectorAll(".digital-form").forEach(form => {
+        const button = form.querySelector('button[type="submit"]');
+        const summary = form.querySelector(".digital-form-message");
+        const fields = ["fullName", "phone", "email", "offerAccepted", "personalDataConsent"];
+
+        function errorElement(name) {
+            const input = form.elements[name];
+            const label = input.closest("label");
+            let error = label.querySelector(".field-error");
+            if (!error) {
+                error = document.createElement("span");
+                error.className = "field-error";
+                error.id = "error-" + form.dataset.product + "-" + name;
+                error.setAttribute("aria-live", "polite");
+                label.appendChild(error);
+            }
+            input.setAttribute("aria-describedby", error.id);
+            return error;
+        }
+
+        function validateField(name) {
+            const input = form.elements[name];
+            const error = errorElement(name);
+            const value = input.type === "checkbox" ? input.checked : input.value.trim();
+            let text = "";
+
+            if (name === "fullName") {
+                if (!value) text = "Укажите ФИО.";
+                else if (String(value).length < 5) text = "ФИО слишком короткое. Укажите имя и фамилию.";
+            }
+            if (name === "phone") {
+                const digits = String(value).replace(/\\D/g, "");
+                if (!value) text = "Укажите номер телефона.";
+                else if (digits.length < 10 || digits.length > 15) text = "Номер должен содержать от 10 до 15 цифр.";
+            }
+            if (name === "email") {
+                if (!value) text = "Укажите электронную почту.";
+                else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(String(value))) text = "Некорректный email. Пример: name@example.com.";
+            }
+            if (name === "offerAccepted" && !value) text = "Необходимо принять публичную оферту.";
+            if (name === "personalDataConsent" && !value) text = "Необходимо дать согласие на обработку персональных данных.";
+
+            error.textContent = text;
+            input.classList.toggle("field-invalid", Boolean(text));
+            input.setAttribute("aria-invalid", String(Boolean(text)));
+            return text;
+        }
+
+        function validateAll() {
+            const errors = [];
+            fields.forEach(name => {
+                const text = validateField(name);
+                if (text) errors.push(text);
+            });
+            summary.textContent = errors.length
+                ? "Пожалуйста, исправьте ошибки: " + errors.join(" ")
+                : "";
+            summary.classList.toggle("has-errors", errors.length > 0);
+            return errors;
+        }
+
+        fields.forEach(name => {
+            const input = form.elements[name];
+            const eventName = input.type === "checkbox" ? "change" : "input";
+            input.addEventListener(eventName, () => {
+                validateField(name);
+                if (summary.textContent) validateAll();
+            });
+            input.addEventListener("blur", () => validateField(name));
+        });
+
+        form.addEventListener("submit", async event => {
             event.preventDefault();
-
-            const button = digitalForm.querySelector('button[type="submit"]');
-            const message = digitalForm.querySelector(".digital-form-message");
-            const product = digitalForm.dataset.product;
-            const fullName = digitalForm.elements.fullName.value.trim();
-            const phone = digitalForm.elements.phone.value.trim();
-            const email = digitalForm.elements.email.value.trim();
-            const social = digitalForm.elements.social.value.trim();
-            const offerAccepted = digitalForm.elements.offerAccepted.checked;
-            const personalDataConsent = digitalForm.elements.personalDataConsent.checked;
-
-            if (!fullName || !phone || !email) {
-                message.textContent = "Заполните ФИО, телефон и электронную почту.";
-                return;
-            }
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                message.textContent = "Проверьте адрес электронной почты.";
-                digitalForm.elements.email.focus();
-                return;
-            }
-            const phoneDigits = phone.replace(/\D/g, "");
-            if (phoneDigits.length < 10 || phoneDigits.length > 15) {
-                message.textContent = "Проверьте номер телефона.";
-                digitalForm.elements.phone.focus();
-                return;
-            }
-            if (!offerAccepted || !personalDataConsent) {
-                message.textContent = "Для заказа необходимо принять оферту и дать согласие на обработку персональных данных.";
+            if (validateAll().length) {
+                const firstInvalid = form.querySelector('[aria-invalid="true"]');
+                if (firstInvalid) firstInvalid.focus();
                 return;
             }
 
+            const product = form.dataset.product;
             const originalText = button.textContent;
             button.disabled = true;
             button.textContent = "Подготавливаем оплату...";
-            message.textContent = "";
+            summary.textContent = "Проверка данных пройдена. Создаём заказ...";
+            summary.classList.remove("has-errors");
 
             try {
                 const endpoint = product === "ebook" ? "./api/ebook/create-payment"
@@ -834,20 +881,24 @@ document.addEventListener("DOMContentLoaded", () => {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        fullName, phone, email, social,
-                        offerAccepted, personalDataConsent,
+                        fullName: form.elements.fullName.value.trim(),
+                        phone: form.elements.phone.value.trim(),
+                        email: form.elements.email.value.trim(),
+                        social: form.elements.social.value.trim(),
+                        offerAccepted: form.elements.offerAccepted.checked,
+                        personalDataConsent: form.elements.personalDataConsent.checked,
                         consentVersion: "2026-10-28"
                     })
                 });
 
                 const result = await response.json().catch(() => ({}));
-                if (!response.ok) throw new Error(result.error || "Не удалось создать заказ. Попробуйте позже.");
+                if (!response.ok) throw new Error(result.error || result.message || ("Ошибка сервера: " + response.status));
                 if (!result.paymentUrl) throw new Error("Сервер не вернул ссылку на оплату.");
-
                 window.location.assign(result.paymentUrl);
             } catch (error) {
                 console.error("Ошибка оплаты цифрового товара:", error);
-                message.textContent = error.message || "Не удалось создать заказ.";
+                summary.textContent = "Не удалось создать заказ: " + (error.message || "неизвестная ошибка");
+                summary.classList.add("has-errors");
                 button.disabled = false;
                 button.textContent = originalText;
             }
