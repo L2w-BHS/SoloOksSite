@@ -540,7 +540,9 @@ h1 em, h2 em, h3 em {
     gap: 28px;
 }
 .book-tile {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     text-decoration: none;
     color: var(--ink);
     min-width: 0;
@@ -598,7 +600,8 @@ h1 em, h2 em, h3 em {
     text-decoration: none;
 }
 .book-buy-button {
-    margin-top: 16px;
+    margin-top: auto;
+    align-self: flex-start;
     width: fit-content;
 }
 
