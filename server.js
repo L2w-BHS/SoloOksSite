@@ -1106,15 +1106,50 @@ async function createDigitalPayment(req, res, productType) {
 
     if (!hasRequiredConsents(req.body)) return consentError(res);
 
-    if (
-        typeof fullName !== "string" || !fullName.trim() ||
-        typeof phone !== "string" || !phone.trim() ||
-        typeof email !== "string" || !email.trim() ||
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) ||
-        (social !== undefined && typeof social !== "string")
-    ) {
+    // Проверяем каждое поле отдельно, чтобы клиент получил точную причину отказа.
+    const fieldErrors = {};
+
+    if (typeof fullName !== "string" || !fullName.trim()) {
+        fieldErrors.fullName = "Сервер не получил ФИО. Обновите страницу и введите ФИО заново.";
+    } else if (fullName.trim().length < 5 || fullName.trim().length > 200) {
+        fieldErrors.fullName = "ФИО должно содержать от 5 до 200 символов.";
+    }
+
+    if (typeof phone !== "string" || !phone.trim()) {
+        fieldErrors.phone = "Сервер не получил номер телефона. Введите телефон заново.";
+    } else {
+        const phoneDigits = phone.replace(/\D/g, "");
+        if (phoneDigits.length < 10 || phoneDigits.length > 15) {
+            fieldErrors.phone = "Телефон должен содержать от 10 до 15 цифр.";
+        }
+    }
+
+    if (typeof email !== "string" || !email.trim()) {
+        fieldErrors.email = "Сервер не получил адрес электронной почты.";
+    } else if (email.trim().length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+        fieldErrors.email = "Сервер считает адрес электронной почты некорректным. Проверьте формат name@example.com.";
+    }
+
+    if (social !== undefined && typeof social !== "string") {
+        fieldErrors.social = "Поле соцсети передано в неверном формате. Очистите его и попробуйте снова.";
+    } else if (typeof social === "string" && social.length > 500) {
+        fieldErrors.social = "Ссылка или имя пользователя в соцсети слишком длинные (максимум 500 символов).";
+    }
+
+    if (Object.keys(fieldErrors).length > 0) {
+        console.warn("Отклонён цифровой заказ: ошибка проверки полей", {
+            productType,
+            fields: Object.keys(fieldErrors),
+            receivedTypes: {
+                fullName: typeof fullName,
+                phone: typeof phone,
+                email: typeof email,
+                social: typeof social
+            }
+        });
         return res.status(400).json({
-            error: "Заполни ФИО, телефон и корректный адрес электронной почты."
+            error: Object.values(fieldErrors).join(" "),
+            fieldErrors
         });
     }
 
