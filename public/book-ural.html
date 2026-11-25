@@ -892,11 +892,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 const result = await response.json().catch(() => ({}));
-                if (!response.ok) throw new Error(result.error || result.message || ("Ошибка сервера: " + response.status));
+                if (!response.ok) {
+                    const serverError = new Error(result.error || result.message || ("Ошибка сервера: " + response.status));
+                    serverError.fieldErrors = result.fieldErrors || {};
+                    throw serverError;
+                }
                 if (!result.paymentUrl) throw new Error("Сервер не вернул ссылку на оплату.");
                 window.location.assign(result.paymentUrl);
             } catch (error) {
                 console.error("Ошибка оплаты цифрового товара:", error);
+                if (error.fieldErrors) {
+                    Object.entries(error.fieldErrors).forEach(([name, text]) => {
+                        const input = form.elements[name];
+                        if (!input) return;
+                        const label = input.closest("label");
+                        let fieldError = label.querySelector(".field-error");
+                        if (!fieldError) {
+                            fieldError = document.createElement("span");
+                            fieldError.className = "field-error";
+                            label.appendChild(fieldError);
+                        }
+                        fieldError.textContent = text;
+                        input.classList.add("field-invalid");
+                        input.setAttribute("aria-invalid", "true");
+                    });
+                }
                 summary.textContent = "Не удалось создать заказ: " + (error.message || "неизвестная ошибка");
                 summary.classList.add("has-errors");
                 button.disabled = false;
