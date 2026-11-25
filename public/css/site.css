@@ -3339,3 +3339,31 @@ body.news-admin-page {
     outline-offset: 3px;
     border-radius: 4px;
 }
+
+
+/* Подробная валидация форм электронной и аудиокниги */
+.digital-form .field-error {
+    display: block;
+    margin-top: 5px;
+    color: #b42345;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+.digital-form input.field-invalid {
+    border-color: #c6284b !important;
+    box-shadow: 0 0 0 2px rgba(198, 40, 75, 0.10);
+}
+.digital-form input[aria-invalid="true"] {
+    border-color: #c6284b;
+}
+.digital-form .digital-consent .field-error {
+    flex-basis: 100%;
+}
+.digital-form-message.has-errors {
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #fff0f2;
+    color: #a51d3d;
+    line-height: 1.55;
+}
