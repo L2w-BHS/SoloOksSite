@@ -816,13 +816,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 else if (String(value).length < 5) text = "ФИО слишком короткое. Укажите имя и фамилию.";
             }
             if (name === "phone") {
-                const digits = String(value).replace(/\\D/g, "");
+                const digits = String(value).replace(/\D/g, "");
                 if (!value) text = "Укажите номер телефона.";
                 else if (digits.length < 10 || digits.length > 15) text = "Номер должен содержать от 10 до 15 цифр.";
             }
             if (name === "email") {
                 if (!value) text = "Укажите электронную почту.";
-                else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(String(value))) text = "Некорректный email. Пример: name@example.com.";
+                else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value))) text = "Некорректный email. Пример: name@example.com.";
             }
             if (name === "offerAccepted" && !value) text = "Необходимо принять публичную оферту.";
             if (name === "personalDataConsent" && !value) text = "Необходимо дать согласие на обработку персональных данных.";
