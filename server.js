@@ -33,11 +33,11 @@ const YOOKASSA_SECRET_KEY = process.env.YOOKASSA_SECRET_KEY;
 const SITE_URL = (process.env.SITE_URL || "https://solooksshop.ru")
     .replace(/\/+$/, "");
 
-const BOOK_AMOUNT = 1900;
-const POSTCARD_AMOUNT = 250;
-const EBOOK_AMOUNT = 1000;
-const AUDIO_AMOUNT = 1000;
-const DIGITAL_BOOK_AMOUNT = 1000;
+const BOOK_AMOUNT = 1520;
+const POSTCARD_AMOUNT = 175 ;
+const EBOOK_AMOUNT = 700 
+const AUDIO_AMOUNT = 700;
+const DIGITAL_BOOK_AMOUNT = 700;
 const PAYMENT_TIME_MS = 15 * 60 * 1000;
 
 // Версии документов. Меняй при публикации новой редакции.
